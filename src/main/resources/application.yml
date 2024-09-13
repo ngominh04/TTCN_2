@@ -1,0 +1,12 @@
+
+spring:
+  application:
+    name: "TTCN2"
+  datasource:
+    url: jdbc:mysql://localhost:3306/trees
+    username: root
+    password: "041103"
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
