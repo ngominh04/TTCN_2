@@ -34,9 +34,10 @@ public class CommonController {
     public String index(Model model) {
         List<Tree> trees = treeRepository.findAllTree();
         model.addAttribute("trees",trees);
+        // add image theo Tree
         List<TreesImage>images=new ArrayList<>();
         for (Tree tree : trees) {
-            TreesImage treesImage = treesImageRepository.findByTreeId_Image(tree.getId());
+            TreesImage treesImage = treesImageRepository.findByMainTreeId_Image(tree.getId());
             images.add(treesImage);
         }
         model.addAttribute("tree_image",images);

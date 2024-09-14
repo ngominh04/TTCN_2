@@ -8,4 +8,13 @@ public class SQL {
     // lấy ảnh chính của cây theo idtree
     public final static String MAIN_IMAGE_OF_TREE="select * from trees_image\n" +
             "    where main_image = 1 and id_tree =?";
+
+    // xem chi tiet cay
+    public static final String DETAIL_TREE="select * from trees t where t.id = ?";
+
+    //ảnh cua cay theo idTree
+    public static final String IDTREE_IMAGE="select * from trees_image t where t.id_tree = ?";
+
+    // lay san pham cung category (loai tru san pham dang xem chi tiet)
+    public static final String TREES_CATEGORY_EXCLUDED_DETAIL_TREE="select * from trees t where t.id_category=? and t.id!=?";
 }

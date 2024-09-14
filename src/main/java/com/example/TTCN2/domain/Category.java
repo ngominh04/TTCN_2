@@ -31,4 +31,7 @@ public class Category {
     @Column(name = "is_delete")
     private Integer isDelete;
 
+    @Column(name = "notes")
+    private String notes;
+
 }
