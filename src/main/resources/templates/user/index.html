@@ -15,16 +15,27 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link th:href="@{/user/css/styles.css}"  type="text/css" rel="stylesheet"/>
 <!--    <link href="/user/css/styles.css"  type="text/css" rel="stylesheet"/>-->
+    <style>
+        .navbar{
+            /*cố định mennu */
+            /*background-color: black;*/
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100000;
+        }
+    </style>
 </head>
 <body>
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="#!">Start Bootstrap</a>
+        <a class="navbar-brand" href="#!">Cây trồng VN</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/}">Trang chủ</a></li>
                 <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
@@ -39,16 +50,19 @@
             <form class="d-flex">
                 <button class="btn btn-outline-dark" type="submit">
                     <i class="bi-cart-fill me-1"></i>
-                    Cart
                     <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
                 </button>
             </form>
+            <div style="width: 5px"></div>
+            <a class="btn btn-outline-dark"   th:href="@{/register/role}">
+                Đăng nhập
+            </a>
         </div>
     </div>
 </nav>
 <div layout:fragment="detail_tree">
     <!-- Header-->
-    <header class=" py-5" style="background-color:  rgb(30 115 50)">
+    <header class=" py-5" style="background-color:  #50c879">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
                 <h1 class="display-4 fw-bolder">Shop in style</h1>
@@ -76,7 +90,9 @@
                                 <!-- Product name-->
                                 <h5 class="fw-bolder" th:text="${tree.getName()}"></h5>
                                 <!-- Product price-->
-                                <span th:text="${#numbers.formatDecimal(tree.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></span>
+                                <span th:text="${#numbers.formatDecimal(tree.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></span><br>
+                                <span th:if="${tree.getIsActive()} == 0" style="color: forestgreen">Còn bán</span>
+                                <span th:if="${tree.getIsActive()} == 1" style="color: red">Hiện không bán</span>
                             </div>
                         </div>
                         <!-- Product actions-->
@@ -92,10 +108,29 @@
         </div>
     </section>
 </div>
+<nav aria-label="Page navigation example" style="margin-left: 9.5rem" th:if="${statusWeb == 1}">
+    <p >Bạn đang ở trang thứ <span th:text="${trees.getNumber()+1}"></span></p>
+    <ul class="pagination">
+        <li class="page-item"><a class="page-link" th:href="@{/(size=8, page=1)}" style="text-decoration: none">Trang đầu</a></li>
+        <div th:if="${trees.totalPages > 0}"
+             th:each="pageNumber : ${pageNumbers}">
 
+            <li class="page-link" >
+                <a th:href="@{/(size=${trees.size}, page=${pageNumber})}"
+                   th:text="${pageNumber}"
+                   th:class="${pageNumber==trees.number + 1} ? active"
+                   style="text-decoration: none"
+                   class="page-link"
+                ></a>
+            </li>
+        </div>
+
+        <li class="page-item"><a class="page-link" style="text-decoration: none" th:href="@{/(size=${trees.size}, page=${maxPageNumber})}">Trang cuối</a></li>
+    </ul>
+</nav>
 
 <!-- Footer-->
-<footer class="py-5 " style="background-color:  rgb(30 115 50)">
+<footer class="py-5 " style="background-color:  #50c879">
     <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p></div>
 </footer>
 <!-- Bootstrap core JS-->

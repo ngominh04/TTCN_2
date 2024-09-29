@@ -3,7 +3,7 @@ package com.example.TTCN2.sql;
 public class SQL {
     // lấy toàn bộ cây
     public final static String ALL_TREES="select * from trees t\n" +
-            "    where t.is_active = 0 and t.is_delete = 0";
+            "    where  t.is_delete = 0";
 
     // lấy ảnh chính của cây theo idtree
     public final static String MAIN_IMAGE_OF_TREE="select * from trees_image\n" +
@@ -16,5 +16,12 @@ public class SQL {
     public static final String IDTREE_IMAGE="select * from trees_image t where t.id_tree = ?";
 
     // lay san pham cung category (loai tru san pham dang xem chi tiet)
-    public static final String TREES_CATEGORY_EXCLUDED_DETAIL_TREE="select * from trees t where t.id_category=? and t.id!=?";
+    public static final String TREES_CATEGORY_EXCLUDED_DETAIL_TREE="select * from trees t where t.id_category=? and t.id!=?\n" +
+            "    limit 4";
+
+    // login_check username
+    public static final String CHECK_LOGIN="select * from user where user.username = ?";
+
+    // lay toan bo user
+    public static final String ALL_USER="select * from user ";
 }

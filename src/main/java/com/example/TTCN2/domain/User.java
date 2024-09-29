@@ -16,12 +16,15 @@ public class User {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_role")
-    private Role idRole;
+    private Integer idRole;
 
     @Column(name = "name", length = 150)
     private String name;
+
+    @Column(name = "email", length = 150)
+    private String email;
 
     @Column(name = "address", length = 250)
     private String address;
@@ -36,10 +39,10 @@ public class User {
     private String password;
 
     @Column(name = "create_date")
-    private Instant createDate;
+    private String createDate;
 
     @Column(name = "update_date")
-    private Instant updateDate;
+    private String updateDate;
 
     @Column(name = "block")
     private Integer block;

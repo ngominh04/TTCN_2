@@ -4,7 +4,10 @@ package com.example.TTCN2.controller;
 import com.example.TTCN2.repository.TreeRepository;
 import com.example.TTCN2.domain.Tree;
 import com.example.TTCN2.domain.TreesImage;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.TTCN2.repository.TreesImageRepository;
 import com.example.TTCN2.service.TreeImageService;
 import com.example.TTCN2.service.TreesService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("")
@@ -29,19 +36,41 @@ public class CommonController {
     @Autowired
     TreeImageService treeImageService;
 
-    // khởi đầu khi vào đường dẫn
+    // khởi đầu khi vào đường dẫn trang usser
     @GetMapping("/")
-    public String index(Model model) {
-        List<Tree> trees = treeRepository.findAllTree();
-        model.addAttribute("trees",trees);
+    public String index(Model model, HttpSession session,
+                        @RequestParam("page") Optional<Integer> page,
+                        @RequestParam("size") Optional<Integer> size) {
+//        List<Tree> trees = treeRepository.findAllTree();
+//        model.addAttribute("trees",trees);
+
+        // phân trang cho trang chủ
+        int currentPage = page.orElse(1); // số trang
+        int pageSize = size.orElse(8); // số sản phẩn trên 1 trang
+        Page<Tree> productPage = treesService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+
+        model.addAttribute("trees", productPage);
+
+        // Tạo status cho web :1 trang chủ, 2 trang xem chi tiết
+        model.addAttribute("statusWeb",1);
+
         // add image theo Tree
         List<TreesImage>images=new ArrayList<>();
-        for (Tree tree : trees) {
+        for (Tree tree : productPage) {
             TreesImage treesImage = treesImageRepository.findByMainTreeId_Image(tree.getId());
             images.add(treesImage);
         }
         model.addAttribute("tree_image",images);
-        return "/user/index";
+        // end add img
+        int totalPages = productPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute("maxPageNumber",pageNumbers.size());
+        }
+        return "user/index";
     }
 
 

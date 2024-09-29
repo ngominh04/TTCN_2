@@ -3,13 +3,11 @@ package com.example.TTCN2.service;
 import com.example.TTCN2.repository.TreeRepository;
 import com.example.TTCN2.domain.Tree;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -18,6 +16,26 @@ import java.util.function.Function;
 public class TreesService {
     @Autowired
     TreeRepository treeRepository;
+
+    // phân trang ở trang chủ
+    // https://techmaster.vn/posts/37233/spring-with-thymeleaf-pagination-for-a-list-phan-trang-voi-spring-va-thymeleaf
+    public Page<Tree> findPaginated(Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Tree> list;
+
+        if (treeRepository.findAllTree().size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, treeRepository.findAllTree().size());
+            list = treeRepository.findAllTree().subList(startItem, toIndex);
+        }
+
+        Page<Tree> coursePage = new PageImpl<Tree>(list, PageRequest.of(currentPage, pageSize), treeRepository.findAllTree().size());
+        return coursePage;
+    }
+
 
     public void flush() {
         treeRepository.flush();
