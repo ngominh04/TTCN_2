@@ -14,9 +14,9 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
-    private User idUser;
+    private Integer idUser;
 
     @Column(name = "total_money")
     private Double totalMoney;

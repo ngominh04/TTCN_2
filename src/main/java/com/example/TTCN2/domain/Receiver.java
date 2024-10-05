@@ -14,9 +14,9 @@ public class Receiver {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
-    private User idUser;
+    private Integer idUser;
 
     @Column(name = "name", length = 150)
     private String name;
