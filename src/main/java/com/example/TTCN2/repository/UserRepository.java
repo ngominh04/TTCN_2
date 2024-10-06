@@ -17,4 +17,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // lay toan bo user
     @Query(value = SQL.ALL_USER,nativeQuery = true)
     List<User> getAll();
+    // get User according to idCus
+    @Query(value = SQL.USER_BY_IDUSER,nativeQuery = true)
+    User getCustomerById(Integer idCus);
 }

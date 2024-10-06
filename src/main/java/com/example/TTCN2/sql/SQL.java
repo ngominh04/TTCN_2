@@ -26,4 +26,8 @@ public class SQL {
     public static final String ALL_USER="select * from user ";
     // lay toan bo receiver theo ID cua User
     public static final String ALL_RECEIVER_BY_IDUSER="select * from receiver where id_user = ?";
+    // lay receiver theo idRece
+    public static final String RECEIVER_BY_IDRECE="select *from receiver where id=?";
+    // lay user theo isCus
+    public static final String USER_BY_IDUSER="select * from user where id=?";
 }
