@@ -21,4 +21,8 @@ public interface TreeRepository extends JpaRepository<Tree, Integer> {
     // SAN PHAM CUNG CATEGORY (TRU SAN PHAM DANG XEM CHI TIET)
     @Query(value = SQL.TREES_CATEGORY_EXCLUDED_DETAIL_TREE,nativeQuery = true)
     List<Tree> findDetailTree_CategoryId(Integer idCate,Integer idTree);
+
+    // lay tree theo id
+    @Query(value = "select * from trees where id=?",nativeQuery = true)
+    Tree findAllById(Integer idPro);
 }

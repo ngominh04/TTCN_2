@@ -14,9 +14,9 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cart")
-    private Cart idCart;
+    private Integer idCart;
 
     @Column(name = "name_tree", length = 150)
     private String nameTree;
@@ -24,11 +24,14 @@ public class CartItem {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "money")
     private Double money;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tree")
-    private Tree idTree;
+    private Integer idTree;
 
 }
