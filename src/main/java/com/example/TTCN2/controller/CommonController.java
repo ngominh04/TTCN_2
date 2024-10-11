@@ -1,7 +1,9 @@
 package com.example.TTCN2.controller;
 
 
-import com.example.TTCN2.repository.TreeRepository;
+import com.example.TTCN2.domain.Cart;
+import com.example.TTCN2.domain.User;
+import com.example.TTCN2.repository.*;
 import com.example.TTCN2.domain.Tree;
 import com.example.TTCN2.domain.TreesImage;
 import jakarta.servlet.http.HttpSession;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.example.TTCN2.repository.TreesImageRepository;
 import com.example.TTCN2.service.TreeImageService;
 import com.example.TTCN2.service.TreesService;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +36,12 @@ public class CommonController {
     TreesImageRepository treesImageRepository;
     @Autowired
     TreeImageService treeImageService;
+    @Autowired
+    CartItemRepository cartItemRepository;
+    @Autowired
+    CartRepository cartRepository;
+    @Autowired
+    CategoryRepository categoryRepository;
 
     // khởi đầu khi vào đường dẫn trang usser
     @GetMapping("/")
@@ -47,12 +54,13 @@ public class CommonController {
         // phân trang cho trang chủ
         int currentPage = page.orElse(1); // số trang
         int pageSize = size.orElse(8); // số sản phẩn trên 1 trang
+        // Tạo status cho web :1 trang chủ, 2 trang xem chi tiết,3 trang xem category
+        model.addAttribute("statusWeb",1);
         Page<Tree> productPage = treesService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
 
         model.addAttribute("trees", productPage);
 
-        // Tạo status cho web :1 trang chủ, 2 trang xem chi tiết
-        model.addAttribute("statusWeb",1);
+
 
         // add image theo Tree
         List<TreesImage>images=new ArrayList<>();
@@ -62,6 +70,15 @@ public class CommonController {
         }
         model.addAttribute("tree_image",images);
         // end add img
+        model.addAttribute("category",categoryRepository.getAllCategory());
+        User user = (User) session.getAttribute("saveCus");
+        if (user != null) {
+            Cart cart = cartRepository.findByIdUser(user.getId());
+            model.addAttribute("cart", cart);
+            if (cart != null) {
+                model.addAttribute("count", cartItemRepository.getCartItemCount(cart.getId()));
+            }
+        }
         int totalPages = productPage.getTotalPages();
         if (totalPages > 0) {
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)

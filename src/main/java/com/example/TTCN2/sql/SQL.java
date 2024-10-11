@@ -30,4 +30,10 @@ public class SQL {
     public static final String RECEIVER_BY_IDRECE="select *from receiver where id=?";
     // lay user theo isCus
     public static final String USER_BY_IDUSER="select * from user where id=?";
+    // dem so luong cartItem
+    public static final String CART_ITEM_COUNT="select count(id) countCartItem from cart_item where id_cart=?";
+    // lay trees theo id category
+    public static final String ALL_TREES_TO_ID_CATEGORY="select *from trees t where t.id_category = ? and t.is_delete=0";
+    // dem  so luong san  pham o category
+    public static final String COUNT_TREES_TO_ID_CATEGORY="select count(id) countCategory from trees t where t.id_category = ? and t.is_delete=0";
 }

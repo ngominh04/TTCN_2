@@ -23,7 +23,7 @@ public class TreesService {
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();
         int startItem = currentPage * pageSize;
-        List<Tree> list;
+        List<Tree> list = List.of();
 
         if (treeRepository.findAllTree().size() < startItem) {
             list = Collections.emptyList();
@@ -32,6 +32,22 @@ public class TreesService {
             list = treeRepository.findAllTree().subList(startItem, toIndex);
         }
 
+        Page<Tree> coursePage = new PageImpl<Tree>(list, PageRequest.of(currentPage, pageSize), treeRepository.findAllTree().size());
+        return coursePage;
+    }
+    // phan trang cho trang category user
+    public Page<Tree> pageCategory(Pageable pageable,Integer idCate) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Tree> list = List.of();
+
+        if (treeRepository.findAllTree().size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, treeRepository.findAllTree().size());
+            list = treeRepository.findAllTreeToIdCategory(idCate).subList(startItem, toIndex);
+        }
         Page<Tree> coursePage = new PageImpl<Tree>(list, PageRequest.of(currentPage, pageSize), treeRepository.findAllTree().size());
         return coursePage;
     }

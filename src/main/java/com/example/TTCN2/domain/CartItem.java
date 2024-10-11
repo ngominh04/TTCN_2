@@ -15,7 +15,7 @@ public class CartItem {
     private Integer id;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_cart")
+    @Column(name = "id_cart")
     private Integer idCart;
 
     @Column(name = "name_tree", length = 150)
