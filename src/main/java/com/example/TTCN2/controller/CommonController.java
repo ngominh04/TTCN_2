@@ -57,11 +57,7 @@ public class CommonController {
         // Tạo status cho web :1 trang chủ, 2 trang xem chi tiết,3 trang xem category
         model.addAttribute("statusWeb",1);
         Page<Tree> productPage = treesService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
-
         model.addAttribute("trees", productPage);
-
-
-
         // add image theo Tree
         List<TreesImage>images=new ArrayList<>();
         for (Tree tree : productPage) {

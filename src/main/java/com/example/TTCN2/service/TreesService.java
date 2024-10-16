@@ -40,16 +40,15 @@ public class TreesService {
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();
         int startItem = currentPage * pageSize;
-        List<Tree> list = List.of();
+        List<Tree> list ;
 
-        if (treeRepository.findAllTree().size() < startItem) {
+        if (treeRepository.findAllTreeToIdCategory(idCate).size() < startItem) {
             list = Collections.emptyList();
         } else {
-            int toIndex = Math.min(startItem + pageSize, treeRepository.findAllTree().size());
+            int toIndex = Math.min(startItem + pageSize, treeRepository.findAllTreeToIdCategory(idCate).size());
             list = treeRepository.findAllTreeToIdCategory(idCate).subList(startItem, toIndex);
         }
-        Page<Tree> coursePage = new PageImpl<Tree>(list, PageRequest.of(currentPage, pageSize), treeRepository.findAllTree().size());
-        return coursePage;
+        return new PageImpl<Tree>(list, PageRequest.of(currentPage, pageSize), treeRepository.findAllTreeToIdCategory(idCate).size());
     }
 
 

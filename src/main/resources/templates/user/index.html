@@ -28,6 +28,17 @@
             left: 0;
             z-index: 100000;
         }
+        /*css cart select option*/
+        select {
+            padding: 0.25rem;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            appearance: none; /* Xóa kiểu mặc định của select */
+
+        }
+
         /*css slick */
         html, body {
             margin: 0;
@@ -381,6 +392,25 @@
             autoplaySpeed: 2000,
         });
     });
+    // js money transport
+    const selectElement = document.getElementById('idTrans');
+    const resultDiv = document.getElementById('result');
+    const resultMoney = document.getElementById('totalMoney')
+    const totalTrees = document.getElementById('totalTrees')
+    selectElement.addEventListener('change', function() {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const money = selectedOption.getAttribute('data-money') || '0.00';
+        const moneyTrans = parseFloat(selectedOption.getAttribute('moneyTrans') || '0.00');
+        const totalFromCart = parseFloat(totalTrees.getAttribute('totalTrees') || '0.00');
+        const total =  totalFromCart + moneyTrans;
+        resultDiv.textContent = money+" VNĐ";
+        resultMoney.textContent = formatNumber(total)+" VNĐ";
+        console.log(money)
+    });
+    // them dau . trong total
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
 </script>
 </body>
 </html>
