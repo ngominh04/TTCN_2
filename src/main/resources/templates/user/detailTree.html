@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/user/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sản phẩm</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Page content-->
+    <div class="container" style="margin-top: 5rem">
+        <div class="row">
+            <!-- Blog entries-->
+            <div class="col-lg-8">
+                <!-- Featured blog post-->
+                <section class="slider-for slider" style="width: 50%;margin-top: 0;border-radius: 5px">
+                    <div  th:each="img: ${images}">
+                        <img style="border-radius: 10px" th:src="'/imageTree/'+${img.getUrl()}" alt="..." />
+                    </div>
+                </section>
+                <section class="slider-nav slider" style="width: 50%;margin-top: -10%">
+                    <div  th:each="img: ${images}">
+                        <img style="border-radius: 10px" th:src="'/imageTree/'+${img.getUrl()}" alt="..." />
+
+                    </div>
+                </section>
+                <!-- Nested row for non-featured blog posts-->
+            </div>
+            <!-- Side widgets-->
+            <div class="col-lg-4">
+
+                <!-- Categories widget-->
+                <div class="card mb-4">
+                    <div class="card-header" ><b th:text="${tree.getName()}"></b></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card-body">
+                                <p class="card-text" >Thông tin cây: <span th:text="${tree.getNotes()}"></span></p>
+                                <p class="card-text" >Số lượng :<span th:text="${tree.getQuantity()}"></span></p>
+                                <p>Giá bán: <span th:text="${#numbers.formatDecimal(tree.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></span></p>
+                                <ul style="display: flex;width: 333px">
+                                    <li style="list-style-type: none" th:if="${session.saveCus != null && tree.getIsActive()==0}">
+                                        <a class="btn btn-outline-dark" th:href="@{'/cart/add/'+${session.saveCus.getId()}+'/'+${tree.getId()}}">Thêm vào giỏ hàng</a>
+                                    </li>
+<!--                                    <li style="list-style-type: none;margin-left: 0.5rem">-->
+<!--                                        <a class="btn btn-outline-dark" th:href="@{#}">Mua ngay</a>-->
+<!--                                    </li>-->
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Side widget-->
+
+            </div>
+<!--            sản phẩm tương tự-->
+            <div class="row">
+                <h3 style="margin-bottom: 1rem;margin-top: 1rem">Một vài sản phẩm tương tự :</h3>
+                <div class="col-lg-3" th:each="trees : ${treesToCategory}">
+                    <!-- Blog post-->
+                    <div class="card mb-4">
+                        <div th:each="image: ${tree_image}" th:if="${image.getIdTree() == tree.getId()}">
+                            <img class="card-img-top" style="width: 299px;height: 300px"
+                                 th:src="'/imageTree/'+${image.getUrl()}" alt="..." />
+                        </div>
+<!--                        <img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." />-->
+                        <div class="card-body" style="text-align: center">
+                            <h2 class="card-title h4" th:text="${trees.getName()}">Post Title</h2>
+                            <p class="card-text" th:text="${trees.getNotes()}"></p>
+                            <span th:text="${#numbers.formatDecimal(trees.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></span>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center" style="margin-top: 1rem">
+                                    <a class="btn btn-outline-dark mt-auto" th:href="@{'/tree/detailTree/'+${trees.getIdCategory()}+'/'+${trees.getId()}}">Xem chi tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

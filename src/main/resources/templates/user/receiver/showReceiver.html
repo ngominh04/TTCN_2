@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container1" style="margin-top: 3.5rem">
+        <h3>Thông tin tài khoản</h3>
+        <p >Tên người dùng : <span th:text="${customer.name}"></span></p>
+        <p >Email :<span th:text="${customer.email}"></span></p>
+        <p >Tên tài khoản : <span th:text="${customer.username}"></span></p>
+        <a class="btn1"
+           style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154" th:href="@{'/user/updateCus/'+${customer.id}}">Sửa thông tin tài khoản</a>
+        <a class="btn1"
+           style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154" th:href="@{'/register/repairPassG/'+${customer.id}}">Thay đổi mật khẩu</a>
+        <h2>Danh sách các địa chỉ nhận của bạn</h2>
+        <ul class="responsive-table">
+            <li class="table-header">
+                <div class="col1 col-1">Tên</div>
+                <div class="col1 col-2">Số điện thoại</div>
+                <div class="col1 col-3">Địa chỉ</div>
+                <div class="col1 col-4">Thao tác</div>
+            </li>
+            <li class="table-row" th:each="rece: ${receiver}">
+                <div class="col1 col-1" data-label="Job Id" th:text="${rece.name}"></div>
+                <div class="col1 col-2" data-label="Customer Name" th:text="${rece.phone}"></div>
+                <div class="col1 col-3" data-label="Amount" th:text="${rece.address}"></div>
+                <div class="col1 col-4" data-label="Payment Status">
+                    <a class="btn1"
+                       style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
+                       th:href="@{'/receiver/repairReceiver/'+${rece.id}}">Sửa</a>
+                    <a class="btn1"
+                       style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
+                       th:href="@{'/receiver/remove/'+${rece.getIdUser()}+'/'+${rece.id}}">Xóa</a>
+                </div>
+            </li>
+        </ul>
+        <div style="margin-bottom: 1.5rem">
+            <a class="btn1"
+               th:href="@{/}"
+               style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154">
+                Quay lại</a>
+            <span style="width: 5px"></span>
+            <a class="btn1" style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154" th:href="@{/receiver/newReceiver}">Thêm địa chỉ</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

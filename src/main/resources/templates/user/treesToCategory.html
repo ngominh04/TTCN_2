@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/user/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Category</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Section-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div class="col mb-5" th:each="tree: ${trees}">
+                    <div class="card h-100" >
+                        <!-- Product image-->
+                        <div th:each="image: ${tree_image}" th:if="${image.getIdTree() == tree.getId()}">
+                            <img class="card-img-top" style="width: 268px;height: 300px"
+                                 th:src="'/imageTree/'+${image.getUrl()}" alt="..." />
+                        </div>
+                        <!--                    <img src="/imageTree/cay_truong_sinh_xanh.png" alt="..."/>-->
+
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder" th:text="${tree.getName()}"></h5>
+                                <!-- Product price-->
+                                <span th:text="${#numbers.formatDecimal(tree.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></span><br>
+                                <span th:if="${tree.getIsActive()} == 0" style="color: forestgreen">Còn bán</span>
+                                <span th:if="${tree.getIsActive()} == 1" style="color: red">Hiện không bán</span>
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto" th:href="@{'/tree/detailTree/'+${tree.getIdCategory()}+'/'+${tree.getId()}}">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <nav aria-label="Page navigation example" style="margin-left: 9.5rem" th:if="${statusWeb == 3}">
+        <p >Bạn đang ở trang thứ <span th:text="${trees.getNumber()+1}"></span></p>
+        <ul class="pagination">
+<!--            <li class="page-item"><a class="page-link" th:href="@{/(size=8, page=1)}" style="text-decoration: none">Trang đầu</a></li>-->
+            <div th:if="${trees.totalPages > 0 && count>=8}"
+                 th:each="pageNumber : ${pageNumbers}">
+                <li class="page-link" >
+                    <a th:href="@{/category/${idCate}(size=${trees.size}, page=${pageNumber})}"
+                       th:text="${pageNumber}"
+                       th:class="${pageNumber==trees.number + 1} ? active"
+                       style="text-decoration: none"
+                       class="page-link"
+                    ></a>
+                </li>
+            </div>
+<!--            <li class="page-item"><a class="page-link" style="text-decoration: none" th:href="@{/(size=${trees.size}, page=${maxPageNumber})}">Trang cuối</a></li>-->
+        </ul>
+    </nav>
+</div>
+
+</body>
+</html>

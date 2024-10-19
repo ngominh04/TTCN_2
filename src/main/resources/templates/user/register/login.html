@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Login Form Design | CodeLab</title>
+    <link rel="stylesheet" href="/static/user/css/styles.css">
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+    html,body{
+        display: grid;
+        height: 100%;
+        width: 100%;
+        place-items: center;
+        background: #f2f2f2;
+        /* background: linear-gradient(-135deg, #c850c0, #4158d0); */
+    }
+    ::selection{
+        background: #4158d0;
+        color: #fff;
+    }
+    .wrapper{
+        width: 380px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
+    }
+    .wrapper .title{
+        font-size: 35px;
+        font-weight: 600;
+        text-align: center;
+        line-height: 100px;
+        color: #fff;
+        user-select: none;
+        border-radius: 15px 15px 0 0;
+        background: linear-gradient(-135deg,#50c879, #878b8f);
+    }
+    .wrapper form{
+        padding: 10px 30px 50px 30px;
+    }
+    .wrapper form .field{
+        height: 50px;
+        width: 100%;
+        margin-top: 20px;
+        position: relative;
+    }
+    .wrapper form .field input{
+        height: 100%;
+        width: 100%;
+        outline: none;
+        font-size: 17px;
+        padding-left: 20px;
+        border: 1px solid lightgrey;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    .wrapper form .field input:focus,
+    form .field input:valid{
+        border-color: #4158d0;
+    }
+    .wrapper form .field label{
+        position: absolute;
+        top: 50%;
+        left: 20px;
+        color: #999999;
+        font-weight: 400;
+        font-size: 17px;
+        pointer-events: none;
+        transform: translateY(-50%);
+        transition: all 0.3s ease;
+    }
+    form .field input:focus ~ label,
+    form .field input:valid ~ label{
+        top: 0%;
+        font-size: 16px;
+        color: #4158d0;
+        background: #fff;
+        transform: translateY(-50%);
+    }
+    form .content{
+        display: flex;
+        width: 100%;
+        height: 50px;
+        font-size: 16px;
+        align-items: center;
+        justify-content: space-around;
+    }
+    form .content .checkbox{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    form .content input{
+        width: 15px;
+        height: 15px;
+        background: red;
+    }
+    form .content label{
+        color: #262626;
+        user-select: none;
+        padding-left: 5px;
+    }
+    form .content .pass-link{
+        color: "";
+    }
+    form .field input[type="submit"]{
+        color: #fff;
+        border: none;
+        padding-left: 0;
+        margin-top: -10px;
+        font-size: 20px;
+        font-weight: 500;
+        cursor: pointer;
+        background: linear-gradient(-135deg, #50c879, #878b8f);;
+        transition: all 0.3s ease;
+    }
+    form .field input[type="submit"]:active{
+        transform: scale(0.95);
+    }
+    form .signup-link{
+        color: #262626;
+        margin-top: 20px;
+        text-align: center;
+    }
+    form .pass-link a,
+    form .signup-link a{
+        color: #4158d0;
+        text-decoration: none;
+    }
+    form .pass-link a:hover,
+    form .signup-link a:hover{
+        text-decoration: underline;
+    }
+    .btn1 {
+        cursor: pointer;
+        position: relative;
+        padding: 10px 20px;
+        background: #4d5154;
+        font-size: 18px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        transition: all 0.5s;
+
+        &:after, &:before {
+            content: " ";
+            width: 10px;
+            height: 10px;
+            position: absolute;
+            border: 0px solid #fff;
+            transition: all 1s;
+        }
+
+        &:after {
+            top: -1px;
+            left: -1px;
+            border-top: 5px solid #b6effb;
+            border-left: 5px solid #b6effb;
+        }
+
+        &:before {
+            bottom: -1px;
+            right: -1px;
+            border-bottom: 5px solid #b6effb;
+            border-right: 5px solid #b6effb;
+        }
+
+        &:hover {
+            border-top-right-radius: 0px;
+            border-bottom-left-radius: 0px;
+        / / background: rgba(0, 0, 0, .5);
+        / / color: white;
+
+            &:before, &:after {
+
+                width: 100%;
+                height: 100%;
+            / / border-color: white;
+            }
+        }
+    }
+</style>
+<body>
+<!--dùng form -->
+<!--https://www.codingnepalweb.com/login-form-with-floating-label-animation/ -->
+<div class="wrapper">
+    <div class="title">
+        Đăng nhập
+    </div>
+
+    <form method="post" th:action="@{/register/login_check}" enctype="multipart/form-data">
+
+        <div th:if="${session.idRole==2}">
+            <p>Bạn đang đăng nhập với tư cách <span style="color: red">người dùng</span></p>
+        </div>
+        <div th:if="${session.idRole==1}">
+            <p>Bạn đang đăng nhập với tư cách <span style="color: red">người quản lí</span></p>
+
+        </div>
+        <div th:if="${session.idRole==3}">
+            <p>Bạn đang đăng nhập với tư cách <span style="color: red">người vận chuyển</span></p>
+        </div>
+        <br>
+        <b><span style="color: red" th:text="${message}"></span></b>
+        <input id="role" name="role" hidden="hidden" th:value="${role}">
+
+        <div class="field">
+            <input type="text" id="username" name="username"  required>
+            <label>Tên tài khoản</label>
+        </div>
+        <div class="field">
+            <input type="password" id="password" name="password" required>
+            <label>Mật khẩu</label>
+        </div>
+        <div class="content">
+            <a class="btn1"
+               th:href="@{/register/forgotPass}"
+               style="margin-top: 1rem;text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
+            >Quên mật khẩu</a>
+        </div>
+        <div class="field">
+            <input type="submit" value="Đăng nhập">
+        </div>
+        <div style="margin-top: 2rem">
+            <a class="btn1"
+               th:href="@{/}"
+               style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
+            >Quay lại</a>
+            <a class="btn1"
+               style="margin-left: 6rem;text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
+               th:if="${role!=1}"
+               th:href="@{/register/newCus}">Đăng ký</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+</body>
+</html>
