@@ -14,9 +14,9 @@ public class OrderDetail {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_order")
-    private Order idOrder;
+    private Integer idOrder;
 
     @Column(name = "name_tree", length = 150)
     private String nameTree;

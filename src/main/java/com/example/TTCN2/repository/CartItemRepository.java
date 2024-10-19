@@ -16,4 +16,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
     // dem so luong cartItem
     @Query(value = SQL.CART_ITEM_COUNT,nativeQuery = true)
     ICartItem getCartItemCount(Integer idCart);
+    // lay cartItem theo idCartItem
+    @Query(value = SQL.GET_CART_ITEM_BY_ID,nativeQuery = true)
+    CartItem getCartItemById(Integer idCartItem);
 }

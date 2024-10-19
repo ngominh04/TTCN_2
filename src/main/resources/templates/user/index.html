@@ -266,7 +266,7 @@
                 </li>
             </ul>
             <div  th:if="${session.saveCus != null}" style="width: 500px;display: flex;">
-                <p style="white-space: pre-wrap;width: 300px">Chào mừng bạn <span th:text="${session.saveCus.name}"></span></p>
+                <p style="white-space: pre-wrap;width: 300px;margin-top: 0.8rem">Chào mừng bạn <span th:text="${session.saveCus.name}"></span></p>
                 <div style="width: 5px"></div>
                 <div style="display: flex;height: 45px">
                     <form class="d-flex">
@@ -308,7 +308,7 @@
                     <div class="card h-100" >
                         <!-- Product image-->
                         <div th:each="image: ${tree_image}" th:if="${image.getIdTree() == tree.getId()}">
-                            <img class="card-img-top" style="width: 268px;height: 300px"
+                            <img class="card-img-top" style="width: 100%;height: 90%"
                                  th:src="'/imageTree/'+${image.getUrl()}" alt="..." />
                         </div>
                         <!--                    <img src="/imageTree/cay_truong_sinh_xanh.png" alt="..."/>-->

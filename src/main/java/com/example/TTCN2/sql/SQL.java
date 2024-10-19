@@ -36,4 +36,10 @@ public class SQL {
     public static final String ALL_TREES_TO_ID_CATEGORY="select *from trees t where t.id_category = ? and t.is_delete=0";
     // dem  so luong san  pham o category
     public static final String COUNT_TREES_TO_ID_CATEGORY="select count(id) countCategory from trees t where t.id_category = ? and t.is_delete=0";
+    // lay cartItem theo idCartItem
+    public static final String GET_CART_ITEM_BY_ID="select * from cart_item where id=?";
+    // lay transport theo idTrans
+    public static final String GET_TRANSPORT_BY_IDTRANS="select * from transport_method where id=?";
+    // lay payment theo idPay
+    public static final String GET_PAYMENT_BY_IDPAY="select * from payment_method where id=?";
 }

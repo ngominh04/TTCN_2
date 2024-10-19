@@ -14,8 +14,14 @@ public class OrderTransport {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_order")
-    private Order idOrder;
+    private Integer idOrder;
+
+    @Column(name = "name_transport")
+    private String nameTransport;
+
+    @Column(name = "money")
+    private Double money;
 
 }

@@ -8,9 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -126,6 +124,36 @@ public class CartController {
             }
         }
 
+        return "redirect:/cart/{idCus}";
+    }
+
+    // nut sua quantity quantity
+    @PostMapping("/{idCus}/{idCartItem}")
+    public String getCartItem(@PathVariable("idCartItem")Integer idCartItem,
+                              @PathVariable("idCus")Integer idCus,
+                                @RequestParam("quantity") Integer quantity
+                                , HttpSession session) {
+        User customer= (User) session.getAttribute("saveCus");
+        CartItem cartItem = cartItemRepository.getCartItemById(idCartItem);
+        if (quantity <= 0 ){
+            cartItem.setQuantity(1);
+            cartItemService.save(cartItem);
+        }
+        else {
+            cartItem.setQuantity(quantity);
+            cartItemService.save(cartItem);
+        }
+        List<CartItem> cartItems = cartItemRepository.getAllCartItem_idCart(cartItem.getIdCart());
+        Cart cart = cartRepository.findByIdUser(customer.getId());
+        double totalMoney = 0;
+        int totalQuantity = 0;
+        for (CartItem cartItem1: cartItems){
+            totalMoney += cartItem1.getMoney()*cartItem1.getQuantity();
+            totalQuantity += cartItem1.getQuantity();
+        }
+        cart.setTotalQuantity(totalQuantity);
+        cart.setTotalMoney(totalMoney);
+        cartService.save(cart);
         return "redirect:/cart/{idCus}";
     }
 }

@@ -14,9 +14,9 @@ public class OrderPayment {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_order")
-    private Order idOrder;
+    private Integer idOrder;
 
     @Column(name = "name_payment", length = 150)
     private String namePayment;

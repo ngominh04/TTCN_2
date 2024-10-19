@@ -16,9 +16,9 @@ public class Order {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
-    private User idUser;
+    private Integer idUser;
 
     @Column(name = "total_money")
     private Double totalMoney;
@@ -26,19 +26,22 @@ public class Order {
     @Column(name = "total_quantity")
     private Integer totalQuantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_transport")
-    private TransportMethod idTransport;
+    private Integer idTransport;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_payment")
-    private PaymentMethod idPayment;
+    private Integer idPayment;
+
+    @Column(name = "id_receiver")
+    private Integer idReceiver;
 
     @Column(name = "create_date")
-    private Instant createDate;
+    private String createDate;
 
     @Column(name = "receiver_date")
-    private Instant receiverDate;
+    private String receiverDate;
 
     @Column(name = "status")
     private Integer status;
