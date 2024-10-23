@@ -28,6 +28,12 @@
             left: 0;
             z-index: 100000;
         }
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
         /*css cart select option*/
         select {
             padding: 0.25rem;
@@ -37,6 +43,23 @@
             background-color: white;
             appearance: none; /* Xóa kiểu mặc định của select */
 
+        }
+        /*css thanh cuộn ngang ul li ở order */
+        .scrollable-list {
+            width: 950px;
+            overflow-x: auto;
+            white-space: nowrap;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-left: 2rem;
+        }
+        .scrollable-list li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .activeOrder {
+            background-color: #198754 !important;
         }
 
         /*css slick */
@@ -264,6 +287,9 @@
                 <li class="nav-item dropdown" th:if="${session.saveCus != null}">
                     <a class="nav-link active" aria-current="page" th:href="@{'/receiver/receiver/'+${session.saveCus.getId()}}">Tài khoản</a>
                 </li>
+                <li class="nav-item dropdown" th:if="${session.saveCus != null}">
+                    <a class="nav-link active" aria-current="page" th:href="@{'/order/'+${session.saveCus.getId()}+'/1 '}">Đơn hàng</a>
+                </li>
             </ul>
             <div  th:if="${session.saveCus != null}" style="width: 500px;display: flex;">
                 <p style="white-space: pre-wrap;width: 300px;margin-top: 0.8rem">Chào mừng bạn <span th:text="${session.saveCus.name}"></span></p>
@@ -411,6 +437,21 @@
     function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
+    // thay doi mau khi click thẻ li ở order
+    const listItems = document.querySelectorAll('.scrollable-list li');
+
+    listItems.forEach(item => {
+        item.addEventListener('click', (event) => {
+            console.log('Li clicked:', item.textContent);
+            event.preventDefault();
+            listItems.forEach(li => li.classList.remove('activeOrder'));
+            item.classList.add('activeOrder');
+            setTimeout(() => {
+                window.location.href = item.querySelector('a').getAttribute('href');
+            }, 100);
+        });
+    });
+
 </script>
 </body>
 </html>

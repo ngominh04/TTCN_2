@@ -42,4 +42,8 @@ public class SQL {
     public static final String GET_TRANSPORT_BY_IDTRANS="select * from transport_method where id=?";
     // lay payment theo idPay
     public static final String GET_PAYMENT_BY_IDPAY="select * from payment_method where id=?";
+    // order theo idCus and status
+    public static final String ORDER_BY_IDCUS_AND_STATUS="select * from `order` where id_user=? and status=?";
+    // orderDetail by idOrder
+    public static final String ORDERDETAIL_BY_IDORDER="select *from order_detail where id_order=?";
 }

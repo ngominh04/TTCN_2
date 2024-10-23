@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{user/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container1" style="margin-top: 5rem;overflow: auto;height: 500px">
+        <ul class="scrollable-list">
+            <li class="activeOrder"><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/1'}">Chờ xác nhận</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/2'}">Đang giao</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/3'}">Đã giao</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/0'}">Đơn hủy</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/4'}">Chờ hoàn đơn</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/5'}">Đang giao lại người bán</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/6'}">Đã hoàn đơn</a></li>
+        </ul>
+        <ul class="responsive-table" >
+            <li class="table-row" th:each="od: ${orders}">
+                <div class="col1 col-1" >
+                    <ul >
+                        <li th:each="odl :${orderDetail}"
+                            th:if="${odl.getIdOrder() == od.getId()}"
+                            th:text="${odl.getNameTree()}"
+                            style="padding: 0;margin-bottom: 0"
+                        ></li>
+                    </ul>
+                </div>
+                <div class="col1 col-3" style="padding-left: 4rem;align-content: center;" th:text="${od.getCreateDate()}"></div>
+                <div class="col1 col-2" style="align-content: center;"  th:text="${#numbers.formatDecimal(od.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></div>
+                <div class="col1 col-4" style="align-content: center;" >
+<!--                    <a class="btn1"-->
+<!--                       style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"-->
+<!--                       th:href="@{''}">Sửa</a>-->
+<!--                    <a class="btn1"-->
+<!--                       style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"-->
+<!--                       th:href="@{''}">Xóa</a>-->
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
