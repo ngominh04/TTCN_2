@@ -32,12 +32,19 @@
                 <div class="col1 col-3" style="padding-left: 4rem;align-content: center;" th:text="${od.getCreateDate()}"></div>
                 <div class="col1 col-2" style="align-content: center;"  th:text="${#numbers.formatDecimal(od.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></div>
                 <div class="col1 col-4" style="align-content: center;" >
-<!--                    <a class="btn1"-->
-<!--                       style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"-->
-<!--                       th:href="@{''}">Sửa</a>-->
-<!--                    <a class="btn1"-->
-<!--                       style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"-->
-<!--                       th:href="@{''}">Xóa</a>-->
+                    <a class="btn1" th:if="${status == 1}"
+                       style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
+                       th:href="@{'/order/closeOrder/'+${session.saveCus.getId()}+'/0/'+${od.getId()}}">Hủy đơn</a>
+                    <!--/*@thymesVar id="getId" type=""*/-->
+                    <a class="btn1" th:if="${status == 2}"
+                       style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
+                       th:href="@{'/order/refundOrder/'+${session.saveCus.getId()}+'/2/'+${od.getId()}}">Trả hàng</a>
+                    <a class="btn1" th:if="${status == 2}"
+                       style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
+                       th:href="@{'/order/receiveOrder/'+${session.saveCus.getId()}+'/2/'+${od.getId()}}">Đã nhận</a>
+                    <a class="btn1" th:if="${status == 0}"
+                       style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
+                       th:href="@{'/order/putOrder/'+${session.saveCus.getId()}+'/0/'+${od.getId()}}">Đặt lại</a>
                 </div>
             </li>
         </ul>

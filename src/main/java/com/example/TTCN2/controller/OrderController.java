@@ -121,7 +121,44 @@ public class OrderController {
             orderDetails.addAll(orderDetailList);
         }
         model.addAttribute("orderDetail",orderDetails);
+        model.addAttribute("status",status);
 
         return "user/order/order";
+    }
+    // huy don status -> 0
+    @GetMapping("/closeOrder/{idCus}/{status}/{idOrder}")
+    public String closeOrder(@PathVariable Integer idCus, @PathVariable Integer status,
+                             @PathVariable Integer idOrder){
+        Order order = orderRepository.findByIdOrder(idOrder);
+        order.setStatus(0);
+        orderRepository.save(order);
+        return "redirect:/order/{idCus}/{status}";
+    }
+    // mua lai status -> 1
+    @GetMapping("/putOrder/{idCus}/{status}/{idOrder}")
+    public String putOrder(@PathVariable Integer idCus, @PathVariable Integer status,
+                             @PathVariable Integer idOrder){
+        Order order = orderRepository.findByIdOrder(idOrder);
+        order.setStatus(1);
+        orderRepository.save(order);
+        return "redirect:/order/{idCus}/{status}";
+    }
+    // da nhan hang status -> 3
+    @GetMapping("/receiveOrder/{idCus}/{status}/{idOrder}")
+    public String receiveOrder(@PathVariable Integer idCus, @PathVariable Integer status,
+                             @PathVariable Integer idOrder){
+        Order order = orderRepository.findByIdOrder(idOrder);
+        order.setStatus(3);
+        orderRepository.save(order);
+        return "redirect:/order/"+idCus+"/"+status;
+    }
+    // hoàn don status -> 4
+    @GetMapping("/refundOrder/{idCus}/{status}/{idOrder}")
+    public String refundOrder(@PathVariable Integer idCus, @PathVariable Integer status,
+                               @PathVariable Integer idOrder){
+        Order order = orderRepository.findByIdOrder(idOrder);
+        order.setStatus(4);
+        orderRepository.save(order);
+        return "redirect:/order/"+idCus+"/"+status;
     }
 }

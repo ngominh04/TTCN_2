@@ -15,4 +15,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query(value = SQL.ORDER_BY_IDCUS_AND_STATUS,nativeQuery = true)
     List<Order> findByCusAndStatus(Integer idCus, Integer status);
 
+    // order by idOrder
+    @Query(value = SQL.ORDER_BY_IDORDER,nativeQuery = true)
+    Order findByIdOrder(Integer idOrder);
 }

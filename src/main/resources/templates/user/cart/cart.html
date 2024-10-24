@@ -99,7 +99,7 @@
 
                                                 <div class="d-flex justify-content-between">
                                                     <p class="mb-2">Tổng tiền sản phẩm</p>
-                                                    <p class="mb-2" id="totalTrees"
+                                                    <p class="mb-2" id="totalTrees" th:if="${cart != null}"
                                                        th:text="${#numbers.formatDecimal(cart.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"
                                                        th:attr="totalTrees=${cart.getTotalMoney()}"
                                                     ></p>
@@ -116,7 +116,7 @@
                                                     <p class="mb-2" id="totalMoney" name="totalMoney"></p>
                                                 </div>
 
-                                                <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-block btn-lg">
+                                                <button th:if="${cart != null}"  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-block btn-lg">
                                                     <div class="d-flex justify-content-between">
                                                         <span style="color: white">Đặt hàng</span>
                                                     </div>
