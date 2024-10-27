@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="" />
+    <title>Admin Dashboard</title>
+    <link type="text/css" rel="stylesheet" th:href="@{/admin/css/index.css}">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar for navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>Danh sách quản lí</h2>
+            </div>
+            <ul>
+                <li><a href="#">Thống kê <span>1</span></a></li>
+                <li><a href="#">Phân loại cây <span>1</span></a></li>
+                <li><a href="#">Danh sách cây <span>1</span></a></li>
+                <li><a href="#">Đơn hàng <span>1</span></a></li>
+                <li><a href="#">Người dùng <span>1</span></a></li>
+                <li><a href="#">Người vận chuyển <span>1</span></a></li>
+                <li><a href="#">Phương thức vận chuyển <span>1</span></a></li>
+                <li><a href="#">Phương thức thanh toán <span>1</span></a></li>
+                <li><a href="#">Tin nhắn <span>1</span></a></li>
+                <li><a href="#">Evaluations <span>1</span></a></li>
+            </ul>
+        </nav>
+
+        <!-- Main content area -->
+        <div class="main-content">
+            <header>
+                <h1>Welcome, Admin</h1>
+                <div class="user-info">
+                    <span th:text="${detailAdmin.getName()}"></span>
+                    <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
+                </div>
+            </header>
+
+            <section class="dashboard">
+                <div class="card">
+                    <h3>Total Trees</h3>
+                    <p>120</p>
+                </div>
+                <div class="card">
+                    <h3>Total Users</h3>
+                    <p>56</p>
+                </div>
+                <div class="card">
+                    <h3>Total Orders</h3>
+                    <p>43</p>
+                </div>
+                <div class="card">
+                    <h3>Total Shippers</h3>
+                    <p>10</p>
+                </div>
+            </section>
+
+            <section class="table-section">
+                <h2>Recent Orders</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Total Money</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>John Doe</td>
+                            <td>$250</td>
+                            <td>Delivered</td>
+                            <td>2023-10-01</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Jane Smith</td>
+                            <td>$100</td>
+                            <td>Pending</td>
+                            <td>2023-10-05</td>
+                        </tr>
+                        <!-- Add more rows as necessary -->
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

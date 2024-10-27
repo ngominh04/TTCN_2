@@ -19,8 +19,10 @@ public class SQL {
     public static final String TREES_CATEGORY_EXCLUDED_DETAIL_TREE="select * from trees t where t.id_category=? and t.id!=?\n" +
             "    limit 4";
 
-    // login_check username
-    public static final String CHECK_LOGIN="select * from user where user.username = ?";
+    // login_check username user
+    public static final String CHECK_LOGIN="select * from user where username = ?";
+    // login_check username user
+    public static final String CHECK_LOGIN_ADMIN="select * from admin where username = ?";
 
     // lay toan bo user
     public static final String ALL_USER="select * from user ";
@@ -48,4 +50,6 @@ public class SQL {
     public static final String ORDERDETAIL_BY_IDORDER="select *from order_detail where id_order=?";
     // get order by idOrder
     public static final String ORDER_BY_IDORDER="select * from `order` where id=?";
+    // information by detail admin
+    public static final String DETAIL_ADMIN_TO_IDADMIN="select * from detail_admin where id_admin = ?";
 }

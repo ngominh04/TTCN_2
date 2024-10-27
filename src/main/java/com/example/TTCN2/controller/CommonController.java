@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.TTCN2.service.TreeImageService;
 import com.example.TTCN2.service.TreesService;
@@ -42,6 +43,8 @@ public class CommonController {
     CartRepository cartRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    DetailAdminRepository detailAdminRepository;
 
     // khởi đầu khi vào đường dẫn trang usser
     @GetMapping("/")
@@ -86,6 +89,13 @@ public class CommonController {
         return "user/index";
     }
 
+    // khi vao admin
+    @GetMapping("/admin/{idAdmin}")
+    public String admin(Model model, HttpSession session,
+                        @PathVariable("idAdmin") Integer idAdmin) {
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(idAdmin));
+        return "/admin/index";
+    }
 
     @GetMapping("/moreData") // thêm dữ liệu bảng trees
     public String moreData() {

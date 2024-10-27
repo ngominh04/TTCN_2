@@ -1,5 +1,6 @@
 package com.example.TTCN2.repository;
 
+import com.example.TTCN2.domain.Admin;
 import com.example.TTCN2.domain.User;
 import com.example.TTCN2.sql.SQL;
 import lombok.Value;
@@ -11,9 +12,10 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    // ktra tai khoan theo username
+    // ktra tai khoan theo username user
     @Query(value= SQL.CHECK_LOGIN,nativeQuery = true)
     User getCustomer(String username);
+
     // lay toan bo user
     @Query(value = SQL.ALL_USER,nativeQuery = true)
     List<User> getAll();

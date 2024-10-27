@@ -1,7 +1,9 @@
 package com.example.TTCN2.controller;
 
+import com.example.TTCN2.domain.Admin;
 import com.example.TTCN2.domain.Cart;
 import com.example.TTCN2.domain.User;
+import com.example.TTCN2.repository.AdminRepository;
 import com.example.TTCN2.repository.UserRepository;
 import com.example.TTCN2.service.ParamService;
 import com.example.TTCN2.service.SHA_256_password;
@@ -27,6 +29,8 @@ public class RegisterController {
     UserService userService;
     @Autowired
     SHA_256_password sha_256_password;
+    @Autowired
+    AdminRepository adminRepository;
     // chon quyen dang nhap
     @GetMapping("/role")
     public String role(){
@@ -57,7 +61,7 @@ public class RegisterController {
                     // thay đổi lại pass vs những người dùng cũ
                     model.addAttribute("message","Vì lí do bảo mật của chúng tôi với khách hàng cũ bạn vui lòng thay lại password: " +
                             "Mật khẩu bạn phải hơn 8 kí tự, bao gồm ít nhất 1 số, 1 chữ thường, 1 chữ hoa, 1 kí tự đặc biệt");
-
+                    session.removeAttribute("idRole");
                     return "/user/register/forgotPass2";
                 }
                 if(!customer.getPassword().equals(sha_256_password.GM_SHA_password(password))){
@@ -75,17 +79,22 @@ public class RegisterController {
             }
             // admin
             if(roleSS == 1){
-//                if(!customer.getPassword().equals(sha_256_password.GM_SHA_password(password))){
-//                    model.addAttribute("message","Mật Khẩu Sai __");
-//                }
-//                else if (customer.getBlock() == 0) {
-//                    model.addAttribute("message","Tài khoản của bạn bị khóa");
-//                } else {
-//
-//                    model.addAttribute("customer",userRepository.getCustomer(username));
-//
-//                    return "redirect:/admin";
-//                }
+                Admin admin= adminRepository.getAdmin(username);
+                if(admin.getPassword().equals(password)){
+                    session.setAttribute("saveAdmin",admin);
+                    model.addAttribute("customer",adminRepository.getAdmin(username));
+                    session.removeAttribute("idRole");
+                    return "redirect:/admin/"+admin.getId();
+                }
+                else if(!admin.getPassword().equals(sha_256_password.GM_SHA_password(password))){
+                    model.addAttribute("message","Mật Khẩu Sai __");
+                }
+                else if(admin.getPassword().equals(sha_256_password.GM_SHA_password(password))){
+                    session.setAttribute("saveAdmin",admin);
+                    model.addAttribute("customer",adminRepository.getAdmin(username));
+                    session.removeAttribute("idRole");
+                    return "redirect:/admin/"+admin.getId();
+                }
             }
             // shipper
             if(roleSS == 3){
@@ -113,6 +122,7 @@ public class RegisterController {
     @GetMapping("/")
     public String logout(HttpSession session){
         session.removeAttribute("saveCus");
+        session.removeAttribute("saveAdmin");
         return "redirect:/";
     }
 
