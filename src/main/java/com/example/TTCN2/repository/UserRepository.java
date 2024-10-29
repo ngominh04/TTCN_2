@@ -2,6 +2,7 @@ package com.example.TTCN2.repository;
 
 import com.example.TTCN2.domain.Admin;
 import com.example.TTCN2.domain.User;
+import com.example.TTCN2.projection.IUser;
 import com.example.TTCN2.sql.SQL;
 import lombok.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // get User according to idCus
     @Query(value = SQL.USER_BY_IDUSER,nativeQuery = true)
     User getCustomerById(Integer idCus);
+    // count user
+    @Query(value = SQL.COUNT_USER,nativeQuery = true)
+    IUser countAllById();
 }

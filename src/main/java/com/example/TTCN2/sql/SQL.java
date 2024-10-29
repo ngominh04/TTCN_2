@@ -52,4 +52,18 @@ public class SQL {
     public static final String ORDER_BY_IDORDER="select * from `order` where id=?";
     // information by detail admin
     public static final String DETAIL_ADMIN_TO_IDADMIN="select * from detail_admin where id_admin = ?";
+    // count tree
+    public static final String COUNT_TREES="select count(id) countTree from trees";
+    // count order
+    public static final String COUNT_ORDER="select count(id) countOrder from `order`";
+    // count shipper
+    public static final String COUNT_SHIPPER="select count(id) countShipper from shipper";
+    // count user
+    public static final String COUNT_USER="select count(id) countUser from user";
+    // limit desc order by receiver_date
+    public static final String LIMIT_ORDER_BY_RECEIVER_DATE="select  * from `order`\n" +
+            "where status= 3\n" +
+            "order by `order`.receiver_date desc\n" +
+            "limit 5";
+
 }

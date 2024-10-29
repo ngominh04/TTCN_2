@@ -45,6 +45,12 @@ public class CommonController {
     CategoryRepository categoryRepository;
     @Autowired
     DetailAdminRepository detailAdminRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    ShipperRepository shipperRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     // khởi đầu khi vào đường dẫn trang usser
     @GetMapping("/")
@@ -94,6 +100,11 @@ public class CommonController {
     public String admin(Model model, HttpSession session,
                         @PathVariable("idAdmin") Integer idAdmin) {
         model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(idAdmin));
+        model.addAttribute("countTree",treeRepository.countAllById());
+        model.addAttribute("countUser",userRepository.countAllById());
+        model.addAttribute("countOrder",orderRepository.countAllById());
+        model.addAttribute("countShipper",shipperRepository.countAllById());
+        model.addAttribute("order_limit5",orderRepository.findOrderByReceiverDate());
         return "/admin/index";
     }
 
