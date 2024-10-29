@@ -16,12 +16,12 @@
                 <h2>Danh sách quản lí</h2>
             </div>
             <ul>
-                <li><a href="#">Thống kê <span>1</span></a></li>
-                <li><a href="#">Phân loại cây <span>1</span></a></li>
-                <li><a href="#">Danh sách cây <span>1</span></a></li>
-                <li><a href="#">Đơn hàng <span>1</span></a></li>
-                <li><a href="#">Người dùng <span>1</span></a></li>
-                <li><a href="#">Người vận chuyển <span>1</span></a></li>
+                <li><a th:href="@{'/admin/'+${session.saveAdmin.getId()}}">Thống kê </a></li>
+                <li><a th:href="@{/category/admin/showCate}">Phân loại cây <span th:text="${session.countCate.getCountCategory()}"></span></a></li>
+                <li><a th:href="@{/tree/admin/showTrees}">Danh sách cây <span th:text="${session.countTree.countTree}"></span></a></li>
+                <li><a href="#">Đơn hàng <span th:text="${session.countOrder.getCountOrder()}"></span></a></li>
+                <li><a href="#">Người dùng <span th:text="${session.countUser.getCountUser()}"></span></a></li>
+                <li><a href="#">Người vận chuyển <span th:text="${session.countShipper.getCountShipper()}"></span></a></li>
                 <li><a href="#">Phương thức vận chuyển <span>1</span></a></li>
                 <li><a href="#">Phương thức thanh toán <span>1</span></a></li>
                 <li><a href="#">Tin nhắn <span>1</span></a></li>
@@ -30,60 +30,53 @@
         </nav>
 
         <!-- Main content area -->
-        <div class="main-content">
+        <div class="main-content" layout:fragment="content">
+            <!--        // header-->
             <header>
-                <h1>Welcome, Admin</h1>
+                <h1></h1>
                 <div class="user-info">
                     <span th:text="${detailAdmin.getName()}"></span>
                     <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
                 </div>
             </header>
-
             <section class="dashboard">
                 <div class="card">
-                    <h3>Total Trees</h3>
-                    <p>120</p>
+                    <h3>Tổng cây</h3>
+                    <p th:text="${session.countTree.getCountTree()}"></p>
                 </div>
                 <div class="card">
-                    <h3>Total Users</h3>
-                    <p>56</p>
+                    <h3>Tổng người dùng</h3>
+                    <p th:text="${session.countUser.getCountUser()}"></p>
                 </div>
                 <div class="card">
-                    <h3>Total Orders</h3>
-                    <p>43</p>
+                    <h3>Tổng đơn hàng</h3>
+                    <p th:text="${session.countOrder.getCountOrder()}"></p>
                 </div>
                 <div class="card">
-                    <h3>Total Shippers</h3>
-                    <p>10</p>
+                    <h3>Tổng người vận chuyển</h3>
+                    <p th:text="${session.countShipper.getCountShipper()}"></p>
                 </div>
             </section>
 
             <section class="table-section">
-                <h2>Recent Orders</h2>
+                <h2>Các đơn hàng bán được gần đây</h2>
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>User</th>
-                            <th>Total Money</th>
-                            <th>Status</th>
-                            <th>Date</th>
+                            <th></th>
+                            <th>Người đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Ngày đặt</th>
+                            <th>Ngày nhận</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody th:each="od :${order_limit5}">
                         <tr>
-                            <td>1</td>
-                            <td>John Doe</td>
-                            <td>$250</td>
-                            <td>Delivered</td>
-                            <td>2023-10-01</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Jane Smith</td>
-                            <td>$100</td>
-                            <td>Pending</td>
-                            <td>2023-10-05</td>
+                            <td th:text="${od.getId()}"></td>
+                            <td th:text="${od.getIdUser()}"></td>
+                            <td th:text="${#numbers.formatDecimal(od.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></td>
+                            <td th:text="${od.getCreateDate()}"></td>
+                            <td th:text="${od.getReceiverDate()}"></td>
                         </tr>
                         <!-- Add more rows as necessary -->
                     </tbody>

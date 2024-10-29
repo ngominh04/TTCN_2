@@ -123,6 +123,11 @@ public class RegisterController {
     public String logout(HttpSession session){
         session.removeAttribute("saveCus");
         session.removeAttribute("saveAdmin");
+        session.removeAttribute("countCate");
+        session.removeAttribute("countTree");
+        session.removeAttribute("countUser");
+        session.removeAttribute("countOrder");
+        session.removeAttribute("countShipper");
         return "redirect:/";
     }
 

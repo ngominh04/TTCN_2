@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Xem loại sản phẩm</title>
+</head>
+<body>
+<div class="main-content" layout:fragment="content">
+    <header>
+        <h1></h1>
+        <div class="user-info">
+            <span th:text="${detailAdmin.getName()}"></span>
+            <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
+        </div>
+    </header>
+    <section class="table-section">
+        <h2>Danh sách các cây</h2>
+        <table>
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody th:each="od :${trees}">
+            <tr>
+                <td th:text="${od.getId()}"></td>
+                <td th:text="${od.getName()}"></td>
+                <td th:text="${od.getRepairer()}"></td>
+                <td th:text="${od.getCreateDate()}"></td>
+                <td ></td>
+            </tr>
+            <!-- Add more rows as necessary -->
+            </tbody>
+        </table>
+    </section>
+    <nav style="position: fixed;bottom: 5px;z-index: 1000;">
+        <p >Bạn đang ở trang thứ <span th:text="${trees.getNumber()+1}"></span></p>
+        <ul class="pagination" style="list-style: none;display: flex;">
+            <div th:if="${trees.totalPages > 0}"
+                 th:each="pageNumber : ${pageNumbers}">
+                <li class="page-link" style="border: 1px solid black;border-radius: 2px;
+                                        width: 15px;text-align: center;margin-left: 5px">
+                    <a th:href="@{/tree/admin/showTrees (size=${trees.size}, page=${pageNumber})}"
+                       th:text="${pageNumber}"
+                       th:class="${pageNumber==trees.number + 1} ? active"
+                       style="text-decoration: none"
+                       class="page-link"
+                    ></a>
+                </li>
+            </div>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

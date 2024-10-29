@@ -1,11 +1,14 @@
 package com.example.TTCN2.controller;
 
+import com.example.TTCN2.domain.Admin;
 import com.example.TTCN2.domain.Tree;
 import com.example.TTCN2.domain.TreesImage;
+import com.example.TTCN2.repository.DetailAdminRepository;
 import com.example.TTCN2.repository.TreeRepository;
 import com.example.TTCN2.repository.TreesImageRepository;
 import com.example.TTCN2.service.TreeImageService;
 import com.example.TTCN2.service.TreesService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +36,10 @@ public class TreeController {
     TreesService treesService;
     @Autowired
     TreeImageService imageService;
+    @Autowired
+    DetailAdminRepository detailAdminRepository;
+    @Autowired
+    TreesImageRepository treesImageRepository;
 
     // xem chi tiet san pham
     @GetMapping("/detailTree/{idCate}/{idTree}")
@@ -57,6 +64,34 @@ public class TreeController {
         model.addAttribute("tree_image",images);
 
         return "user/detailTree";
+    }
+    @GetMapping("/admin/showTrees")
+    public String showTrees(Model model, HttpSession session,
+                            @RequestParam("page") Optional<Integer> page,
+                            @RequestParam("size") Optional<Integer> size) {
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+        // phân trang cho trang chủ
+        int currentPage = page.orElse(1); // số trang
+        int pageSize = size.orElse(8); // số sản phẩn trên 1 trang
+        Page<Tree> productPage = treesService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("trees", productPage);
+        // add image theo Tree
+        List<TreesImage>images=new ArrayList<>();
+        for (Tree tree : productPage) {
+            TreesImage treesImage = treesImageRepository.findByMainTreeId_Image(tree.getId());
+            images.add(treesImage);
+        }
+        model.addAttribute("tree_image",images);
+        int totalPages = productPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute("maxPageNumber",pageNumbers.size());
+        }
+        return "admin/trees/showTrees";
     }
 
 }

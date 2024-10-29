@@ -1,11 +1,16 @@
 package com.example.TTCN2.controller;
 
+import com.example.TTCN2.domain.Admin;
+import com.example.TTCN2.domain.Category;
 import com.example.TTCN2.domain.Tree;
 import com.example.TTCN2.domain.TreesImage;
 import com.example.TTCN2.repository.CategoryRepository;
+import com.example.TTCN2.repository.DetailAdminRepository;
 import com.example.TTCN2.repository.TreeRepository;
 import com.example.TTCN2.repository.TreesImageRepository;
+import com.example.TTCN2.service.CategoryService;
 import com.example.TTCN2.service.TreesService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,8 @@ public class CategoryController {
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
+    CategoryService categoryService;
+    @Autowired
     TreeRepository treeRepository;
     @Autowired
     TreesService treesService;
@@ -35,6 +42,8 @@ public class CategoryController {
     TreesImageRepository findByMainTreeId_Image;
     @Autowired
     TreesImageRepository treesImageRepository;
+    @Autowired
+    DetailAdminRepository  detailAdminRepository;
 
     @GetMapping(value = "/{idCate}")
     public String category(@PathVariable("idCate") Integer idCate, Model model,
@@ -75,5 +84,29 @@ public class CategoryController {
             model.addAttribute("maxPageNumber",pageNumbers.size());
         }
         return "user/treesToCategory";
+    }
+    // show cate admin
+    @GetMapping("/admin/showCate")
+    public String showCategory(Model model, HttpSession session,
+                               @RequestParam("page") Optional<Integer> page,
+                               @RequestParam("size") Optional<Integer> size) {
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+
+        // phân trang cho trang chủ
+        int currentPage = page.orElse(1); // số trang
+        int pageSize = size.orElse(8); // số sản phẩn trên 1 trang
+        Page<Category> productPage = categoryService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+
+        model.addAttribute("showCategory",productPage);
+        int totalPages = productPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute("maxPageNumber",pageNumbers.size());
+        }
+        return "admin/category/showCategory";
     }
 }

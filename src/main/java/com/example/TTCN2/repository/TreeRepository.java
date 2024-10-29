@@ -2,6 +2,7 @@ package com.example.TTCN2.repository;
 
 import com.example.TTCN2.domain.Tree;
 import com.example.TTCN2.projection.ICategory;
+import com.example.TTCN2.projection.ITrees;
 import com.example.TTCN2.sql.SQL;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -34,4 +35,8 @@ public interface TreeRepository extends JpaRepository<Tree, Integer> {
     // dem so luong cay theo category
     @Query(value = SQL.COUNT_TREES_TO_ID_CATEGORY,nativeQuery = true)
     ICategory findCategoryById(Integer idCate);
+
+    // count tree
+    @Query(value = SQL.COUNT_TREES,nativeQuery = true)
+    ITrees countAllById();
 }

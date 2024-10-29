@@ -1,11 +1,8 @@
 package com.example.TTCN2.controller;
 
 
-import com.example.TTCN2.domain.Cart;
-import com.example.TTCN2.domain.User;
+import com.example.TTCN2.domain.*;
 import com.example.TTCN2.repository.*;
-import com.example.TTCN2.domain.Tree;
-import com.example.TTCN2.domain.TreesImage;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +42,12 @@ public class CommonController {
     CategoryRepository categoryRepository;
     @Autowired
     DetailAdminRepository detailAdminRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    ShipperRepository shipperRepository;
+    @Autowired
+    OrderRepository orderRepository;
 
     // khởi đầu khi vào đường dẫn trang usser
     @GetMapping("/")
@@ -92,9 +95,17 @@ public class CommonController {
     // khi vao admin
     @GetMapping("/admin/{idAdmin}")
     public String admin(Model model, HttpSession session,
-                        @PathVariable("idAdmin") Integer idAdmin) {
+                        @PathVariable("idAdmin") Integer idAdmin,
+                        @RequestParam("page") Optional<Integer> page,
+                        @RequestParam("size") Optional<Integer> size) {
         model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(idAdmin));
-        return "/admin/index";
+        session.setAttribute("countCate",categoryRepository.countAllById());
+        session.setAttribute("countTree",treeRepository.countAllById());
+        session.setAttribute("countUser",userRepository.countAllById());
+        session.setAttribute("countOrder",orderRepository.countAllById());
+        session.setAttribute("countShipper",shipperRepository.countAllById());
+        model.addAttribute("order_limit5",orderRepository.findOrderByReceiverDate());
+        return "admin/index";
     }
 
     @GetMapping("/moreData") // thêm dữ liệu bảng trees

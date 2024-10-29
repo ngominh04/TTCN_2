@@ -20,10 +20,10 @@ public class Category {
     private String name;
 
     @Column(name = "create_date")
-    private Instant createDate;
+    private String createDate;
 
     @Column(name = "update_date")
-    private Instant updateDate;
+    private String updateDate;
 
     @Column(name = "repairer")
     private Integer repairer;
