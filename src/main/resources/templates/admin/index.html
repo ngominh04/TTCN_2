@@ -8,6 +8,65 @@
     <title>Admin Dashboard</title>
     <link type="text/css" rel="stylesheet" th:href="@{/admin/css/index.css}">
 </head>
+<style>
+    /* General form styling */
+    .main-form {
+        width: 550px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    label {
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    input[type="text"], input[type="number"], select {
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #45a049;
+    }
+
+    /* Optional styling for select options */
+    select {
+        background-color: #fff;
+        color: #333;
+    }
+
+    select option {
+        padding: 10px;
+    }
+
+    /* Add a hover effect for select and input fields */
+    input[type="text"]:hover, input[type="number"]:hover, select:hover {
+        border-color: #888;
+    }
+</style>
 <body>
     <div class="container">
         <!-- Sidebar for navigation -->

@@ -17,6 +17,7 @@
     </header>
     <section class="table-section">
         <h2>Các loại sản phẩm</h2>
+        <p style="color: red" th:text="${message}"></p>
         <table>
             <thead>
             <tr>
@@ -33,12 +34,21 @@
                 <td th:text="${od.getName()}"></td>
                 <td th:text="${od.getRepairer()}"></td>
                 <td th:text="${od.getCreateDate()}"></td>
-                <td ></td>
+                <td >
+                    <a style="border: 1px solid black;border-radius: 2px; color: black;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/category/admin/editCategory/'+${od.getId()}}">Sửa</a>
+                </td>
             </tr>
             <!-- Add more rows as necessary -->
             </tbody>
         </table>
     </section>
+    <div style="height: 2rem"></div>
+    <a style="border: 1px solid black;border-radius: 2px; color: black; margin-top: 2rem;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+       th:href="@{/category/admin/newCategory}"
+    >Thêm mới </a>
     <nav style="position: fixed;bottom: 5px;z-index: 1000;">
         <p >Bạn đang ở trang thứ <span th:text="${showCategory.getNumber()+1}"></span></p>
         <ul class="pagination" style="list-style: none;display: flex;">

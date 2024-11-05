@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa phân loại cây</title>
+</head>
+<body>
+<main class="main-container" layout:fragment="content">
+    <div class="main-title" style="margin-left: 100%;width: 250px;margin-top: 3rem;margin-bottom: 2rem">
+        <h2>Phân loại cây</h2>
+    </div>
+    <div class="main-form" style="margin-left: 100%">
+        <form method="post" enctype="multipart/form-data" th:action="@{'/category/admin/saveEditCategory/'+${idCate}}">
+            <!-- <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="wood">Wood Trees</option>
+                <option value="flower">Flowers</option>
+            </select><br><br> -->
+
+            <label for="name">Tên loại cây:</label>
+            <input type="text" id="name" name="name" th:value="${category.getName()}"><br><br>
+
+            <label for="notes">Ghi chú:</label>
+            <input  type="text" id="notes" name="notes" th:value="${category.getNotes()}"><br><br>
+
+            <label >Hiển thị phía người dùng:</label>
+            <input type="radio" style="margin-bottom: -15px" name="is_delete"
+                   id="is_delete_yes" value="0" th:checked="${category.getIsDelete()} == 0">
+            <label for="is_delete_yes">Đang hiển thị</label>
+            <input type="radio" style="margin-bottom: -15px" name="is_delete"
+                   id="is_delete_no" value="1" th:checked="${category.getIsDelete()} == 1">
+            <label for="is_delete_no">Không hiển thị</label>
+            <br><br>
+
+            <input type="submit" value="Lưu lại">
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

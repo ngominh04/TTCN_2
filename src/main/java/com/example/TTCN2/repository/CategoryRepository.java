@@ -17,4 +17,6 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     @Query(value = SQL.COUNT_CATEGORY,nativeQuery = true)
     ICategory countAllById();
+    @Query(value = "select * from category where id=?",nativeQuery = true)
+    Category getCategoryById(Integer idCate);
 }

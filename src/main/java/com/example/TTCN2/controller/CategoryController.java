@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -93,7 +94,7 @@ public class CategoryController {
         Admin admin = (Admin) session.getAttribute("saveAdmin");
         model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
 
-        // phân trang cho trang chủ
+        // phân trang cho trang category in admin
         int currentPage = page.orElse(1); // số trang
         int pageSize = size.orElse(8); // số sản phẩn trên 1 trang
         Page<Category> productPage = categoryService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
@@ -108,5 +109,59 @@ public class CategoryController {
             model.addAttribute("maxPageNumber",pageNumbers.size());
         }
         return "admin/category/showCategory";
+    }
+    // edit category
+    @GetMapping("/admin/editCategory/{idCate}")
+    public String editCate(Model model,HttpSession session,
+                           @PathVariable("idCate") Integer idCate){
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        if (admin.getPower() == 3){
+            model.addAttribute("message","Bạn không đủ quyền hạn để sửa");
+            return "redirect:/admin/showCate";
+        }
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+        model.addAttribute("category",categoryRepository.getCategoryById(idCate));
+
+        return "admin/category/editCategory";
+    }
+    @PostMapping ("/admin/saveEditCategory/{idCate}")
+    public String editSaveCate(Model model,HttpSession session,
+                                @PathVariable("idCate") Integer idCate,
+                               @RequestParam("name") String name,
+                               @RequestParam("notes")String notes,
+                               @RequestParam("is_delete")Integer is_delete){
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+//        model.addAttribute("category",categoryRepository.getCategoryById(idCate));
+        Category category = categoryRepository.getCategoryById(idCate);
+        category.setUpdateDate(String.valueOf(LocalDateTime.now()));
+        category.setRepairer(admin.getId());
+        category.setIsDelete(is_delete);
+        category.setName(name);
+        category.setNotes(notes);
+        categoryService.save(category);
+        return "redirect:/category/admin/showCate";
+    }
+    // new cate
+    @GetMapping("/admin/newCategory")
+    public String newCategory(Model model,HttpSession session){
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+        return "admin/category/newCategory";
+    }
+    @PostMapping("/admin/newSaveCategory")
+    public String newSaveCategory(@RequestParam("name") String name,
+                                  @RequestParam("notes")String notes,
+                                  HttpSession session,Model model){
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+        Category category = new Category();
+        category.setName(name);
+        category.setNotes(notes);
+        category.setRepairer(admin.getId());
+        category.setIsDelete(0);
+        category.setCreateDate(String.valueOf(LocalDateTime.now()));
+        categoryService.save(category);
+        return "redirect:/category/admin/showCate";
     }
 }
