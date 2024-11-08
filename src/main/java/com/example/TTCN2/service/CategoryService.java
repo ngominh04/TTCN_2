@@ -26,14 +26,14 @@ public class CategoryService {
         int startItem = currentPage * pageSize;
         List<Category> list = List.of();
 
-        if (categoryRepository.getAllCategory().size() < startItem) {
+        if (categoryRepository.getAllCategoryAdmin().size() < startItem) {
             list = Collections.emptyList();
         } else {
-            int toIndex = Math.min(startItem + pageSize, categoryRepository.getAllCategory().size());
-            list = categoryRepository.getAllCategory().subList(startItem, toIndex);
+            int toIndex = Math.min(startItem + pageSize, categoryRepository.getAllCategoryAdmin().size());
+            list = categoryRepository.getAllCategoryAdmin().subList(startItem, toIndex);
         }
 
-        Page<Category> coursePage = new PageImpl<Category>(list, PageRequest.of(currentPage, pageSize), categoryRepository.getAllCategory().size());
+        Page<Category> coursePage = new PageImpl<Category>(list, PageRequest.of(currentPage, pageSize), categoryRepository.getAllCategoryAdmin().size());
         return coursePage;
     }
 

@@ -33,6 +33,12 @@
                 <td th:text="${od.getName()}"></td>
                 <td th:text="${od.getRepairer()}"></td>
                 <td th:text="${od.getCreateDate()}"></td>
+                <td >
+                    <div th:each="image: ${tree_image}" th:if="${image.getIdTree() == tree.getId()}">
+                        <img class="card-img-top" style="width: 100%;height: 90%"
+                             th:src="'/imageTree/'+${image.getUrl()}" alt="..." />
+                    </div>
+                </td>
                 <td ></td>
             </tr>
             <!-- Add more rows as necessary -->

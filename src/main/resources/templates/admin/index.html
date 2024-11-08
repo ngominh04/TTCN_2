@@ -66,6 +66,14 @@
     input[type="text"]:hover, input[type="number"]:hover, select:hover {
         border-color: #888;
     }
+    /*css count */
+    .count{
+        border: 1px solid white;
+        padding: 4px 5px 4px 4px;
+        border-radius: 50%;
+        color: black;
+        background-color: white;
+    }
 </style>
 <body>
     <div class="container">
@@ -76,15 +84,15 @@
             </div>
             <ul>
                 <li><a th:href="@{'/admin/'+${session.saveAdmin.getId()}}">Thống kê </a></li>
-                <li><a th:href="@{/category/admin/showCate}">Phân loại cây <span th:text="${session.countCate.getCountCategory()}"></span></a></li>
-                <li><a th:href="@{/tree/admin/showTrees}">Danh sách cây <span th:text="${session.countTree.countTree}"></span></a></li>
-                <li><a href="#">Đơn hàng <span th:text="${session.countOrder.getCountOrder()}"></span></a></li>
-                <li><a href="#">Người dùng <span th:text="${session.countUser.getCountUser()}"></span></a></li>
-                <li><a href="#">Người vận chuyển <span th:text="${session.countShipper.getCountShipper()}"></span></a></li>
-                <li><a href="#">Phương thức vận chuyển <span>1</span></a></li>
-                <li><a href="#">Phương thức thanh toán <span>1</span></a></li>
-                <li><a href="#">Tin nhắn <span>1</span></a></li>
-                <li><a href="#">Evaluations <span>1</span></a></li>
+                <li><a th:href="@{/category/admin/showCate}">Phân loại cây <span class="count" th:text="${session.countCate.getCountCategory()}"></span></a></li>
+                <li><a th:href="@{/tree/admin/showTrees}">Danh sách cây <span class="count" th:text="${session.countTree.countTree}"></span></a></li>
+                <li><a href="#">Đơn hàng <span class="count" th:text="${session.countOrder.getCountOrder()}"></span></a></li>
+                <li><a href="#">Người dùng <span class="count" th:text="${session.countUser.getCountUser()}"></span></a></li>
+                <li><a href="#">Người vận chuyển <span class="count" th:text="${session.countShipper.getCountShipper()}"></span></a></li>
+                <li><a href="#">Phương thức vận chuyển <span class="count">1</span></a></li>
+                <li><a href="#">Phương thức thanh toán <span class="count">1</span></a></li>
+                <li><a href="#">Tin nhắn <span class="count">1</span></a></li>
+                <li><a href="#">Evaluations <span class="count">1</span></a></li>
             </ul>
         </nav>
 

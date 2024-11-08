@@ -11,9 +11,12 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    // get all cate
+    // get all cate user
     @Query(value = "select * from category where is_delete=0",nativeQuery = true)
     List<Category> getAllCategory();
+    // get all cate admin
+    @Query(value = "select * from category",nativeQuery = true)
+    List<Category> getAllCategoryAdmin();
 
     @Query(value = SQL.COUNT_CATEGORY,nativeQuery = true)
     ICategory countAllById();

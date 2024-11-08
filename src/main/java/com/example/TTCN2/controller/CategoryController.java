@@ -113,11 +113,28 @@ public class CategoryController {
     // edit category
     @GetMapping("/admin/editCategory/{idCate}")
     public String editCate(Model model,HttpSession session,
-                           @PathVariable("idCate") Integer idCate){
+                           @PathVariable("idCate") Integer idCate,
+                           @RequestParam("page") Optional<Integer> page,
+                           @RequestParam("size") Optional<Integer> size){
         Admin admin = (Admin) session.getAttribute("saveAdmin");
         if (admin.getPower() == 3){
+            model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+            // phân trang cho trang category in admin
+            int currentPage = page.orElse(1); // số trang
+            int pageSize = size.orElse(8); // số sản phẩn trên 1 trang
+            Page<Category> productPage = categoryService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+
+            model.addAttribute("showCategory",productPage);
+            int totalPages = productPage.getTotalPages();
+            if (totalPages > 0) {
+                List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                        .boxed()
+                        .collect(Collectors.toList());
+                model.addAttribute("pageNumbers", pageNumbers);
+                model.addAttribute("maxPageNumber",pageNumbers.size());
+            }
             model.addAttribute("message","Bạn không đủ quyền hạn để sửa");
-            return "redirect:/admin/showCate";
+            return "admin/category/showCategory";
         }
         model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
         model.addAttribute("category",categoryRepository.getCategoryById(idCate));
@@ -144,8 +161,29 @@ public class CategoryController {
     }
     // new cate
     @GetMapping("/admin/newCategory")
-    public String newCategory(Model model,HttpSession session){
+    public String newCategory(Model model,HttpSession session,
+                              @RequestParam("page") Optional<Integer> page,
+                              @RequestParam("size") Optional<Integer> size){
         Admin admin = (Admin) session.getAttribute("saveAdmin");
+        if (admin.getPower() == 3){
+            model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+            // phân trang cho trang category in admin
+            int currentPage = page.orElse(1); // số trang
+            int pageSize = size.orElse(8); // số sản phẩn trên 1 trang
+            Page<Category> productPage = categoryService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+
+            model.addAttribute("showCategory",productPage);
+            int totalPages = productPage.getTotalPages();
+            if (totalPages > 0) {
+                List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                        .boxed()
+                        .collect(Collectors.toList());
+                model.addAttribute("pageNumbers", pageNumbers);
+                model.addAttribute("maxPageNumber",pageNumbers.size());
+            }
+            model.addAttribute("message","Bạn không đủ quyền hạn để thêm");
+            return "admin/category/showCategory";
+        }
         model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
         return "admin/category/newCategory";
     }
@@ -162,6 +200,38 @@ public class CategoryController {
         category.setIsDelete(0);
         category.setCreateDate(String.valueOf(LocalDateTime.now()));
         categoryService.save(category);
+        return "redirect:/category/admin/showCate";
+    }
+    // remove cate
+    @GetMapping("/admin/removeCategory/{idCate}")
+    public String removeCategory(@PathVariable("idCate") Integer idCate,
+                                 HttpSession session,Model model,
+                                 @RequestParam("page") Optional<Integer> page,
+                                 @RequestParam("size") Optional<Integer> size){
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        if (admin.getPower() == 1){
+            Category category = categoryRepository.getCategoryById(idCate);
+            categoryService.delete(category);
+        }
+        else {
+            model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+            // phân trang cho trang category in admin
+            int currentPage = page.orElse(1); // số trang
+            int pageSize = size.orElse(8); // số sản phẩn trên 1 trang
+            Page<Category> productPage = categoryService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+
+            model.addAttribute("showCategory",productPage);
+            int totalPages = productPage.getTotalPages();
+            if (totalPages > 0) {
+                List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                        .boxed()
+                        .collect(Collectors.toList());
+                model.addAttribute("pageNumbers", pageNumbers);
+                model.addAttribute("maxPageNumber",pageNumbers.size());
+            }
+            model.addAttribute("message","Bạn không đủ quyền hạn để xóa");
+            return "admin/category/showCategory";
+        }
         return "redirect:/category/admin/showCate";
     }
 }

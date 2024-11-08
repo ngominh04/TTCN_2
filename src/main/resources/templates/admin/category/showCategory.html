@@ -22,9 +22,11 @@
             <thead>
             <tr>
                 <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>Tên phân loại</th>
+                <th>Mã người sửa</th>
+                <th>Ngày tạo</th>
+                <th>Ngày sửa</th>
+                <th>Trạng thái</th>
                 <th></th>
             </tr>
             </thead>
@@ -34,10 +36,16 @@
                 <td th:text="${od.getName()}"></td>
                 <td th:text="${od.getRepairer()}"></td>
                 <td th:text="${od.getCreateDate()}"></td>
+                <td th:text="${od.getUpdateDate()}"></td>
+                <td th:if="${od.getIsDelete()} == 0" style="color: #15f48d" >Đang hiển thị</td>
+                <td th:if="${od.getIsDelete()} == 1" style="color: #fb4e4e">Không hiển thị</td>
                 <td >
                     <a style="border: 1px solid black;border-radius: 2px; color: black;
                            width: 15px;text-align: center;padding: 5px; text-decoration: none;"
                        th:href="@{'/category/admin/editCategory/'+${od.getId()}}">Sửa</a>
+                    <a style="border: 1px solid black;border-radius: 2px; color: black;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/category/admin/removeCategory/'+${od.getId()}}">Xóa</a>
                 </td>
             </tr>
             <!-- Add more rows as necessary -->
