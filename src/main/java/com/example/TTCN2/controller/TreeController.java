@@ -93,5 +93,24 @@ public class TreeController {
         }
         return "admin/trees/showTrees";
     }
+    // xem chi tiet san pham admin
+    @GetMapping("/admin/detailTree/{idTree}")
+    public String detailTreeAdmin(Model model, @PathVariable(name = "idTree") Integer idTree,
+                                  HttpSession  session) {
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+        model.addAttribute("tree", treeRepository.findDetailTreeById(idTree));
+        model.addAttribute("images",imageRepository.findByIdTree_Images(idTree));
+        // add image theo Tree
+        List<Tree> trees = treeRepository.findAllTree();
+        List<TreesImage> images=new ArrayList<>();
+        for (Tree tree : trees) {
+            TreesImage treesImage = imageRepository.findByMainTreeId_Image(tree.getId());
+            images.add(treesImage);
+        }
+        model.addAttribute("tree_image",images);
+
+        return "admin/trees/detailTree";
+    }
 
 }

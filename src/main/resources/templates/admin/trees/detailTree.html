@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sản phẩm</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Page content-->
+    <div class="container" style="margin-top: 5rem;margin-left: inherit;">
+        <div class="row">
+            <a style="border: 1px solid black;border-radius: 2px; color: black;
+                width: 15px;text-align: center;padding: 5px; text-decoration: none;
+                "
+               th:href="@{/tree/admin/showTrees}">Quay lại</a>
+            <!-- Blog entries-->
+            <div>
+                <div style="margin-top: 1rem" >
+                    <ul style="display: flex;list-style-type: none;margin-bottom: 2rem">
+                        <li th:each="img: ${images}" style="margin-right: 1rem">
+                            <img style="border-radius: 10px;width: 200px;height: 200px"
+                                 th:src="'/imageTree/'+${img.getUrl()}" alt="..." />
+                            <br><br>
+                            <a style="border: 1px solid black;border-radius: 2px; color: black;
+                            width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                               th:href="@{#}">Sửa ảnh</a>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+            <!-- Side widgets-->
+            <div >
+
+                <!-- Categories widget-->
+                <div >
+                    <div  ><b style="font-size: 24px" th:text="${tree.getName()}"></b></div>
+                    <div >
+                        <div >
+                            <div >
+                                <p style="font-size: 20px" >Thông tin cây: <span th:text="${tree.getNotes()}"></span></p>
+                                <p style="font-size: 20px" >Số lượng :<span th:text="${tree.getQuantity()}"></span></p>
+                                <p style="font-size: 20px">Giá bán: <span th:text="${#numbers.formatDecimal(tree.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></span></p>
+                                <p  style="font-size: 20px">Trạng thái bán :
+                                    <span th:if="${tree.getIsActive() == 0}" style="color: #198754">Đang bán</span>
+                                    <span th:if="${tree.getIsActive() == 1}" style="color: red">Không bán</span>
+                                </p>
+                                <p style="font-size: 20px" >Hiển thị phía người dùng :
+                                    <span th:if="${tree.getIsDelete() == 0}" style="color: #198754">Đang hiển thị</span>
+                                    <span th:if="${tree.getIsDelete() == 1}" style="color: red">Không hiển thị</span>
+                                </p>
+                                <br>
+                                <a style="border: 1px solid black;border-radius: 2px; color: black;
+                                    width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                                   th:href="@{#}">Sửa thông tin cây</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Side widget-->
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

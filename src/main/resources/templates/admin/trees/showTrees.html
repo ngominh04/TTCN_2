@@ -21,32 +21,52 @@
             <thead>
             <tr>
                 <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>Ảnh</th>
+                <th>Tên cây</th>
+                <th>Người sửa</th>
+                <th>Số lượng </th>
+                <th>Giá tiền</th>
+                <th>Ngày tạo</th>
+                <th>Ngày sửa</th>
                 <th></th>
             </tr>
             </thead>
             <tbody th:each="od :${trees}">
             <tr>
                 <td th:text="${od.getId()}"></td>
-                <td th:text="${od.getName()}"></td>
-                <td th:text="${od.getRepairer()}"></td>
-                <td th:text="${od.getCreateDate()}"></td>
                 <td >
-                    <div th:each="image: ${tree_image}" th:if="${image.getIdTree() == tree.getId()}">
-                        <img class="card-img-top" style="width: 100%;height: 90%"
+                    <div th:each="image: ${tree_image}" th:if="${image.getIdTree() == od.getId()}">
+                        <img class="card-img-top" style="width: 100px;height: 100px;border-radius: 15px;"
                              th:src="'/imageTree/'+${image.getUrl()}" alt="..." />
                     </div>
                 </td>
-                <td ></td>
+                <td th:text="${od.getName()}"></td>
+                <td th:text="${od.getRepairer()}"></td>
+                <td th:text="${od.getQuantity()}"></td>
+                <td th:text="${#numbers.formatDecimal(od.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></td>
+                <td th:text="${od.getCreateDate()}"></td>
+                <td th:text="${od.getUpdateDate()}"></td>
+                <td>
+                    <a style="border: 1px solid black;border-radius: 2px; color: black;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/tree/admin/detailTree/'+${od.getId()}}">Xem chi tiết</a>
+                    <br><br>
+                    <a style="border: 1px solid black;border-radius: 2px; color: black;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/category/admin/editCategory/'+${od.getId()}}">Sửa</a>
+                    <br><br>
+                    <a style="border: 1px solid black;border-radius: 2px; color: black;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/category/admin/removeCategory/'+${od.getId()}}">Xóa</a>
+                </td>
             </tr>
             <!-- Add more rows as necessary -->
             </tbody>
         </table>
     </section>
-    <nav style="position: fixed;bottom: 5px;z-index: 1000;">
-        <p >Bạn đang ở trang thứ <span th:text="${trees.getNumber()+1}"></span></p>
+    <div style="height: 50px"></div>
+    <nav style="bottom: 5px;">
+        <p style="margin-bottom: 10px;" >Bạn đang ở trang thứ <span th:text="${trees.getNumber()+1}"></span></p>
         <ul class="pagination" style="list-style: none;display: flex;">
             <div th:if="${trees.totalPages > 0}"
                  th:each="pageNumber : ${pageNumbers}">
