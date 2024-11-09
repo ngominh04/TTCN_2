@@ -8,73 +8,6 @@
     <title>Admin Dashboard</title>
     <link type="text/css" rel="stylesheet" th:href="@{/admin/css/index.css}">
 </head>
-<style>
-    /* General form styling */
-    .main-form {
-        width: 550px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        background-color: #f9f9f9;
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-    }
-
-    label {
-        margin-bottom: 8px;
-        font-weight: bold;
-        color: #333;
-    }
-
-    input[type="text"], input[type="number"], select {
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    input[type="submit"] {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    input[type="submit"]:hover {
-        background-color: #45a049;
-    }
-
-    /* Optional styling for select options */
-    select {
-        background-color: #fff;
-        color: #333;
-    }
-
-    select option {
-        padding: 10px;
-    }
-
-    /* Add a hover effect for select and input fields */
-    input[type="text"]:hover, input[type="number"]:hover, select:hover {
-        border-color: #888;
-    }
-    /*css count */
-    .count{
-        border: 1px solid white;
-        padding: 4px 5px 4px 4px;
-        border-radius: 50%;
-        color: black;
-        background-color: white;
-    }
-</style>
 <body>
     <div class="container">
         <!-- Sidebar for navigation -->
@@ -83,45 +16,44 @@
                 <h2>Danh sách quản lí</h2>
             </div>
             <ul>
-                <li><a th:href="@{'/admin/'+${session.saveAdmin.getId()}}">Thống kê </a></li>
-                <li><a th:href="@{/category/admin/showCate}">Phân loại cây <span class="count" th:text="${session.countCate.getCountCategory()}"></span></a></li>
-                <li><a th:href="@{/tree/admin/showTrees}">Danh sách cây <span class="count" th:text="${session.countTree.countTree}"></span></a></li>
-                <li><a href="#">Đơn hàng <span class="count" th:text="${session.countOrder.getCountOrder()}"></span></a></li>
-                <li><a href="#">Người dùng <span class="count" th:text="${session.countUser.getCountUser()}"></span></a></li>
-                <li><a href="#">Người vận chuyển <span class="count" th:text="${session.countShipper.getCountShipper()}"></span></a></li>
-                <li><a href="#">Phương thức vận chuyển <span class="count">1</span></a></li>
-                <li><a href="#">Phương thức thanh toán <span class="count">1</span></a></li>
-                <li><a href="#">Tin nhắn <span class="count">1</span></a></li>
-                <li><a href="#">Evaluations <span class="count">1</span></a></li>
+                <li><a href="#">Thống kê <span>1</span></a></li>
+                <li><a href="#">Phân loại cây <span>1</span></a></li>
+                <li><a href="#">Danh sách cây <span>1</span></a></li>
+                <li><a href="#">Đơn hàng <span>1</span></a></li>
+                <li><a href="#">Người dùng <span>1</span></a></li>
+                <li><a href="#">Người vận chuyển <span>1</span></a></li>
+                <li><a href="#">Phương thức vận chuyển <span>1</span></a></li>
+                <li><a href="#">Phương thức thanh toán <span>1</span></a></li>
+                <li><a href="#">Tin nhắn <span>1</span></a></li>
+                <li><a href="#">Evaluations <span>1</span></a></li>
             </ul>
         </nav>
 
         <!-- Main content area -->
-        <div class="main-content" layout:fragment="content">
-            <!--        // header-->
+        <div class="main-content">
             <header>
-                <h1></h1>
                 <div class="user-info">
                     <span th:text="${detailAdmin.getName()}"></span>
                     <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
                 </div>
             </header>
+
             <section class="dashboard">
                 <div class="card">
                     <h3>Tổng cây</h3>
-                    <p th:text="${session.countTree.getCountTree()}"></p>
+                    <p th:text="${countTree.getCountTree()}"></p>
                 </div>
                 <div class="card">
                     <h3>Tổng người dùng</h3>
-                    <p th:text="${session.countUser.getCountUser()}"></p>
+                    <p th:text="${countUser.getCountUser()}"></p>
                 </div>
                 <div class="card">
                     <h3>Tổng đơn hàng</h3>
-                    <p th:text="${session.countOrder.getCountOrder()}"></p>
+                    <p th:text="${countOrder.getCountOrder()}"></p>
                 </div>
                 <div class="card">
                     <h3>Tổng người vận chuyển</h3>
-                    <p th:text="${session.countShipper.getCountShipper()}"></p>
+                    <p th:text="${countShipper.getCountShipper()}"></p>
                 </div>
             </section>
 
