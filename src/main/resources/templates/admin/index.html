@@ -17,13 +17,13 @@
             </div>
             <ul>
                 <li><a th:href="@{}">Thống kê </a></li>
-                <li><a th:href="@{}">Phân loại cây <span>1</span></a></li>
-                <li><a th:href="@{}">Danh sách cây <span>1</span></a></li>
-                <li><a th:href="@{}">Đơn hàng <span>1</span></a></li>
-                <li><a th:href="@{}">Người dùng <span>1</span></a></li>
-                <li><a th:href="@{}">Người vận chuyển <span>1</span></a></li>
-                <li><a th:href="@{}">Phương thức vận chuyển <span>1</span></a></li>
-                <li><a th:href="@{}">Phương thức thanh toán <span>1</span></a></li>
+                <li><a th:href="@{}">Phân loại cây <span th:text="${session.countCate.getCountCategory()}"></span></a></li>
+                <li><a th:href="@{}">Danh sách cây <span th:text="${session.countTree.getCountTree()}"></span></a></li>
+                <li><a th:href="@{}">Đơn hàng <span th:text="${session.countOrder.getCountOrder()}"></span></a></li>
+                <li><a th:href="@{}">Người dùng <span th:text="${session.countUser.getCountUser()}"></span></a></li>
+                <li><a th:href="@{}">Người vận chuyển <span th:text="${session.countShipper.getCountShipper()}"></span></a></li>
+                <li><a th:href="@{}">Phương thức vận chuyển <span></span></a></li>
+                <li><a th:href="@{}">Phương thức thanh toán <span></span></a></li>
                 <li><a th:href="@{}">Tin nhắn <span>1</span></a></li>
                 <li><a th:href="@{}">Evaluations <span>1</span></a></li>
             </ul>
