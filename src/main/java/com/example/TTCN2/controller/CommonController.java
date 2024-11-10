@@ -95,9 +95,7 @@ public class CommonController {
     // khi vao admin
     @GetMapping("/admin/{idAdmin}")
     public String admin(Model model, HttpSession session,
-                        @PathVariable("idAdmin") Integer idAdmin,
-                        @RequestParam("page") Optional<Integer> page,
-                        @RequestParam("size") Optional<Integer> size) {
+                        @PathVariable("idAdmin") Integer idAdmin) {
         model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(idAdmin));
         session.setAttribute("countCate",categoryRepository.countAllById());
         session.setAttribute("countTree",treeRepository.countAllById());
@@ -107,55 +105,4 @@ public class CommonController {
         model.addAttribute("order_limit5",orderRepository.findOrderByReceiverDate());
         return "admin/index";
     }
-
-    @GetMapping("/moreData") // thêm dữ liệu bảng trees
-    public String moreData() {
-        for (int i = 0; i < 5; i++) {
-            Tree tree = new Tree();
-            tree.setCreateDate(String.valueOf(LocalDateTime.now()));
-            tree.setUpdateDate(String.valueOf(LocalDateTime.now()));
-            tree.setIdCategory(5);
-            tree.setQuantity(100);
-            tree.setMoney(150000.0);
-            tree.setRepairer(1);
-            tree.setIsActive(0);
-            tree.setIsDelete(0);
-            tree.setQuantity(0);
-            tree.setNotes("Hạt giống");
-            treesService.save(tree);
-            for (int j = 0; j < 3; j++) {
-                TreesImage treesImage = new TreesImage();
-                treesImage.setCreateDate(String.valueOf(LocalDateTime.now()));
-                treesImage.setUpdateDate(String.valueOf(LocalDateTime.now()));
-                treesImage.setMainImage(0);
-                treesImage.setUrl("NGO_TIM.jpg");
-                treesImage.setRepairer(1);
-                treesImage.setIdTree(tree.getId());
-                treeImageService.save(treesImage);
-            }
-        }
-
-        return "/user/index";
-    }
-
-//    @GetMapping("/1")
-//    public String one(Model model) {
-//
-//        int[] arr = {5, 3, 8, 1, 2};
-//        int n = 5;
-//
-//        for (int i = 0; i < n - 1; i++) {
-//            for (int j = 0; j < n - i - 1; j++) {
-//                if (arr[j] > arr[j + 1]) {
-//                    int temp = arr[j];
-//                    arr[j] = arr[j + 1];
-//                    arr[j + 1] = temp;
-//                }
-//            }
-//        }
-//        model.addAttribute("a",arr);
-//        return "user/index";
-//    }
-
-
 }
