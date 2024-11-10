@@ -15,4 +15,8 @@ public interface TreesImageRepository extends JpaRepository<TreesImage, Integer>
     // toan bo anh cua cay theo idTree
     @Query(value = SQL.IDTREE_IMAGE,nativeQuery = true)
     List<TreesImage> findByIdTree_Images(Integer idTree);
+
+    // get all image by idImage
+    @Query(value = "select * from trees_image where id=?",nativeQuery = true)
+    TreesImage getByIdImage(Integer idImage);
 }

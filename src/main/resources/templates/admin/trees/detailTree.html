@@ -19,13 +19,17 @@
             <div>
                 <div style="margin-top: 1rem" >
                     <ul style="display: flex;list-style-type: none;margin-bottom: 2rem">
-                        <li th:each="img: ${images}" style="margin-right: 1rem">
-                            <img style="border-radius: 10px;width: 200px;height: 200px"
+                        <li th:each="img: ${images}" style="margin-right: 1rem;text-align: center">
+                            <img th:if="${img.getUrl() != null}" style="border-radius: 10px;width: 200px;height: 200px"
                                  th:src="'/imageTree/'+${img.getUrl()}" alt="..." />
-                            <br><br>
+                            <p th:if="${img.getUrl() == null}" style="color: red">Chưa có ảnh</p>
+                            <p th:if="${img.getMainImage() == 1}"
+                               style="color: green;padding: 5px 0 5px 0;border: 1px solid;border-radius: 10px">
+                                Ảnh chính</p>
+                            <br><br th:if="${img.getMainImage() == 0}">
                             <a style="border: 1px solid black;border-radius: 2px; color: black;
                             width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                               th:href="@{#}">Sửa ảnh</a>
+                               th:href="@{'/tree/admin/repairImg/'+${tree.getId()}+'/'+${img.getId()}}">Sửa ảnh</a>
                         </li>
 
                     </ul>
@@ -33,7 +37,7 @@
                 </div>
             </div>
             <!-- Side widgets-->
-            <div >
+            <div style="width: 645px;" layout:fragment="detailTreeContent" >
 
                 <!-- Categories widget-->
                 <div >
@@ -41,8 +45,9 @@
                     <div >
                         <div >
                             <div >
-                                <p style="font-size: 20px" >Thông tin cây: <span th:text="${tree.getNotes()}"></span></p>
+                                <p style="font-size: 20px;width: 100%" >Thông tin cây: <span th:text="${tree.getNotes()}"></span></p>
                                 <p style="font-size: 20px" >Số lượng :<span th:text="${tree.getQuantity()}"></span></p>
+                                <p style="font-size: 20px" >Phân loại cây :<span th:text="${category.get().getName()}"></span></p>
                                 <p style="font-size: 20px">Giá bán: <span th:text="${#numbers.formatDecimal(tree.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></span></p>
                                 <p  style="font-size: 20px">Trạng thái bán :
                                     <span th:if="${tree.getIsActive() == 0}" style="color: #198754">Đang bán</span>
@@ -55,7 +60,7 @@
                                 <br>
                                 <a style="border: 1px solid black;border-radius: 2px; color: black;
                                     width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                                   th:href="@{#}">Sửa thông tin cây</a>
+                                   th:href="@{'/tree/admin/editTree/'+${tree.getId()}}">Sửa thông tin cây</a>
                             </div>
                         </div>
 

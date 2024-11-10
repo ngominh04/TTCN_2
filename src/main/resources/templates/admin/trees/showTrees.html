@@ -36,8 +36,9 @@
                 <td th:text="${od.getId()}"></td>
                 <td >
                     <div th:each="image: ${tree_image}" th:if="${image.getIdTree() == od.getId()}">
-                        <img class="card-img-top" style="width: 100px;height: 100px;border-radius: 15px;"
+                        <img th:if="${image.getUrl() != null}" class="card-img-top" style="width: 100px;height: 100px;border-radius: 15px;"
                              th:src="'/imageTree/'+${image.getUrl()}" alt="..." />
+                        <p th:if="${image.getUrl() == null}" style="color: red">Chưa có ảnh</p>
                     </div>
                 </td>
                 <td th:text="${od.getName()}"></td>
@@ -53,7 +54,7 @@
                     <br><br>
                     <a style="border: 1px solid black;border-radius: 2px; color: black;
                            width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/category/admin/editCategory/'+${od.getId()}}">Sửa</a>
+                       th:href="@{'/tree/admin/editTree/'+${od.getId()}}">Sửa</a>
                     <br><br>
                     <a style="border: 1px solid black;border-radius: 2px; color: black;
                            width: 15px;text-align: center;padding: 5px; text-decoration: none;"
@@ -64,8 +65,12 @@
             </tbody>
         </table>
     </section>
-    <div style="height: 50px"></div>
-    <nav style="bottom: 5px;">
+    <div style="height: 2rem"></div>
+    <a style="border: 1px solid black;border-radius: 2px; color: black; margin-top: 2rem;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+       th:href="@{/tree/admin/newTree}"
+    >Thêm mới </a>
+    <nav style="bottom: 5px;margin-top: 2rem">
         <p style="margin-bottom: 10px;" >Bạn đang ở trang thứ <span th:text="${trees.getNumber()+1}"></span></p>
         <ul class="pagination" style="list-style: none;display: flex;">
             <div th:if="${trees.totalPages > 0}"

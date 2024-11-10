@@ -23,7 +23,8 @@
             <tr>
                 <th></th>
                 <th>Tên phân loại</th>
-                <th>Mã người sửa</th>
+                <th>Người sửa</th>
+                <th>Ghi chú</th>
                 <th>Ngày tạo</th>
                 <th>Ngày sửa</th>
                 <th>Trạng thái</th>
@@ -35,6 +36,7 @@
                 <td th:text="${od.getId()}"></td>
                 <td th:text="${od.getName()}"></td>
                 <td th:text="${od.getRepairer()}"></td>
+                <td th:text="${od.getNotes()}" style="width: 390px;"></td>
                 <td th:text="${od.getCreateDate()}"></td>
                 <td th:text="${od.getUpdateDate()}"></td>
                 <td th:if="${od.getIsDelete()} == 0" style="color: #15f48d" >Đang hiển thị</td>

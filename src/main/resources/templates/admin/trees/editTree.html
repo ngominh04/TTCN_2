@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa cây</title>
+</head>
+<body>
+<main class="main-container" layout:fragment="content">
+    <div class="main-title" style="margin-left: 100%;width: 250px;margin-top: 3rem;margin-bottom: 2rem">
+        <h2>Sửa cây</h2>
+    </div>
+    <div class="main-form" style="margin-left: 100%">
+        <form method="post" enctype="multipart/form-data" th:action="@{'/tree/admin/saveEditTree/'+${tree.getId()}}">
+            <label for="name">Tên cây:</label>
+            <input type="text" id="name" name="name" th:value="${tree.getName()}"><br>
+
+            <label for="imageID">Chọn ảnh chính:</label>
+            <div >
+                <ul style="display: flex;list-style-type: none">
+                    <li th:each="img :${tree_image}" style="margin-right: 0.5rem">
+                        <img style="border-radius: 10px;width: 150px;height: 150px"
+                             th:src="'/imageTree/'+${img.getUrl()}" alt="..." />
+                        <input type="radio" id="imageID" name="imageID" th:value="${img.getId()}" th:checked="${img.getMainImage()}">
+                    </li>
+                </ul>
+            </div>
+            <br>
+
+            <label for="quantity">Số lượng :</label>
+            <input  type="number" id="quantity" name="quantity" th:value="${tree.getQuantity()}"><br>
+
+            <label for="notes">Thông tin cây: </label>
+            <input   type="text" id="notes" name="notes" th:value="${tree.notes}"><br>
+
+            <label for="price">Giá bán: (VNĐ)</label>
+            <input type="text" id="price" name="price" th:value="${#numbers.formatDecimal(tree.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}"><br>
+
+            <label >Hiển thị phía người dùng:</label>
+            <input type="radio" style="margin-bottom: -15px" name="is_delete"
+                   id="is_delete_yes" value="0" th:checked="${tree.getIsDelete()} == 0">
+            <label for="is_delete_yes">Đang hiển thị</label>
+            <input type="radio" style="margin-bottom: -15px" name="is_delete"
+                   id="is_delete_no" value="1" th:checked="${tree.getIsDelete()} == 1">
+            <label for="is_delete_no">Không hiển thị</label>
+            <br>
+
+            <label >Trạng thái bán :</label>
+            <input type="radio" style="margin-bottom: -15px" name="is_active"
+                   id="is_active_yes" value="0" th:checked="${tree.getIsActive()} == 0">
+            <label for="is_active_yes">Đang bán</label>
+            <input type="radio" style="margin-bottom: -15px" name="is_active"
+                   id="is_active_no" value="1" th:checked="${tree.getIsActive()} == 1">
+            <label for="is_active_no">Không bán</label>
+            <br>
+            <label >Chọn phân loại cây :</label>
+            <div th:each="cate :${category}" style="margin-left: 2rem">
+                <label th:for="${cate.getId()}" th:text="${cate.getName()}"></label>
+                <input type="radio" th:id="${cate.getId()}" name="category" th:value="${cate.getId()}" th:checked="${cate.getId() == tree.getIdCategory()}">
+            </div>
+            <br>
+
+            <input type="submit" value="Lưu lại">
+        </form>
+    </div>
+</main>
+
+</body>
+</html>
