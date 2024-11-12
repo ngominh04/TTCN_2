@@ -57,7 +57,11 @@ public class OrderController {
                         ) {
         User user = (User) session.getAttribute("saveCus");
         Cart cart = cartRepository.findByIdUser(user.getId());
+        List<CartItem> cartItems1 = cartItemRepository.getAllCartItem_idCart(cart.getId());
+        if (cartItems1.isEmpty()){
 
+            return "redirect:/cart/{idCus}";
+        }
 
         // save order
         Order order = new Order();

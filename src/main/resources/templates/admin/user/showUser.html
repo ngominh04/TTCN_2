@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Xem loại sản phẩm</title>
+</head>
+<body>
+<div class="main-content" layout:fragment="content">
+    <header>
+        <h1></h1>
+        <div class="user-info">
+            <span th:text="${detailAdmin.getName()}"></span>
+            <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
+        </div>
+    </header>
+    <section class="table-section">
+        <h2>Các loại sản phẩm</h2>
+        <p style="color: red" th:text="${message}"></p>
+        <table>
+            <thead>
+            <tr>
+                <th></th>
+                <th>Tên người dùng</th>
+                <th>email</th>
+                <th>Địa chỉ</th>
+                <th>Ngày tạo</th>
+                <th>Ngày sửa</th>
+                <th>Trạng thái</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody th:each="od :${users}">
+            <tr>
+                <td th:text="${od.getId()}"></td>
+                <td th:text="${od.getName()}"></td>
+                <td th:text="${od.getEmail()}"></td>
+                <td th:text="${od.getAddress()}" style="width: 390px;"></td>
+                <td th:text="${od.getCreateDate()}"></td>
+                <td th:text="${od.getUpdateDate()}"></td>
+                <td th:if="${od.getBlock()} == 0" style="color: #15f48d" >Không bị chặn</td>
+                <td th:if="${od.getBlock()} == 1" style="color: #fb4e4e">Đang bị chặn</td>
+                <td th:if="${session.saveAdmin.getPower() != 3}">
+                    <a th:if="${od.getBlock() == 0}"
+                       style="border: 1px solid black;border-radius: 2px; color: black;
+                       width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/user/admin/blockUser/'+${od.getId()}}">Chặn</a>
+                    <a th:if="${od.getBlock() == 1}"
+                       style="border: 1px solid black;border-radius: 2px; color: black;
+                       width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/user/admin/blockUser/'+${od.getId()}}">Bỏ chặn</a>
+                </td>
+            </tr>
+            <!-- Add more rows as necessary -->
+            </tbody>
+        </table>
+    </section>
+    <div style="height: 2rem"></div>
+
+    <nav style="position: fixed;bottom: 5px;z-index: 1000;">
+        <p >Bạn đang ở trang thứ <span th:text="${users.getNumber()+1}"></span></p>
+        <ul class="pagination" style="list-style: none;display: flex;">
+            <div th:if="${users.totalPages > 0}"
+                 th:each="pageNumber : ${pageNumbers}">
+                <li class="page-link" style="border: 1px solid black;border-radius: 2px;
+                                        width: 15px;text-align: center;margin-left: 5px">
+                    <a th:href="@{/user/admin/showUser (size=${users.size}, page=${pageNumber})}"
+                       th:text="${pageNumber}"
+                       th:class="${pageNumber==users.number + 1} ? active"
+                       style="text-decoration: none"
+                       class="page-link"
+                    ></a>
+                </li>
+            </div>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

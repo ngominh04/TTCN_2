@@ -19,4 +19,9 @@ public interface TreesImageRepository extends JpaRepository<TreesImage, Integer>
     // get all image by idImage
     @Query(value = "select * from trees_image where id=?",nativeQuery = true)
     TreesImage getByIdImage(Integer idImage);
+
+//    // delete TreesImage by id_tree
+//    @Query(value = "delete from trees_image where id_tree=?",nativeQuery = true)
+//    TreesImage deleteByTreeId(Integer id_tree);
+
 }

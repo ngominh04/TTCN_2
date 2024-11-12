@@ -34,7 +34,7 @@ public class ReceiverController {
         User customer = (User) session.getAttribute("saveCus");
         model.addAttribute("customer",customer);
         model.addAttribute("receiver",receiverRepository.getAllByReceiverId(idCus));
-        model.addAttribute("count", cartItemRepository.getCartItemCount(cartRepository.findByIdUser(idCus).getId()));
+//        model.addAttribute("count", cartItemRepository.getCartItemCount(cartRepository.findByIdUser(idCus).getId()));
         session.removeAttribute("newReceiverOrder");
         return "user/receiver/showReceiver";
     }

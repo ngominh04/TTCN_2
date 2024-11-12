@@ -78,7 +78,7 @@ public class CommonController {
             Cart cart = cartRepository.findByIdUser(user.getId());
             model.addAttribute("cart", cart);
             if (cart != null) {
-                model.addAttribute("count", cartItemRepository.getCartItemCount(cart.getId()));
+                session.setAttribute("countCart_user",cartItemRepository.getCartItemCount(cart.getId()));
             }
         }
         int totalPages = productPage.getTotalPages();

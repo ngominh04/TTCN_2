@@ -128,6 +128,7 @@ public class RegisterController {
         session.removeAttribute("countUser");
         session.removeAttribute("countOrder");
         session.removeAttribute("countShipper");
+        session.removeAttribute("countCart_user");
         return "redirect:/";
     }
 
@@ -144,8 +145,8 @@ public class RegisterController {
         List<User> customers = userRepository.getAll();
         boolean check = false;
         for (User customer:customers) {
-            if (customer.getEmail().equals(email) == true){
-                if (customer.getUsername().equals(username) == true){
+            if (customer.getEmail().equals(email)){
+                if (customer.getUsername().equals(username)){
                     check = false;
                     session.setAttribute("usernameForgot",username);
                     return "/user/register/forgotPass2";
@@ -165,11 +166,11 @@ public class RegisterController {
                               @RequestParam("password")String password,
                               @RequestParam("password2")String password2,
                               HttpSession session){
-        if (password.equals(password2) == false){
+        if (!password.equals(password2)){
             model.addAttribute("message","2 mật khẩu phải giống nhau");
             return "/user/register/forgotPass2";
         }
-        if (password.length() <8 && password2.length()<8){
+        if (password.length() <8){
             model.addAttribute("message","Mật khẩu phải trên 8 ký tự");
             return "/user/register/forgotPass2";
         }
@@ -177,7 +178,7 @@ public class RegisterController {
         Pattern pattern = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).+$");
         Matcher matcher = pattern.matcher(password);
         boolean checkPass = matcher.matches();
-        if ( checkPass == false){
+        if (!checkPass){
             model.addAttribute("message",
                     "Mật khẩu phải chứa ít nhất 1 kí tự số, " +
                             "1 chữ thường, 1 chữ hoa, 1 ký tự đặc biệt");
@@ -185,7 +186,7 @@ public class RegisterController {
         }
         else {
             User customer = userRepository.getCustomer((String) session.getAttribute("usernameForgot"));
-            customer.setPassword(sha_256_password.SHA_password(password));
+            customer.setPassword(SHA_256_password.SHA_password(password));
             session.removeAttribute("usernameForgot");
             session.removeAttribute("idRole");
             userService.save(customer);
@@ -202,11 +203,11 @@ public class RegisterController {
                              @RequestParam("password")String password,
                              @RequestParam("password2")String password2,
                              HttpSession session){
-        if (password.equals(password2) == false){
+        if (!password.equals(password2)){
             model.addAttribute("message","2 mật khẩu phải giống nhau");
             return "/user/register/forgotPass2";
         }
-        if (password.length() <8 && password2.length()<8){
+        if (password.length() <8){
             model.addAttribute("message","Mật khẩu phải trên 8 ký tự");
             return "/user/register/forgotPass2";
         }
@@ -214,7 +215,7 @@ public class RegisterController {
         Pattern pattern = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).+$");
         Matcher matcher = pattern.matcher(password);
         boolean checkPass = matcher.matches();
-        if ( checkPass == false){
+        if (!checkPass){
             model.addAttribute("message",
                     "Mật khẩu phải chứa ít nhất 1 kí tự số, " +
                             "1 chữ thường, 1 chữ hoa, 1 ký tự đặc biệt");
@@ -222,7 +223,7 @@ public class RegisterController {
         }
         else {
             User customer = (User) session.getAttribute("saveCus");
-            customer.setPassword(sha_256_password.SHA_password(password));
+            customer.setPassword(SHA_256_password.SHA_password(password));
             userService.save(customer);
         }
         return "redirect:/receiver/receiver/{idCus}";

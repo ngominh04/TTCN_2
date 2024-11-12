@@ -50,10 +50,15 @@ public class CartController {
             model.addAttribute("message","Không có sản phẩm nào trong giỏ hàng bạn");
         }
         else {
-            model.addAttribute("cartItem",cartItemRepository.getAllCartItem_idCart(cart.getId()));
-            model.addAttribute("cart",cart);
-            model.addAttribute("category",categoryRepository.getAllCategory());
-            model.addAttribute("count", cartItemRepository.getCartItemCount(cart.getId()));
+            List<CartItem> cartItems =cartItemRepository.getAllCartItem_idCart(cart.getId());
+            if (cartItems.isEmpty()){
+                model.addAttribute("message","Không có sản phẩm nào trong giỏ hàng bạn");
+                return "user/cart/cart";
+            }else {
+                model.addAttribute("cartItem",cartItems);
+                model.addAttribute("cart",cart);
+                model.addAttribute("category",categoryRepository.getAllCategory());
+            }
         }
 
         return "user/cart/cart";
@@ -156,4 +161,22 @@ public class CartController {
         cartService.save(cart);
         return "redirect:/cart/{idCus}";
     }
+    // remove cart
+    @GetMapping("/removeCart/{idCus}/{idCartItem}")
+    public String removeCart(@PathVariable("idCus")Integer idCus,
+                             @PathVariable("idCartItem") Integer idCartItem,
+                             HttpSession session){
+        User customer= (User) session.getAttribute("saveCus");
+        CartItem cartItem = cartItemRepository.getCartItemById(idCartItem);
+        List<CartItem> cartItems = cartItemRepository.getAllCartItem_idCart(cartItem.getIdCart());
+        if (!cartItems.isEmpty()){
+            Cart cart = cartRepository.findByIdUser(customer.getId());
+            cart.setTotalQuantity(cartItem.getQuantity() - 1);
+            cart.setTotalMoney(cart.getTotalMoney() - cartItem.getMoney()*cartItem.getQuantity());
+            cartService.save(cart);
+        }
+        cartItemService.delete(cartItem);
+        return "redirect:/cart/{idCus}";
+    }
+
 }

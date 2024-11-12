@@ -1,6 +1,7 @@
 package com.example.TTCN2.controller;
 
 import com.example.TTCN2.domain.Admin;
+import com.example.TTCN2.domain.Category;
 import com.example.TTCN2.domain.Tree;
 import com.example.TTCN2.domain.TreesImage;
 import com.example.TTCN2.repository.CategoryRepository;
@@ -47,6 +48,8 @@ public class TreeController {
     CategoryRepository categoryRepository;
     @Autowired
     uploadFileService uploadFileService;
+    @Autowired
+    TreeImageService treeImageService;
     // xem chi tiet san pham
     @GetMapping("/detailTree/{idCate}/{idTree}")
     public String detailTree(Model model, @PathVariable(name = "idTree") Integer idTree,
@@ -246,7 +249,18 @@ public class TreeController {
         double price = Double.parseDouble(priceStr.replace(".",""));
 
         Tree tree = new Tree();
-        for (int i = 0; i < 2; i++) {
+        tree.setIdCategory(category);
+        tree.setName(name);
+        tree.setQuantity(quantity);
+        tree.setNotes(notes);
+        tree.setMoney(price);
+        tree.setIsActive(0);
+        tree.setIsDelete(0);
+        tree.setCreateDate(String.valueOf(LocalDateTime.now()));
+        tree.setRepairer(admin.getId());
+        treesService.save(tree);
+        // add image theo tree
+        for (int i = 0; i < 3; i++) {
             TreesImage treesImage =new TreesImage();
             treesImage.setUrl(null);
             if (i == 0) {
@@ -259,16 +273,6 @@ public class TreeController {
             treesImage.setRepairer(admin.getId());
             imageService.save(treesImage);
         }
-        tree.setIdCategory(category);
-        tree.setName(name);
-        tree.setQuantity(quantity);
-        tree.setNotes(notes);
-        tree.setMoney(price);
-        tree.setIsActive(0);
-        tree.setIsDelete(0);
-        tree.setCreateDate(String.valueOf(LocalDateTime.now()));
-        tree.setRepairer(admin.getId());
-        treesService.save(tree);
 
         return "redirect:/tree/admin/showTrees";
     }
@@ -300,5 +304,48 @@ public class TreeController {
         treesImage.setRepairer(admin.getId());
         treesImageRepository.save(treesImage);
         return "redirect:/tree/admin/detailTree/{idTree}";
+    }
+    // remove tree vs power 1
+    @GetMapping("/admin/removeTree/{idTree}")
+    public String removeTree(HttpSession session,Model model,
+                             @PathVariable("idTree")Integer idTree,
+                             @RequestParam("page") Optional<Integer> page,
+                             @RequestParam("size") Optional<Integer> size){
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        if (admin.getPower() == 1){
+            Tree tree = treeRepository.findAllById(idTree);
+            List<TreesImage> images = treesImageRepository.findByIdTree_Images(tree.getId());
+            for (TreesImage image : images) {
+                treeImageService.delete(image);
+            }
+//            treeImageService.deleteByTreeId(idTree);
+            treeRepository.delete(tree);
+        }
+        else {
+                model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+                // phân trang cho trang chủ
+                int currentPage = page.orElse(1); // số trang
+                int pageSize = size.orElse(8); // số sản phẩn trên 1 trang
+                Page<Tree> productPage = treesService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+                model.addAttribute("trees", productPage);
+                // add image theo Tree
+                List<TreesImage>images=new ArrayList<>();
+                for (Tree tree : productPage) {
+                    TreesImage treesImage = treesImageRepository.findByMainTreeId_Image(tree.getId());
+                    images.add(treesImage);
+                }
+                model.addAttribute("tree_image",images);
+                int totalPages = productPage.getTotalPages();
+                if (totalPages > 0) {
+                    List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                            .boxed()
+                            .collect(Collectors.toList());
+                    model.addAttribute("pageNumbers", pageNumbers);
+                    model.addAttribute("maxPageNumber",pageNumbers.size());
+                }
+                return "admin/trees/showTrees";
+            }
+            model.addAttribute("message","Bạn không đủ quyền hạn để xóa");
+            return "redirect:/tree/admin/showTrees";
     }
 }

@@ -145,4 +145,8 @@ public class TreeImageService {
     public void deleteById(Integer integer) {
         treesImageRepository.deleteById(integer);
     }
+
+//    public void deleteByTreeId(Integer tree_id) {
+//        treesImageRepository.deleteByTreeId(tree_id);
+//    }
 }

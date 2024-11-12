@@ -21,7 +21,7 @@
                 </section>
                 <section class="slider-nav slider" style="width: 50%;margin-top: -10%">
                     <div  th:each="img: ${images}">
-                        <img style="border-radius: 10px" th:src="'/imageTree/'+${img.getUrl()}" alt="..." />
+                        <img style="border-radius: 10px;width: 70px;height: 70px" th:src="'/imageTree/'+${img.getUrl()}" alt="..." />
 
                     </div>
                 </section>
@@ -61,7 +61,7 @@
                 <div class="col-lg-3" th:each="trees : ${treesToCategory}">
                     <!-- Blog post-->
                     <div class="card mb-4">
-                        <div th:each="image: ${tree_image}" th:if="${image.getIdTree() == tree.getId()}">
+                        <div th:each="image: ${tree_image}" th:if="${image.getIdTree() == trees.getId()}">
                             <img class="card-img-top" style="width: 299px;height: 300px"
                                  th:src="'/imageTree/'+${image.getUrl()}" alt="..." />
                         </div>

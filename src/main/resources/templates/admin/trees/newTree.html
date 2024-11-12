@@ -14,21 +14,21 @@
     <div class="main-form" style="margin-left: 100%">
         <form method="post" enctype="multipart/form-data" th:action="@{/tree/admin/saveNewTree}">
             <label for="name">Tên cây:</label>
-            <input type="text" id="name" name="name" ><br>
+            <input type="text" id="name" name="name" required><br>
 
             <label for="quantity">Số lượng :</label>
-            <input  type="number" id="quantity" name="quantity" ><br>
+            <input  type="number" id="quantity" name="quantity" required><br>
 
             <label for="notes">Thông tin cây: </label>
-            <input   type="text" id="notes" name="notes" ><br>
+            <input   type="text" id="notes" name="notes" required><br>
 
             <label for="price">Giá bán: (VNĐ)</label>
-            <input type="text" id="price" name="price" ><br>
+            <input type="text" id="price" name="price" required><br>
 
             <label >Chọn phân loại cây :</label>
             <div th:each="cate :${category}" style="margin-left: 2rem">
                 <label th:for="${cate.getId()}" th:text="${cate.getName()}"></label>
-                <input type="radio" th:id="${cate.getId()}" name="category" th:value="${cate.getId()}">
+                <input type="radio" th:id="${cate.getId()}" name="category" th:value="${cate.getId()}" required>
             </div>
             <br>
 

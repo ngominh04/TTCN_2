@@ -1,16 +1,15 @@
 package com.example.TTCN2.service;
 
+import com.example.TTCN2.domain.Tree;
 import com.example.TTCN2.domain.User;
 import com.example.TTCN2.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -20,6 +19,23 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    // phan trang cho user in admin
+    public Page<User> findPaginated(Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<User> list = List.of();
+
+        if (userRepository.getAll().size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, userRepository.getAll().size());
+            list = userRepository.getAll().subList(startItem, toIndex);
+        }
+
+        Page<User> coursePage = new PageImpl<User>(list, PageRequest.of(currentPage, pageSize), userRepository.getAll().size());
+        return coursePage;
+    }
 
     public void deleteAll() {
         userRepository.deleteAll();
