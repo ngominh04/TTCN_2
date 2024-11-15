@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm phương thức vận chuyển</title>
+</head>
+<body>
+<main class="main-container" layout:fragment="content">
+    <div class="main-title" style="margin-left: 100%;width: 500px;margin-top: 3rem;margin-bottom: 2rem">
+        <h2>Thêm phương thức vận chuyển</h2>
+    </div>
+    <div class="main-form" style="margin-left: 100%">
+        <form method="post" enctype="multipart/form-data" th:action="@{/payment/admin/newSavePayment}">
+            <label for="name">Tên phương thức:</label>
+            <input type="text" id="name" name="name" required><br><br>
+
+            <label for="notes">Ghi chú:</label>
+            <input  type="text" id="notes" name="notes" required><br><br>
+
+
+            <br><br>
+
+            <input type="submit" value="Thêm mới">
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

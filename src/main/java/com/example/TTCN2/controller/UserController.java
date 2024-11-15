@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -67,6 +68,7 @@ public class UserController {
         customer.setName(fullName);
         customer.setEmail(email);
         customer.setUsername(username);
+        customer.setUpdateDate(String.valueOf(LocalDateTime.now()));
 //        customer.setPassword(password);
         userService.save(customer);
         return "redirect:/receiver/receiver/{idCus}";

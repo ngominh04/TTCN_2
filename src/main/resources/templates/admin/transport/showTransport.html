@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách phương thức thanh toán</title>
+</head>
+<body>
+<div class="main-content" layout:fragment="content">
+    <header>
+        <h1></h1>
+        <div class="user-info">
+            <span th:text="${detailAdmin.getName()}"></span>
+            <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
+        </div>
+    </header>
+    <section class="table-section">
+        <h2>Danh sách phương thức vận chuyển</h2>
+        <table>
+            <thead>
+            <tr>
+                <th></th>
+                <th>Tên</th>
+                <th style="width: 300px">Ghi chú</th>
+                <th >Giá tiền</th>
+                <th>Ngày tạo</th>
+                <th>Ngày sửa</th>
+                <th>Trạng thái</th>
+                <th style="width: 92px;"></th>
+                <th style="width: 110px"></th>
+            </tr>
+            </thead>
+            <tbody th:each="od :${transports}">
+            <tr>
+                <td th:text="${od.getId()}"></td>
+                <td th:text="${od.getName()}"></td>
+                <td th:text="${od.getNotes()}"></td>
+                <td th:text="${#numbers.formatDecimal(od.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></td>
+                <td th:text="${od.getCreateDate()}"></td>
+                <td th:text="${od.getUpdateDate()}"></td>
+                <td th:if="${od.getIsActive()} == 0" style="color: #15f48d" >Đang hiển thị</td>
+                <td th:if="${od.getIsActive()} == 1" style="color: #fb4e4e">Không hiển thị</td>
+                <td style="width: 92px;" th:if="${session.saveAdmin.getPower() != 3}">
+                    <a th:if="${od.getIsActive() == 0}"
+                       style="border: 1px solid black;border-radius: 2px; color: black;
+                       width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/transport/admin/activeTransport/'+${od.getId()}}">Chặn</a>
+                    <a th:if="${od.getIsActive() == 1}"
+                       style="border: 1px solid black;border-radius: 2px; color: black;
+                       width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/transport/admin/activeTransport/'+${od.getId()}}">Bỏ chặn</a>
+                </td>
+                <td >
+                    <a th:if="${session.saveAdmin.getPower() !=3}"
+                       style="border: 1px solid black;border-radius: 2px; color: black;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/transport/admin/editTransport/'+${od.getId()}}">Sửa</a>
+                    <a th:if="${session.saveAdmin.getPower() ==1}"
+                       style="border: 1px solid black;border-radius: 2px; color: black;
+                       width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/transport/admin/removeTransport/'+${od.getId()}}">Xóa</a>
+                </td>
+            </tr>
+            <!-- Add more rows as necessary -->
+            </tbody>
+        </table>
+    </section>
+    <div style="height: 2rem"></div>
+    <a style="border: 1px solid black;border-radius: 2px; color: black; margin-top: 2rem;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+       th:href="@{/transport/admin/newTransport}"
+    >Thêm mới </a>
+    <nav style="position: fixed;bottom: 5px;z-index: 1000;">
+        <p >Bạn đang ở trang thứ <span th:text="${transports.getNumber()+1}"></span></p>
+        <ul class="pagination" style="list-style: none;display: flex;">
+            <div th:if="${transports.totalPages > 0}"
+                 th:each="pageNumber : ${pageNumbers}">
+                <li class="page-link" style="border: 1px solid black;border-radius: 2px;
+                                        width: 15px;text-align: center;margin-left: 5px">
+                    <a th:href="@{/shipper/admin/showShipper (size=${transports.size}, page=${pageNumber})}"
+                       th:text="${pageNumber}"
+                       th:class="${pageNumber==transports.number + 1} ? active"
+                       style="text-decoration: none"
+                       class="page-link"
+                    ></a>
+                </li>
+            </div>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

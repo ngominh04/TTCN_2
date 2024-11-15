@@ -4,7 +4,7 @@
       layout:decorate="~{/admin/index}">
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách người dùng</title>
+    <title>Danh sách phương thức thanh toán</title>
 </head>
 <body>
 <div class="main-content" layout:fragment="content">
@@ -16,40 +16,49 @@
         </div>
     </header>
     <section class="table-section">
-        <h2>Danh sách người dùng</h2>
-        <p style="color: red" th:text="${message}"></p>
+        <h2>Danh sách phương thức thanh toán</h2>
+<!--        <p style="color: red" th:text="${message}"></p>-->
         <table>
             <thead>
             <tr>
                 <th></th>
-                <th>Tên người dùng</th>
-                <th>email</th>
-                <th>Địa chỉ</th>
+                <th>Tên</th>
+                <th style="width: 300px">Ghi chú</th>
                 <th>Ngày tạo</th>
                 <th>Ngày sửa</th>
                 <th>Trạng thái</th>
                 <th style="width: 92px;"></th>
+                <th></th>
             </tr>
             </thead>
-            <tbody th:each="od :${users}">
+            <tbody th:each="od :${paymentMethods}">
             <tr>
                 <td th:text="${od.getId()}"></td>
                 <td th:text="${od.getName()}"></td>
-                <td th:text="${od.getEmail()}"></td>
-                <td th:text="${od.getAddress()}" style="width: 390px;"></td>
+                <td th:text="${od.getNotes()}"></td>
                 <td th:text="${od.getCreateDate()}"></td>
                 <td th:text="${od.getUpdateDate()}"></td>
-                <td th:if="${od.getBlock()} == 0" style="color: #15f48d" >Không bị chặn</td>
-                <td th:if="${od.getBlock()} == 1" style="color: #fb4e4e">Đang bị chặn</td>
+                <td th:if="${od.getIsActive()} == 0" style="color: #15f48d" >Đang hiển thị</td>
+                <td th:if="${od.getIsActive()} == 1" style="color: #fb4e4e">Không hiển thị</td>
                 <td style="width: 92px;" th:if="${session.saveAdmin.getPower() != 3}">
-                    <a th:if="${od.getBlock() == 0}"
+                    <a th:if="${od.getIsActive() == 0}"
                        style="border: 1px solid black;border-radius: 2px; color: black;
                        width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/user/admin/blockUser/'+${od.getId()}}">Chặn</a>
-                    <a th:if="${od.getBlock() == 1}"
+                       th:href="@{'/payment/admin/activePayment/'+${od.getId()}}">Chặn</a>
+                    <a th:if="${od.getIsActive() == 1}"
                        style="border: 1px solid black;border-radius: 2px; color: black;
                        width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/user/admin/blockUser/'+${od.getId()}}">Bỏ chặn</a>
+                       th:href="@{'/payment/admin/activePayment/'+${od.getId()}}">Bỏ chặn</a>
+                </td>
+                <td >
+                    <a th:if="${session.saveAdmin.getPower() !=3}"
+                       style="border: 1px solid black;border-radius: 2px; color: black;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/payment/admin/editPayment/'+${od.getId()}}">Sửa</a>
+                    <a th:if="${session.saveAdmin.getPower() ==1}"
+                            style="border: 1px solid black;border-radius: 2px; color: black;
+                       width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+                       th:href="@{'/payment/admin/removePayment/'+${od.getId()}}">Xóa</a>
                 </td>
             </tr>
             <!-- Add more rows as necessary -->
@@ -57,17 +66,20 @@
         </table>
     </section>
     <div style="height: 2rem"></div>
-
+    <a style="border: 1px solid black;border-radius: 2px; color: black; margin-top: 2rem;
+                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
+       th:href="@{/payment/admin/newPayment}"
+    >Thêm mới </a>
     <nav style="position: fixed;bottom: 5px;z-index: 1000;">
-        <p >Bạn đang ở trang thứ <span th:text="${users.getNumber()+1}"></span></p>
+        <p >Bạn đang ở trang thứ <span th:text="${paymentMethods.getNumber()+1}"></span></p>
         <ul class="pagination" style="list-style: none;display: flex;">
-            <div th:if="${users.totalPages > 0}"
+            <div th:if="${paymentMethods.totalPages > 0}"
                  th:each="pageNumber : ${pageNumbers}">
                 <li class="page-link" style="border: 1px solid black;border-radius: 2px;
                                         width: 15px;text-align: center;margin-left: 5px">
-                    <a th:href="@{/user/admin/showUser (size=${users.size}, page=${pageNumber})}"
+                    <a th:href="@{/shipper/admin/showShipper (size=${paymentMethods.size}, page=${pageNumber})}"
                        th:text="${pageNumber}"
-                       th:class="${pageNumber==users.number + 1} ? active"
+                       th:class="${pageNumber==paymentMethods.number + 1} ? active"
                        style="text-decoration: none"
                        class="page-link"
                     ></a>

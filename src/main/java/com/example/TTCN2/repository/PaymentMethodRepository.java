@@ -14,6 +14,9 @@ public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, In
     // get all
     @Query(value = "select * from payment_method where is_active = 0 ",nativeQuery = true)
     List<PaymentMethod> getAllById();
+    // get all at admin
+    @Query(value = "select * from payment_method ",nativeQuery = true)
+    List<PaymentMethod> getAllById_admin();
     // lay payment theo idPay
     @Query(value = SQL.GET_PAYMENT_BY_IDPAY,nativeQuery = true)
     PaymentMethod getPaymentById(Integer idPay);

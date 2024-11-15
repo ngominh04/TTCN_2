@@ -4,7 +4,7 @@
       layout:decorate="~{/admin/index}">
 <head>
     <meta charset="UTF-8">
-    <title>Danh sách người dùng</title>
+    <title>Danh sách người vận chuyển</title>
 </head>
 <body>
 <div class="main-content" layout:fragment="content">
@@ -16,40 +16,43 @@
         </div>
     </header>
     <section class="table-section">
-        <h2>Danh sách người dùng</h2>
+        <h2>Danh sách người vận chuyển</h2>
         <p style="color: red" th:text="${message}"></p>
         <table>
             <thead>
             <tr>
                 <th></th>
-                <th>Tên người dùng</th>
-                <th>email</th>
+                <th>Tên</th>
+                <th>SĐT</th>
                 <th>Địa chỉ</th>
                 <th>Ngày tạo</th>
                 <th>Ngày sửa</th>
+                <th></th>
                 <th>Trạng thái</th>
                 <th style="width: 92px;"></th>
             </tr>
             </thead>
-            <tbody th:each="od :${users}">
+            <tbody th:each="od :${shippers}">
             <tr>
                 <td th:text="${od.getId()}"></td>
                 <td th:text="${od.getName()}"></td>
-                <td th:text="${od.getEmail()}"></td>
-                <td th:text="${od.getAddress()}" style="width: 390px;"></td>
+                <td th:text="${od.getPhone()}"></td>
+                <td th:text="${od.getAddress()}" style="width: 320px;"></td>
                 <td th:text="${od.getCreateDate()}"></td>
                 <td th:text="${od.getUpdateDate()}"></td>
                 <td th:if="${od.getBlock()} == 0" style="color: #15f48d" >Không bị chặn</td>
                 <td th:if="${od.getBlock()} == 1" style="color: #fb4e4e">Đang bị chặn</td>
+                <td th:if="${od.getStatus() == 1}">Đang rảnh</td>
+                <td th:if="${od.getStatus() == 2}">Đang giao hàng</td>
                 <td style="width: 92px;" th:if="${session.saveAdmin.getPower() != 3}">
                     <a th:if="${od.getBlock() == 0}"
                        style="border: 1px solid black;border-radius: 2px; color: black;
                        width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/user/admin/blockUser/'+${od.getId()}}">Chặn</a>
+                       th:href="@{'/shipper/admin/blockShipper/'+${od.getId()}}">Chặn</a>
                     <a th:if="${od.getBlock() == 1}"
                        style="border: 1px solid black;border-radius: 2px; color: black;
                        width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/user/admin/blockUser/'+${od.getId()}}">Bỏ chặn</a>
+                       th:href="@{'/shipper/admin/blockShipper/'+${od.getId()}}">Bỏ chặn</a>
                 </td>
             </tr>
             <!-- Add more rows as necessary -->
@@ -59,15 +62,15 @@
     <div style="height: 2rem"></div>
 
     <nav style="position: fixed;bottom: 5px;z-index: 1000;">
-        <p >Bạn đang ở trang thứ <span th:text="${users.getNumber()+1}"></span></p>
+        <p >Bạn đang ở trang thứ <span th:text="${shippers.getNumber()+1}"></span></p>
         <ul class="pagination" style="list-style: none;display: flex;">
-            <div th:if="${users.totalPages > 0}"
+            <div th:if="${shippers.totalPages > 0}"
                  th:each="pageNumber : ${pageNumbers}">
                 <li class="page-link" style="border: 1px solid black;border-radius: 2px;
                                         width: 15px;text-align: center;margin-left: 5px">
-                    <a th:href="@{/user/admin/showUser (size=${users.size}, page=${pageNumber})}"
+                    <a th:href="@{/shipper/admin/showShipper (size=${shippers.size}, page=${pageNumber})}"
                        th:text="${pageNumber}"
-                       th:class="${pageNumber==users.number + 1} ? active"
+                       th:class="${pageNumber==shippers.number + 1} ? active"
                        style="text-decoration: none"
                        class="page-link"
                     ></a>

@@ -47,6 +47,8 @@ public class OrderController {
     TransportMethodRepository transportMethodRepository;
     @Autowired
     PaymentMethodRepository paymentMethodRepository;
+    @Autowired
+    DetailAdminRepository detailAdminRepository;
 
 
     @PostMapping("/{idCus}")
@@ -164,5 +166,45 @@ public class OrderController {
         order.setStatus(4);
         orderRepository.save(order);
         return "redirect:/order/"+idCus+"/"+status;
+    }
+
+    ////////////////// admin ///////////////////
+    // show order
+    @GetMapping("/admin/showOrder/{status}")
+    public String showOrder(Model model,HttpSession session,
+                            @PathVariable Integer status){
+
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+        List<Order> orders = orderRepository.getAllOrderByStatus(status);
+        model.addAttribute("orders",orders);
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        for (Order order : orders) {
+            List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(order.getId());
+            orderDetails.addAll(orderDetailList);
+        }
+        model.addAttribute("countByOrder_status0",orderRepository.countAllByStatus(0));
+        model.addAttribute("countByOrder_status1",orderRepository.countAllByStatus(1));
+        model.addAttribute("countByOrder_status2",orderRepository.countAllByStatus(2));
+        model.addAttribute("countByOrder_status3",orderRepository.countAllByStatus(3));
+        model.addAttribute("countByOrder_status4",orderRepository.countAllByStatus(4));
+        model.addAttribute("countByOrder_status5",orderRepository.countAllByStatus(5));
+        model.addAttribute("countByOrder_status6",orderRepository.countAllByStatus(6));
+        model.addAttribute("orderDetail",orderDetails);
+        model.addAttribute("status",status);
+        return "admin/order/showOrder";
+    }
+    // xac nhan don 1->2; chap nhan hoan don 4->5
+    @GetMapping("/admin/orderStatus/{idOrder}")
+    public String orderStatus(@PathVariable Integer idOrder,Model model){
+        Order order = orderRepository.findByIdOrder(idOrder);
+        if (order.getStatus() == 1) {
+            order.setStatus(2);
+            orderRepository.save(order);
+        }if (order.getStatus() == 4) {
+            order.setStatus(5);
+            orderRepository.save(order);
+        }
+        return "redirect:/order/admin/showOrder/"+order.getStatus();
     }
 }

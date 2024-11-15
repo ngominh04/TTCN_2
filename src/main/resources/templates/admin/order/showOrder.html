@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container1" style="margin-top: 5rem;overflow: auto;height: 500px">
+        <ul class="scrollable-list">
+            <li >
+                <a class="aByOrder" th:href="@{/order/admin/showOrder/1}">Chờ xác nhận <span class="spanByOrder" th:text="' '+${countByOrder_status1.getCountOrder()}"></span></a>
+            </li>
+            <li><a class="aByOrder" th:href="@{/order/admin/showOrder/2}">Đang giao <span class="spanByOrder" th:text="' '+${countByOrder_status2.getCountOrder()}"></span></a></li>
+            <li><a class="aByOrder" th:href="@{/order/admin/showOrder/3}">Đã giao <span class="spanByOrder" th:text="' '+${countByOrder_status3.getCountOrder()}"></span></a></li>
+            <li><a class="aByOrder" th:href="@{/order/admin/showOrder/0}">Đơn hủy <span class="spanByOrder" th:text="' '+${countByOrder_status0.getCountOrder()}"></span></a></li>
+            <li><a class="aByOrder" th:href="@{/order/admin/showOrder/4}">Chờ hoàn đơn <span class="spanByOrder" th:text="' '+${countByOrder_status4.getCountOrder()}"></span></a></li>
+            <li><a class="aByOrder" th:href="@{/order/admin/showOrder/5}">Đang giao lại người bán <span class="spanByOrder" th:text="' '+${countByOrder_status5.getCountOrder()}"></span></a></li>
+            <li><a class="aByOrder" th:href="@{/order/admin/showOrder/6}">Đã hoàn đơn <span class="spanByOrder" th:text="' '+${countByOrder_status6.getCountOrder()}"></span></a></li>
+        </ul>
+        <section class="table-section">
+            <h2>Danh sách đơn
+                <span th:if="${status == 1}"  >chờ xác nhận</span>
+                <span th:if="${status == 2}"  >đang giao</span>
+                <span th:if="${status == 3}"  >đã giao</span>
+                <span th:if="${status == 0}"  >đơn hủy</span>
+                <span th:if="${status == 4}"  >chờ hoàn lại</span>
+                <span th:if="${status == 5}"  >đang giao lại người bán</span>
+                <span th:if="${status == 6}"  >đã hoàn lại</span>
+            </h2>
+            <table>
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Các cây trong đơn</th>
+                    <th>Ngày đặt</th>
+                    <th>Giá tiền</th>
+                    <th style="width: 220px;"></th>
+                </tr>
+                </thead>
+                <tbody th:each="od: ${orders}">
+                <tr>
+                    <td th:text="${od.getId()}"></td>
+                    <td>
+                        <ul style="list-style-type: none">
+                            <li th:each="odl :${orderDetail}"
+                                th:if="${odl.getIdOrder() == od.getId()}"
+                                th:text="${odl.getNameTree()}"></li>
+                        </ul>
+                    </td>
+                    <td th:text="${od.getCreateDate()}"></td>
+                    <td th:text="${#numbers.formatDecimal(od.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></td>
+                    <td>
+                        <a th:if="${od.getStatus()==1}" class="aByOrder" th:href="@{'/order/admin/orderStatus/'+${od.getId()}}">Xác nhận đơn</a>
+                        <a th:if="${od.getStatus()==4}" class="aByOrder" th:href="@{'/order/admin/orderStatus/'+${od.getId()}}">Chấp nhận hoàn đơn</a>
+                    </td>
+                </tr>
+                <!-- Add more rows as necessary -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+</body>
+</html>

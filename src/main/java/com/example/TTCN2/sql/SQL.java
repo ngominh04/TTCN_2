@@ -26,6 +26,8 @@ public class SQL {
 
     // lay toan bo user
     public static final String ALL_USER="select * from user ";
+    // lay toan bo shipper
+    public static final String ALL_SHIPPER="select * from shipper ";
     // lay toan bo receiver theo ID cua User
     public static final String ALL_RECEIVER_BY_IDUSER="select * from receiver where id_user = ?";
     // lay receiver theo idRece
@@ -46,6 +48,8 @@ public class SQL {
     public static final String GET_PAYMENT_BY_IDPAY="select * from payment_method where id=?";
     // order theo idCus and status
     public static final String ORDER_BY_IDCUS_AND_STATUS="select * from `order` where id_user=? and status=?";
+    // order theo idCus and status
+    public static final String ORDER_BY_STATUS="select * from `order` where status=?";
     // orderDetail by idOrder
     public static final String ORDERDETAIL_BY_IDORDER="select *from order_detail where id_order=?";
     // get order by idOrder
@@ -58,6 +62,8 @@ public class SQL {
     public static final String COUNT_CATEGORY="select count(id) countCategory from category";
     // count order
     public static final String COUNT_ORDER="select count(id) countOrder from `order`";
+    // count order
+    public static final String COUNT_ORDER_BY_STATUS="select count(id) countOrder from `order` where status = ?";
     // count shipper
     public static final String COUNT_SHIPPER="select count(id) countShipper from shipper";
     // count user

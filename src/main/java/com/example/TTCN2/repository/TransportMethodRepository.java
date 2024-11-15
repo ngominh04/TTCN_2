@@ -16,4 +16,8 @@ public interface TransportMethodRepository extends JpaRepository<TransportMethod
     // lay trans theo idTrans
     @Query(value = SQL.GET_TRANSPORT_BY_IDTRANS,nativeQuery = true)
     TransportMethod getTransportById(Integer idTrans);
+
+    // get all at admin
+    @Query(value = "select * from transport_method ",nativeQuery = true)
+    List<TransportMethod> getAllById_admin();
 }

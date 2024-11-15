@@ -25,4 +25,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     // limit 5 desc receiver_date
     @Query(value = SQL.LIMIT_ORDER_BY_RECEIVER_DATE,nativeQuery = true)
     List<Order> findOrderByReceiverDate();
+    // order the idCus , status
+    @Query(value = SQL.ORDER_BY_STATUS,nativeQuery = true)
+    List<Order> getAllOrderByStatus(Integer status);
+    // count order by status
+    @Query(value = SQL.COUNT_ORDER_BY_STATUS,nativeQuery = true)
+    IOrder countAllByStatus(Integer status);
 }

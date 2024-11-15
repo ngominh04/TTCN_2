@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa phương thức thanh toán</title>
+</head>
+<body>
+<main class="main-container" layout:fragment="content">
+    <div class="main-title" style="margin-left: 100%;width: 500px;margin-top: 3rem;margin-bottom: 2rem">
+        <h2>Phương thức thanh toán</h2>
+    </div>
+    <div class="main-form" style="margin-left: 100%">
+        <form method="post" enctype="multipart/form-data" th:action="@{'/payment/admin/saveEditPayment/'+${payment.getId()}}">
+
+            <label for="name">Tên phương thức:</label>
+            <input type="text" id="name" name="name" th:value="${payment.getName()}"><br><br>
+
+            <label for="notes">Ghi chú:</label>
+            <input  type="text" id="notes" name="notes" th:value="${payment.getNotes()}"><br><br>
+
+            <label >Hiển thị phía người dùng:</label>
+            <input type="radio" style="margin-bottom: -15px" name="is_active"
+                   id="is_active_yes" value="0" th:checked="${payment.getIsActive()} == 0">
+            <label for="is_active_yes">Đang hiển thị</label>
+            <input type="radio" style="margin-bottom: -15px" name="is_active"
+                   id="is_active_no" value="1" th:checked="${payment.getIsActive()} == 1">
+            <label for="is_active_no">Không hiển thị</label>
+            <br><br>
+
+            <input type="submit" value="Lưu lại">
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

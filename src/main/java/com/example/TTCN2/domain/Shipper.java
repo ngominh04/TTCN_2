@@ -16,9 +16,9 @@ public class Shipper {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_role")
-    private Role idRole;
+    private Integer idRole;
 
     @Column(name = "username", length = 150)
     private String username;
@@ -36,9 +36,15 @@ public class Shipper {
     private String phone;
 
     @Column(name = "create_date")
-    private Instant createDate;
+    private String createDate;
 
     @Column(name = "update_date")
-    private Instant updateDate;
+    private String updateDate;
+//    Status ở shipper: 1 (đang rảnh),2 (đang giao sp)
+    @Column(name = "status")
+    private Integer status;
+
+    @Column(name = "block")
+    private Integer block;
 
 }

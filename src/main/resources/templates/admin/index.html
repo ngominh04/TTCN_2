@@ -58,6 +58,35 @@
     input[type="text"]:hover, input[type="number"]:hover, select:hover {
         border-color: #888;
     }
+    /*css thanh cuộn ngang ul li ở order */
+    .scrollable-list {
+        /*width: 950px;*/
+        /*overflow-x: auto;*/
+        /*white-space: nowrap;*/
+        /*border: 1px solid #ccc;*/
+        border-radius: 5px;
+        padding: 10px;
+        /*margin-left: 2rem;*/
+    }
+    .scrollable-list li {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .aByOrder{
+        background-color: #333;
+        color: white;
+        padding: 5px 10px;
+        text-decoration: none;
+        margin-left: 20px;
+        border-radius: 5px;
+    }
+    .spanByOrder{
+        border: 1px solid white;
+        border-radius: 10px;
+        background-color: #333;
+        color: white;
+        padding: 2px 5px 0 4px;
+    }
 </style>
 <body>
     <div class="container">
@@ -70,11 +99,11 @@
                 <li><a th:href="@{'/admin/'+${session.saveAdmin.getId()}}">Thống kê </a></li>
                 <li><a th:href="@{/category/admin/showCate}">Phân loại cây <span th:text="${session.countCate.getCountCategory()}"></span></a></li>
                 <li><a th:href="@{/tree/admin/showTrees}">Danh sách cây <span th:text="${session.countTree.getCountTree()}"></span></a></li>
-                <li><a th:href="@{#}">Đơn hàng <span th:text="${session.countOrder.getCountOrder()}"></span></a></li>
+                <li><a th:href="@{/order/admin/showOrder/1}">Đơn hàng <span th:text="${session.countOrder.getCountOrder()}"></span></a></li>
                 <li><a th:href="@{/user/admin/showUser}">Người dùng <span th:text="${session.countUser.getCountUser()}"></span></a></li>
-                <li><a th:href="@{#}">Người vận chuyển <span th:text="${session.countShipper.getCountShipper()}"></span></a></li>
-                <li><a th:href="@{#}">Phương thức vận chuyển <span></span></a></li>
-                <li><a th:href="@{#}">Phương thức thanh toán <span></span></a></li>
+                <li><a th:href="@{/shipper/admin/showShipper}">Người vận chuyển <span th:text="${session.countShipper.getCountShipper()}"></span></a></li>
+                <li><a th:href="@{/payment/admin/showPayment}">Phương thức thanh toán <span></span></a></li>
+                <li><a th:href="@{/transport/admin/showTransport}">Phương thức vận chuyển<span></span></a></li>
                 <li><a th:href="@{#}">Tin nhắn <span>1</span></a></li>
                 <li><a th:href="@{#}">Evaluations <span>1</span></a></li>
             </ul>
@@ -135,5 +164,21 @@
             </section>
         </div>
     </div>
+<script>
+    // thay doi mau khi click thẻ li ở order
+    const listItems = document.querySelectorAll('.scrollable-list li');
+
+    listItems.forEach(item => {
+        item.addEventListener('click', (event) => {
+            console.log('Li clicked:', item.textContent);
+            event.preventDefault();
+            listItems.forEach(li => li.classList.remove('activeOrder'));
+            item.classList.add('activeOrder');
+            setTimeout(() => {
+                window.location.href = item.querySelector('a').getAttribute('href');
+            });
+        });
+    });
+</script>
 </body>
 </html>
