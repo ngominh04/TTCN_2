@@ -18,4 +18,8 @@ public interface ShipperRepository extends JpaRepository<Shipper, Integer> {
     // lay toan bo user
     @Query(value = SQL.ALL_SHIPPER,nativeQuery = true)
     List<Shipper> getAll();
+
+    // get shipper by username
+    @Query(value = SQL.CHECK_LOGIN_SHIPPER,nativeQuery = true)
+    Shipper checkLogin(String username);
 }

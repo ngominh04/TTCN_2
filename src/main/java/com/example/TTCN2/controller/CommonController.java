@@ -105,4 +105,9 @@ public class CommonController {
         model.addAttribute("order_limit5",orderRepository.findOrderByReceiverDate());
         return "admin/index";
     }
+    // enter shipper
+    @GetMapping("/shipper/{idShipper}")
+    public String shipper(@PathVariable Integer idShipper){
+        return "shipper/index";
+    }
 }

@@ -2,8 +2,10 @@ package com.example.TTCN2.controller;
 
 import com.example.TTCN2.domain.Admin;
 import com.example.TTCN2.domain.Cart;
+import com.example.TTCN2.domain.Shipper;
 import com.example.TTCN2.domain.User;
 import com.example.TTCN2.repository.AdminRepository;
+import com.example.TTCN2.repository.ShipperRepository;
 import com.example.TTCN2.repository.UserRepository;
 import com.example.TTCN2.service.ParamService;
 import com.example.TTCN2.service.SHA_256_password;
@@ -31,6 +33,8 @@ public class RegisterController {
     SHA_256_password sha_256_password;
     @Autowired
     AdminRepository adminRepository;
+    @Autowired
+    ShipperRepository shipperRepository;
     // chon quyen dang nhap
     @GetMapping("/role")
     public String role(){
@@ -98,17 +102,24 @@ public class RegisterController {
             }
             // shipper
             if(roleSS == 3){
-//                if(!customer.getPassword().equals(sha_256_password.GM_SHA_password(password))){
-//                    model.addAttribute("message","Mật Khẩu Sai __");
-//                }
-//                else if (customer.getBlock() == 0) {
-//                    model.addAttribute("message","Tài khoản của bạn bị khóa");
-//                } else {
-//
-//                    model.addAttribute("customer",userRepository.getCustomer(username));
-//
-//                    return "redirect:/shipper";
-//                }
+                Shipper shipper = shipperRepository.checkLogin(username);
+                if(shipper.getPassword().equals(password)){
+                    session.setAttribute("saveShipper",shipper);
+                    model.addAttribute("shipper",shipper);
+                    session.removeAttribute("idRole");
+                    return "redirect:/shipper/"+shipper.getId();
+                }
+                else if(!shipper.getPassword().equals(sha_256_password.GM_SHA_password(password))){
+                    model.addAttribute("message","Mật Khẩu Sai __");
+                }
+                else if (shipper.getBlock() == 0) {
+                    model.addAttribute("message","Tài khoản của bạn bị khóa");
+                } else {
+
+                    model.addAttribute("shipper",shipper);
+
+                    return "redirect:/shipper/"+shipper.getId();
+                }
             }
 
         }catch (Exception e){

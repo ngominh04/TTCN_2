@@ -23,6 +23,8 @@ public class SQL {
     public static final String CHECK_LOGIN="select * from user where username = ?";
     // login_check username user
     public static final String CHECK_LOGIN_ADMIN="select * from admin where username = ?";
+    // login_check username user
+    public static final String CHECK_LOGIN_SHIPPER="select * from shipper where username = ?";
 
     // lay toan bo user
     public static final String ALL_USER="select * from user ";
