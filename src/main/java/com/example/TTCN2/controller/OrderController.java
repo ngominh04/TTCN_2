@@ -75,7 +75,7 @@ public class OrderController {
         order.setIdReceiver(idReceiver);
         order.setCreateDate(String.valueOf(LocalDateTime.now()));
         // status: 1 cho xac nhan ; 2 dang giao ; 3 da giao ; 4 cho hoan don
-        //; 5 dang giao lai admin; 6: da giao cho admin ; 0 huy don
+        //; 5 dang giao lai admin; 6: da giao cho admin ; 0 huy don ;7: cho shipper lay hang
         order.setStatus(1);
         // save order
         orderRepository.save(order);
@@ -113,8 +113,9 @@ public class OrderController {
     }
 
     // click xem don hang
-    // status: 1 cho xac nhan ; 2 dang giao ; 3 da giao ; 4 cho hoan don
-    //; 5 dang giao lai admin; 6: da giao cho admin ; 0 huy don
+    // status: 1 cho xac nhan ; 2 : cho shipper den lay ; 3 dang giao ; 4 da giao ;
+    // 5 cho hoan don ; 6 dang giao lai admin; 7: da giao cho admin
+    //;; 0 huy don ;
     @GetMapping("/{idCus}/{status}")
     public String orderStatus(@PathVariable Integer idCus, @PathVariable Integer status,
                               HttpSession session,Model model) {
@@ -149,21 +150,21 @@ public class OrderController {
         orderRepository.save(order);
         return "redirect:/order/{idCus}/{status}";
     }
-    // da nhan hang status -> 3
+    // da nhan hang status -> 4
     @GetMapping("/receiveOrder/{idCus}/{status}/{idOrder}")
     public String receiveOrder(@PathVariable Integer idCus, @PathVariable Integer status,
                              @PathVariable Integer idOrder){
         Order order = orderRepository.findByIdOrder(idOrder);
-        order.setStatus(3);
+        order.setStatus(4);
         orderRepository.save(order);
         return "redirect:/order/"+idCus+"/"+status;
     }
-    // hoàn don status -> 4
+    // hoàn don status -> 5
     @GetMapping("/refundOrder/{idCus}/{status}/{idOrder}")
     public String refundOrder(@PathVariable Integer idCus, @PathVariable Integer status,
                                @PathVariable Integer idOrder){
         Order order = orderRepository.findByIdOrder(idOrder);
-        order.setStatus(4);
+        order.setStatus(5);
         orderRepository.save(order);
         return "redirect:/order/"+idCus+"/"+status;
     }
@@ -190,19 +191,20 @@ public class OrderController {
         model.addAttribute("countByOrder_status4",orderRepository.countAllByStatus(4));
         model.addAttribute("countByOrder_status5",orderRepository.countAllByStatus(5));
         model.addAttribute("countByOrder_status6",orderRepository.countAllByStatus(6));
+        model.addAttribute("countByOrder_status7",orderRepository.countAllByStatus(7));
         model.addAttribute("orderDetail",orderDetails);
         model.addAttribute("status",status);
         return "admin/order/showOrder";
     }
-    // xac nhan don 1->2; chap nhan hoan don 4->5
+    // xac nhan don 1->2; chap nhan hoan don 5->2 (2: cho shipper den lay)
     @GetMapping("/admin/orderStatus/{idOrder}")
     public String orderStatus(@PathVariable Integer idOrder,Model model){
         Order order = orderRepository.findByIdOrder(idOrder);
         if (order.getStatus() == 1) {
             order.setStatus(2);
             orderRepository.save(order);
-        }if (order.getStatus() == 4) {
-            order.setStatus(5);
+        }if (order.getStatus() == 5) {
+            order.setStatus(2);
             orderRepository.save(order);
         }
         return "redirect:/order/admin/showOrder/"+order.getStatus();

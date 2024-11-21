@@ -2,7 +2,6 @@ package com.example.TTCN2.controller;
 
 import com.example.TTCN2.domain.Admin;
 import com.example.TTCN2.domain.Shipper;
-import com.example.TTCN2.domain.User;
 import com.example.TTCN2.repository.DetailAdminRepository;
 import com.example.TTCN2.repository.ShipperRepository;
 import com.example.TTCN2.service.ShipperService;
@@ -24,14 +23,14 @@ import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/shipper")
-public class ShippperController {
+public class ShipperController {
     @Autowired
     ShipperRepository shipperRepository;
     @Autowired
     ShipperService shipperService;
     @Autowired
     DetailAdminRepository detailAdminRepository;
-    // show all user to admin
+    // show all shipper to admin
     @GetMapping("/admin/showShipper")
     public String showShipper(HttpSession session, Model model,
                            @RequestParam("page") Optional<Integer> page,
@@ -54,7 +53,7 @@ public class ShippperController {
         }
         return "admin/shipper/showShipper";
     }
-    // block user
+    // block shipper
     @GetMapping("/admin/blockShipper/{idShipper}")
     public String blockShipper(HttpSession session, Model model,
                             @PathVariable("idShipper")Integer idShipper){

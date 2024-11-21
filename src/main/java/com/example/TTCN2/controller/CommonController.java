@@ -2,6 +2,7 @@ package com.example.TTCN2.controller;
 
 
 import com.example.TTCN2.domain.*;
+import com.example.TTCN2.projection.IOrder;
 import com.example.TTCN2.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,8 @@ public class CommonController {
     ShipperRepository shipperRepository;
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    ReceiverRepository receiverRepository;
 
     // khởi đầu khi vào đường dẫn trang usser
     @GetMapping("/")
@@ -107,7 +110,9 @@ public class CommonController {
     }
     // enter shipper
     @GetMapping("/shipper/{idShipper}")
-    public String shipper(@PathVariable Integer idShipper){
+    public String shipper(@PathVariable Integer idShipper,Model model){
+        List<IOrder> orders=orderRepository.getAllOrderByStatusJoinReceiver(1);
+        model.addAttribute("orders",orders);
         return "shipper/index";
     }
 }

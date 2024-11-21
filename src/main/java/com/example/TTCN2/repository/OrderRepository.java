@@ -28,6 +28,9 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     // order the idCus , status
     @Query(value = SQL.ORDER_BY_STATUS,nativeQuery = true)
     List<Order> getAllOrderByStatus(Integer status);
+    // order the idCus , status
+    @Query(value = SQL.GET_ALL_ORDER_BY_STATUS_JOIN_RECEIVER,nativeQuery = true)
+    List<IOrder> getAllOrderByStatusJoinReceiver(Integer status);
     // count order by status
     @Query(value = SQL.COUNT_ORDER_BY_STATUS,nativeQuery = true)
     IOrder countAllByStatus(Integer status);
