@@ -73,9 +73,11 @@ public class OrderController {
         order.setTotalMoney(cart.getTotalMoney()+transportMethodRepository.getTransportById(idTrans).getMoney());
         order.setIdUser(idCus);
         order.setIdReceiver(idReceiver);
+        order.setIdShipper(0);
         order.setCreateDate(String.valueOf(LocalDateTime.now()));
-        // status: 1 cho xac nhan ; 2 dang giao ; 3 da giao ; 4 cho hoan don
-        //; 5 dang giao lai admin; 6: da giao cho admin ; 0 huy don ;7: cho shipper lay hang
+        // status: 1 cho xac nhan ; 2 : cho shipper den lay ; 3 dang giao ; 4 da giao ;
+        // 5 cho hoan don ; 6 dang giao lai admin; 7: da giao cho admin
+        //;; 0 huy don ;
         order.setStatus(1);
         // save order
         orderRepository.save(order);

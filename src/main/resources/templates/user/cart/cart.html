@@ -50,10 +50,12 @@
                                                         <div style="margin-left: 0.25rem">
                                                             <h5 class="mb-0" th:text="${#numbers.formatDecimal(item.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></h5>
                                                         </div>
-                                                        <div style="margin-left: 0.5rem">
-                                                            <a th:href="@{'/cart/removeCart/'+${session.saveCus.getId()}+'/'+${item.getId()}}">X</a>
+                                                        <div style="margin-left: 2.5rem">
+                                                            <a th:href="@{'/cart/removeCart/'+${session.saveCus.getId()}+'/'+${item.getId()}}" style="color: #ff0202;">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </a>
                                                         </div>
-                                                        <a href="#!" style="color: #cecece;"><i class="fas fa-trash-alt"></i></a>
+
                                                     </div>
                                                 </div>
                                             </div>

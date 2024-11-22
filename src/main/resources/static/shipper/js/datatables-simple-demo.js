@@ -1567,7 +1567,7 @@
                              labels: {
                                  placeholder: "Tìm đơn theo mã… ",
                                  searchTitle: "Search within table",
-                                 noRows: "No entries found",
+                                 noRows: "Không có đơn",
                                  noResults: "No results match your search query",
                                  info: "Đơn hàng {start} tới {end} trong số {rows}"
                              },

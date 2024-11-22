@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Trang chủ người vận chuyển</title>
+        <title>Trang người vận chuyển</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link th:href="@{/shipper/css/styles.css}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -96,15 +96,15 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav">
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                    <div class="sb-sidenav-menu" >
+                        <div class="nav" style="align-items: center">
+                            <a class="nav-link collapsed" th:href="@{'/shipper/'+${session.saveShipper.getId()}}">
                                 Cần giao
                             </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <a class="nav-link collapsed" th:href="@{/shipper/shipperOrder/3}">
                                 Đang giao
                             </a>
-                            <a class="nav-link" href="charts.html">
+                            <a class="nav-link collapsed" th:href="@{/shipper/shipperOrder/4}">
                                 Đã giao
                             </a>
 <!--                            <a class="nav-link" href="tables.html">-->
@@ -114,8 +114,8 @@
                     </div>
                 </nav>
             </div>
-            <div id="layoutSidenav_content" layout:fragment="content">
-                <main>
+            <div id="layoutSidenav_content" >
+                <main layout:fragment="content">
                     <div class="container-fluid px-4" style="margin-top: 3rem">
                         <div class="card mb-4">
                             <div class="card-header">
@@ -153,12 +153,14 @@
                                             <td th:text="${od.getCreateDate()}"></td>
                                             <td >
                                                 <ul style="display: flex;list-style-type: none">
-                                                    <li><a class="btn1" th:href="@{#}">
+                                                    <li><a class="btn1" th:href="@{'/shipper/shipperOrder/detailOrder/'+${od.getId()}}">
                                                         Xem
                                                     </a></li>
-                                                    <li style="margin-left: 0.5rem"><a class="btn1" th:href="@{#}">
+                                                    <li style="margin-left: 0.5rem">
+                                                        <a class="btn1" th:href="@{'/shipper/shipperOrder/confirmOrder/'+${od.getId()}}">
                                                         Nhận
-                                                    </a></li>
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </td>
                                         </tr>

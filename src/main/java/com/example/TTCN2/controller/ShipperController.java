@@ -1,9 +1,11 @@
 package com.example.TTCN2.controller;
 
 import com.example.TTCN2.domain.Admin;
+import com.example.TTCN2.domain.Order;
 import com.example.TTCN2.domain.Shipper;
-import com.example.TTCN2.repository.DetailAdminRepository;
-import com.example.TTCN2.repository.ShipperRepository;
+import com.example.TTCN2.domain.ShipperOrder;
+import com.example.TTCN2.projection.IOrder;
+import com.example.TTCN2.repository.*;
 import com.example.TTCN2.service.ShipperService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +33,15 @@ public class ShipperController {
     ShipperService shipperService;
     @Autowired
     DetailAdminRepository detailAdminRepository;
+    @Autowired
+    OrderRepository orderRepository;
+    @Autowired
+    OrderDetailRepository orderDetailRepository;
+    @Autowired
+    ReceiverRepository receiverRepository;
+    @Autowired
+    ShipperOrderRepository shipperOrderRepository;
+
     // show all shipper to admin
     @GetMapping("/admin/showShipper")
     public String showShipper(HttpSession session, Model model,
@@ -69,5 +81,47 @@ public class ShipperController {
             shipperService.save(shipper);
         }
         return "redirect:/shipper/admin/showShipper";
+    }
+
+    // show orderShipper
+    @GetMapping("/shipperOrder/{orderStatus}")
+    public String showOrderStatus_Shipper(@PathVariable Integer orderStatus, HttpSession session, Model model){
+        Shipper shipper = (Shipper) session.getAttribute("saveShipper");
+        List<IOrder> orders = orderRepository.getAllOrderByStatusJoinReceiver(orderStatus,shipper.getId());
+        model.addAttribute("orders", orders);
+        if (orderStatus == 4){
+            return "shipper/shipperOrder/showShipperOrder4";
+        }
+        return "shipper/shipperOrder/showShipperOrder3";
+    }
+
+    //detail order
+    @GetMapping("/shipperOrder/detailOrder/{idOrder}")
+    public String showOrderStatus(@PathVariable Integer idOrder, HttpSession session, Model model){
+        Order order = orderRepository.getReferenceById(idOrder);
+        model.addAttribute("order",order);
+        model.addAttribute("trees",orderDetailRepository.findByOrderId(order.getId()));
+        model.addAttribute("receiver",receiverRepository.findAllById(order.getIdReceiver()));
+        return "shipper/shipperOrder/detailOrder";
+    }
+
+    // nhan don de giao phia shipper
+    @GetMapping("/shipperOrder/confirmOrder/{idOrder}")
+    public String confirmOrder(@PathVariable Integer idOrder, HttpSession session, Model model){
+        Shipper shipper = (Shipper) session.getAttribute("saveShipper");
+        // repair table order
+        Order order = orderRepository.getReferenceById(idOrder);
+        order.setIdShipper(shipper.getId());
+        order.setStatus(3);
+        orderRepository.save(order);
+        // save table shipper_order
+        ShipperOrder shipperOrder = new ShipperOrder();
+        shipperOrder.setIdShipper(shipper.getId());
+        shipperOrder.setIdOrder(order.getId());
+        shipperOrder.setReceiverDate(String.valueOf(LocalDateTime.now()));
+        shipperOrder.setStatus(1);
+        // Trạng thái ở shippeOrder : 1 đang giao , 2 đã giao tới khách
+        shipperOrderRepository.save(shipperOrder);
+        return "redirect:/shipper/"+shipper.getId();
     }
 }

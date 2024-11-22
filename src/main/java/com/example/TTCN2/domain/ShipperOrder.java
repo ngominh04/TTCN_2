@@ -16,18 +16,24 @@ public class ShipperOrder {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_shipper")
-    private Shipper idShipper;
+    private Integer idShipper;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_order")
-    private Order idOrder;
+    private Integer idOrder;
 
     @Column(name = "receiver_date")
-    private Instant receiverDate;
+    private String receiverDate;
+
+    @Column(name = "delivery_date")
+    private String deliveryDate;
 
     @Column(name = "image_order", length = 250)
     private String imageOrder;
+
+    @Column(name = "status")
+    private Integer status;
 
 }

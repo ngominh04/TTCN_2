@@ -18,4 +18,5 @@ public interface ReceiverRepository extends JpaRepository<Receiver, Integer> {
     // get receiver by idRece
     @Query(value = SQL.RECEIVER_BY_IDRECE,nativeQuery = true)
     Receiver findAllById(Integer idRece);
+
 }

@@ -77,8 +77,8 @@ public class SQL {
             "limit 5";
     // get all order join receiver ()
     public static final String GET_ALL_ORDER_BY_STATUS_JOIN_RECEIVER= "select o.id id,o.total_money totalMoney,o.total_quantity totalQuantity,o.id_receiver idRece\n" +
-            "     ,r.name nameRece,r.address addressRece,o.create_date createDate\n" +
+            "     ,r.name nameRece,r.address addressRece,o.create_date createDate,o.status status\n" +
             "from `order` o\n" +
             "    join trees.receiver r on r.id = o.id_receiver\n" +
-            "where o.status = ?";
+            "where o.status = ? and o.id_shipper = ?";
 }

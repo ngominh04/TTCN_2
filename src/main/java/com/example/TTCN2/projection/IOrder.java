@@ -9,4 +9,5 @@ public interface IOrder {
     String getAddressRece();
     String getCreateDate();
     Integer getCountOrder();
+    Integer getStatus();
 }

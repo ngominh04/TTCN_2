@@ -46,4 +46,7 @@ public class Order {
     @Column(name = "status")
     private Integer status;
 
+    @Column(name = "id_shipper")
+    private Integer idShipper;
+
 }

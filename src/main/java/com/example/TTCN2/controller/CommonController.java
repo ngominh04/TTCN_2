@@ -111,7 +111,8 @@ public class CommonController {
     // enter shipper
     @GetMapping("/shipper/{idShipper}")
     public String shipper(@PathVariable Integer idShipper,Model model){
-        List<IOrder> orders=orderRepository.getAllOrderByStatusJoinReceiver(1);
+        List<IOrder> orders=orderRepository.getAllOrderByStatusJoinReceiver(2,1);
+        // idShipper chung khi order default la 1
         model.addAttribute("orders",orders);
         return "shipper/index";
     }
