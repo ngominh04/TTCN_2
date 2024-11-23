@@ -107,9 +107,6 @@
                             <a class="nav-link collapsed" th:href="@{/shipper/shipperOrder/4}">
                                 Đã giao
                             </a>
-<!--                            <a class="nav-link" href="tables.html">-->
-<!--                                Tables-->
-<!--                            </a>-->
                         </div>
                     </div>
                 </nav>
@@ -191,5 +188,35 @@
         <script th:src="@{/shipper/assets/demo/chart-bar-demo.js}"></script>
 <!--        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>-->
         <script th:src="@{/shipper/js/datatables-simple-demo.js}"></script>
+        <script>
+            function previewImage(event) {
+                var reader = new FileReader();
+
+                // When the file is loaded, set the image preview source
+                reader.onload = function () {
+                    var output = document.getElementById('imagePreview');
+
+                    // Add event listener to the file input
+                    document.getElementById('image_order');
+
+                    function previewImage(event) {
+                        var reader = new FileReader();
+
+                        // When the file is loaded, set the image preview source
+                        reader.onload = function () {
+                            var output = document.getElementById('imagePreview');
+                            output.src = reader.result;  // Set the image source to the result of FileReader
+                            output.style.display = 'block';  // Make the image visible
+                        };
+
+                        // Read the selected file as a data URL
+                        reader.readAsDataURL(event.target.files[0]);
+                    }
+
+                    // Add event listener to the file input
+                    document.getElementById('image_order').addEventListener('change', previewImage);
+                }
+            }
+        </script>
     </body>
 </html>

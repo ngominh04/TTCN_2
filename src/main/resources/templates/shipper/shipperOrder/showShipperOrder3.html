@@ -38,7 +38,8 @@
                     <!--                                    </tfoot>-->
                     <tbody >
                     <tr th:each="od :${orders}" >
-                        <td th:text="${od.getId()}"></td>
+                        <td th:each="sh_o :${shipperOrders}" th:if="${sh_o.getStatus() == 1}"><p><span th:text="${od.getId()}"></span> (<span  style="color: red" >Đang giao</span>)</p></td>
+                        <td th:each="sh_o :${shipperOrders}" th:if="${sh_o.getStatus() == 2}"><p><span th:text="${od.getId()}"></span> (<span  style="color: green" >Đã giao</span>)</p></td>
                         <td th:text="${od.getAddressRece()}"></td>
                         <td th:text="${od.getNameRece()}"></td>
                         <td th:text="${#numbers.formatDecimal(od.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></td>
@@ -47,9 +48,6 @@
                             <ul style="display: flex;list-style-type: none">
                                 <li><a class="btn1" th:href="@{'/shipper/shipperOrder/detailOrder/'+${od.getId()}}">
                                     Xem
-                                </a></li>
-                                <li style="margin-left: 0.5rem"><a class="btn1" th:href="@{#}">
-                                    Nhận
                                 </a></li>
                             </ul>
                         </td>

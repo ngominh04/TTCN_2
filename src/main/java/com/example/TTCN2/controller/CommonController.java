@@ -51,6 +51,9 @@ public class CommonController {
     OrderRepository orderRepository;
     @Autowired
     ReceiverRepository receiverRepository;
+    @Autowired
+    ShipperOrderRepository shipperOrderRepository;
+
 
     // khởi đầu khi vào đường dẫn trang usser
     @GetMapping("/")

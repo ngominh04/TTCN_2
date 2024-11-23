@@ -81,4 +81,10 @@ public class SQL {
             "from `order` o\n" +
             "    join trees.receiver r on r.id = o.id_receiver\n" +
             "where o.status = ? and o.id_shipper = ?";
+    // get shipper_order by idOrder
+    public static final String GET_SHIPPER_ORDER_BY_IDORDER="select * from shipper_order where id_order = ?";
+    // get all shipper_order by id_shipper
+    public static final String GET_ALL_SHIPPER_ORDER_BY_IDSHIPPER="select * from shipper_order where id_shipper = ?";
+    // get Shipper by idShipper
+    public static final String GET_SHIPPER_BY_IDSHIPPER="select * from shipper where id=?";
 }

@@ -67,8 +67,23 @@
                                 <div class="d-flex justify-content-between align-items-center mb-4">
                                     <div>
                                         <h4 class="mb-1">Tổng số tiền cần thu : <span th:text="${#numbers.formatDecimal(order.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></span></h4>
+                                        <div style="height: 16px"></div>
+                                        <a th:if="${order.getStatus() == 2}" class="btn1" th:href="@{'/shipper/shipperOrder/confirmOrder/'+${order.getId()}}">
+                                            Nhận
+                                        </a>
+                                        <form th:if="${order.getStatus() == 3 && shipperOrder.getStatus()==1}" th:action="@{'/shipper/shipperOrder/saveImageOrder/'+${order.getId()}}" enctype="multipart/form-data" method="post">
+                                            <label for="image_order">Chụp ảnh sản phẩm đã giao</label>
+                                            <input name="image_order" id="image_order" type="file"><br>
+                                            <img id="imagePreview" src="" alt="Image preview" style="max-width: 300px; display: none;"/><br>
+                                            <input type="submit" class="btn1" value="Xác nhận">
+                                        </form>
+                                        <div th:if="${shipperOrder.getStatus() == 2}">
+                                            <p>Ảnh chụp sản phẩm đã giao (Time: <span th:text="${shipperOrder.getDeliveryDate()}"></span>)</p>
+                                            <img  th:src="'/imageTree/'+${shipperOrder.getImageOrder()}" alt="" style="max-width: 300px;"/><br>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
