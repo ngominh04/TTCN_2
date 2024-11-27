@@ -34,5 +34,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     // count order by status
     @Query(value = SQL.COUNT_ORDER_BY_STATUS,nativeQuery = true)
     IOrder countAllByStatus(Integer status);
+    // count dateDiff order wwith status 4
+    @Query(value = SQL.DATEDIFF_ORDER_STATTUS_4,nativeQuery = true)
+    IOrder getOrderByStatus4(Integer idOrder);
 
 }

@@ -87,4 +87,6 @@ public class SQL {
     public static final String GET_ALL_SHIPPER_ORDER_BY_IDSHIPPER="select * from shipper_order where id_shipper = ?";
     // get Shipper by idShipper
     public static final String GET_SHIPPER_BY_IDSHIPPER="select * from shipper where id=?";
+    // dateDiff orderStatus4
+    public static final String DATEDIFF_ORDER_STATTUS_4="select datediff(receiver_date,create_date) dateOrder from `order` where id=?";
 }

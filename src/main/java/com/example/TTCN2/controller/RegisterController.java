@@ -1,12 +1,8 @@
 package com.example.TTCN2.controller;
 
-import com.example.TTCN2.domain.Admin;
-import com.example.TTCN2.domain.Cart;
-import com.example.TTCN2.domain.Shipper;
-import com.example.TTCN2.domain.User;
-import com.example.TTCN2.repository.AdminRepository;
-import com.example.TTCN2.repository.ShipperRepository;
-import com.example.TTCN2.repository.UserRepository;
+import com.example.TTCN2.domain.*;
+import com.example.TTCN2.projection.IOrder;
+import com.example.TTCN2.repository.*;
 import com.example.TTCN2.service.ParamService;
 import com.example.TTCN2.service.SHA_256_password;
 import com.example.TTCN2.service.UserService;
@@ -35,6 +31,10 @@ public class RegisterController {
     AdminRepository adminRepository;
     @Autowired
     ShipperRepository shipperRepository;
+    @Autowired
+    OrderRepository orderRepository;
+    @Autowired
+    ShipperOrderRepository shipperOrderRepository;
     // chon quyen dang nhap
     @GetMapping("/role")
     public String role(){
@@ -78,6 +78,18 @@ public class RegisterController {
                     model.addAttribute("customer",userRepository.getCustomer(username));
                     // remove sesion
                     session.removeAttribute("idRole");
+
+                    // ktra order status 3 -> 4
+                    List<Order> orders = orderRepository.findByCusAndStatus(customer.getId(), 3);
+                    for (Order order : orders) {
+                        IOrder iOrder =orderRepository.getOrderByStatus4(order.getId());
+                        ShipperOrder shipperOrder = shipperOrderRepository.findByOrderId(order.getId());
+                        if (iOrder.getDateOrder() >3 && shipperOrder.getStatus()==2){
+                            order.setStatus(4);
+                            orderRepository.save(order);
+                        }
+                    }
+
                     return "redirect:/";
                 }
             }

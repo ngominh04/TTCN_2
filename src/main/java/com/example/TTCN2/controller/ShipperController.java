@@ -138,6 +138,7 @@ public class ShipperController {
         Shipper shipper = (Shipper) session.getAttribute("saveShipper");
         uploadFileService.store(image_order);
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(image_order.getOriginalFilename()));
+        Order order = orderRepository.findByIdOrder(idOrder);
         // save status, image and deliveryDate
         ShipperOrder shipperOrder = shipperOrderRepository.findByOrderId(idOrder);
         if (shipper.getStatus() ==1 ){
@@ -145,6 +146,9 @@ public class ShipperController {
             shipperOrder.setDeliveryDate(String.valueOf(LocalDateTime.now()));
             shipperOrder.setStatus(2); // (2) trang thai da giao toi user kem image
             shipperOrderRepository.save(shipperOrder);
+            // save delivery date in order
+            order.setReceiverDate(shipperOrder.getDeliveryDate());
+            orderRepository.save(order);
             return "redirect:/shipper/shipperOrder/3";
         }
         return "redirect:/shipper/shipperOrder/3";

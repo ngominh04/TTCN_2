@@ -10,4 +10,5 @@ public interface IOrder {
     String getCreateDate();
     Integer getCountOrder();
     Integer getStatus();
+    Integer getDateOrder();
 }

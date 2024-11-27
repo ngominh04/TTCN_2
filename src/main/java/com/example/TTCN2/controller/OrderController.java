@@ -1,6 +1,7 @@
 package com.example.TTCN2.controller;
 
 import com.example.TTCN2.domain.*;
+import com.example.TTCN2.projection.IOrder;
 import com.example.TTCN2.repository.*;
 import com.example.TTCN2.service.*;
 import jakarta.servlet.http.HttpSession;
@@ -49,6 +50,8 @@ public class OrderController {
     PaymentMethodRepository paymentMethodRepository;
     @Autowired
     DetailAdminRepository detailAdminRepository;
+    @Autowired
+    ShipperOrderRepository shipperOrderRepository;
 
 
     @PostMapping("/{idCus}")
@@ -125,11 +128,17 @@ public class OrderController {
         List<Order> orders = orderRepository.findByCusAndStatus(user.getId(),status);
         model.addAttribute("orders",orders);
         List<OrderDetail> orderDetails = new ArrayList<>();
+        List<ShipperOrder> shipperOrders = new ArrayList<>();
+        List<IOrder> dateDiffs = new ArrayList<>();
         for (Order order : orders) {
             List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(order.getId());
             orderDetails.addAll(orderDetailList);
+            shipperOrders.add(shipperOrderRepository.findByOrderId(order.getId()));
+            dateDiffs.add(orderRepository.getOrderByStatus4(order.getId()));
         }
+        model.addAttribute("dateDiffs",dateDiffs);
         model.addAttribute("orderDetail",orderDetails);
+        model.addAttribute("shipperOrders",shipperOrders);
         model.addAttribute("status",status);
 
         return "user/order/order";
@@ -156,9 +165,12 @@ public class OrderController {
     @GetMapping("/receiveOrder/{idCus}/{status}/{idOrder}")
     public String receiveOrder(@PathVariable Integer idCus, @PathVariable Integer status,
                              @PathVariable Integer idOrder){
+        // chuyen trang thai order
         Order order = orderRepository.findByIdOrder(idOrder);
+        order.setReceiverDate(String.valueOf(LocalDateTime.now()));
         order.setStatus(4);
         orderRepository.save(order);
+
         return "redirect:/order/"+idCus+"/"+status;
     }
     // hoàn don status -> 5

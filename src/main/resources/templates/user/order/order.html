@@ -11,14 +11,18 @@
     <div class="container1" style="margin-top: 5rem;overflow: auto;height: 500px">
         <ul class="scrollable-list">
             <li class="activeOrder"><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/1'}">Chờ xác nhận</a></li>
-            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/2'}">Đang giao</a></li>
-            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/3'}">Đã giao</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/2'}">Chờ vận chuyển</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/3'}">Đang giao</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/4'}">Đã giao</a></li>
             <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/0'}">Đơn hủy</a></li>
-            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/4'}">Chờ hoàn đơn</a></li>
-            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/5'}">Đang giao lại người bán</a></li>
-            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/6'}">Đã hoàn đơn</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/5'}">Chờ hoàn đơn</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/6'}">Đang giao lại người bán</a></li>
+            <li><a class="btn1" th:href="@{'/order/'+${session.saveCus.getId()}+'/7'}">Đã hoàn đơn</a></li>
         </ul>
         <ul class="responsive-table" >
+            <div th:if="${status == 4}">
+                <p style="color: red">Bạn được trả hàng sau khi nhận hàng 3 ngày</p>
+            </div>
             <li class="table-row" th:each="od: ${orders}">
                 <div class="col1 col-1" >
                     <ul >
@@ -32,16 +36,26 @@
                 <div class="col1 col-3" style="padding-left: 4rem;align-content: center;" th:text="${od.getCreateDate()}"></div>
                 <div class="col1 col-2" style="align-content: center;"  th:text="${#numbers.formatDecimal(od.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></div>
                 <div class="col1 col-4" style="align-content: center;" >
-                    <a class="btn1" th:if="${status == 1}"
+                    <a class="btn1" th:if="${status == 1 || status==2}"
                        style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
                        th:href="@{'/order/closeOrder/'+${session.saveCus.getId()}+'/0/'+${od.getId()}}">Hủy đơn</a>
                     <!--/*@thymesVar id="getId" type=""*/-->
-                    <a class="btn1" th:if="${status == 2}"
-                       style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
-                       th:href="@{'/order/refundOrder/'+${session.saveCus.getId()}+'/2/'+${od.getId()}}">Trả hàng</a>
-                    <a class="btn1" th:if="${status == 2}"
-                       style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
-                       th:href="@{'/order/receiveOrder/'+${session.saveCus.getId()}+'/2/'+${od.getId()}}">Đã nhận</a>
+                    <div th:each="date :${dateDiffs}">
+<!--                        Điều kiện trả hàng là 3 ngày-->
+                        <a class="btn1" th:if="${status == 4 && date.getDateOrder()<3}"
+                           style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
+                           th:href="@{'/order/refundOrder/'+${session.saveCus.getId()}+'/2/'+${od.getId()}}">Trả hàng</a>
+                    </div>
+
+                    <div th:if="${status == 3}" th:each="shipperOrder :${shipperOrders}">
+                        <a class="btn1" th:if="${shipperOrder.getStatus() ==2 && od.getId()==shipperOrder.getIdOrder()}"
+                           style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
+                           th:href="@{'/order/receiveOrder/'+${session.saveCus.getId()}+'/2/'+${od.getId()}}">Đã nhận</a>
+                        <span class="btn1" th:if="${shipperOrder.getStatus() ==1 && od.getId()==shipperOrder.getIdOrder()}"
+                           style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
+                           >Đã nhận</span>
+                    </div>
+
                     <a class="btn1" th:if="${status == 0}"
                        style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
                        th:href="@{'/order/putOrder/'+${session.saveCus.getId()}+'/0/'+${od.getId()}}">Đặt lại</a>
