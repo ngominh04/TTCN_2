@@ -39,36 +39,40 @@
                 <span th:if="${status == 6}"  >Đang giao lại người bán</span>
                 <span th:if="${status == 7}"  >Đã hoàn lại</span>
             </h2>
-            <table>
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Các cây trong đơn</th>
-                    <th>Ngày đặt</th>
-                    <th>Giá tiền</th>
-                    <th style="width: 220px;"></th>
-                </tr>
-                </thead>
-                <tbody th:each="od: ${orders}">
-                <tr>
-                    <td th:text="${od.getId()}"></td>
-                    <td>
-                        <ul style="list-style-type: none">
-                            <li th:each="odl :${orderDetail}"
-                                th:if="${odl.getIdOrder() == od.getId()}"
-                                th:text="${odl.getNameTree()}"></li>
-                        </ul>
-                    </td>
-                    <td th:text="${od.getCreateDate()}"></td>
-                    <td th:text="${#numbers.formatDecimal(od.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></td>
-                    <td>
-                        <a th:if="${od.getStatus()==1}" class="aByOrder" th:href="@{'/order/admin/orderStatus/'+${od.getId()}}">Xác nhận đơn</a>
-                        <a th:if="${od.getStatus()==5}" class="aByOrder" th:href="@{'/order/admin/orderStatus/'+${od.getId()}}">Chấp nhận hoàn đơn</a>
-                    </td>
-                </tr>
-                <!-- Add more rows as necessary -->
-                </tbody>
-            </table>
+            <div >
+                <table >
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Các cây trong đơn</th>
+                        <th>Ngày đặt</th>
+                        <th>Giá tiền</th>
+                        <th style="width: 220px;"></th>
+                    </tr>
+                    </thead>
+                    <tbody th:each="od: ${orders}">
+                    <tr style="height: 80px">
+                        <td th:text="${od.getId()}"></td>
+                        <td>
+                            <ul style="list-style-type: none">
+                                <li th:each="odl :${orderDetail}"
+                                    th:if="${odl.getIdOrder() == od.getId()}"
+                                    th:text="${odl.getNameTree()}"></li>
+                            </ul>
+                        </td>
+                        <td th:text="${od.getCreateDate()}"></td>
+                        <td th:text="${#numbers.formatDecimal(od.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></td>
+                        <td>
+                            <a th:if="${od.getStatus()==1}" class="aByOrder" th:href="@{'/order/admin/orderStatus/'+${od.getId()}}">Xác nhận đơn</a>
+                            <a th:if="${od.getStatus()==5}" class="aByOrder" th:href="@{'/order/admin/orderStatus/'+${od.getId()}}">Chấp nhận hoàn đơn</a>
+                            <div style="height: 14px;width: 10px"></div>
+                            <a class="aByOrder"  th:href="@{'/order/admin/detailOrder/'+${od.getId()}}">Xem</a>
+                        </td>
+                    </tr>
+                    <!-- Add more rows as necessary -->
+                    </tbody>
+                </table>
+            </div>
         </section>
     </div>
 </div>

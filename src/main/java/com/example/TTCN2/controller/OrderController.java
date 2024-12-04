@@ -52,6 +52,10 @@ public class OrderController {
     DetailAdminRepository detailAdminRepository;
     @Autowired
     ShipperOrderRepository shipperOrderRepository;
+    @Autowired
+    ReceiverRepository receiverRepository;
+    @Autowired
+    TreeRepository treeRepository;
 
 
     @PostMapping("/{idCus}")
@@ -64,7 +68,6 @@ public class OrderController {
         Cart cart = cartRepository.findByIdUser(user.getId());
         List<CartItem> cartItems1 = cartItemRepository.getAllCartItem_idCart(cart.getId());
         if (cartItems1.isEmpty()){
-
             return "redirect:/cart/{idCus}";
         }
 
@@ -76,7 +79,7 @@ public class OrderController {
         order.setTotalMoney(cart.getTotalMoney()+transportMethodRepository.getTransportById(idTrans).getMoney());
         order.setIdUser(idCus);
         order.setIdReceiver(idReceiver);
-        order.setIdShipper(0);
+        order.setIdShipper(1);
         order.setCreateDate(String.valueOf(LocalDateTime.now()));
         // status: 1 cho xac nhan ; 2 : cho shipper den lay ; 3 dang giao ; 4 da giao ;
         // 5 cho hoan don ; 6 dang giao lai admin; 7: da giao cho admin
@@ -109,6 +112,10 @@ public class OrderController {
             orderDetail.setMoney(cartItem.getMoney());
             orderDetail.setNameTree(cartItem.getNameTree());
             orderDetailRepository.save(orderDetail);
+            // reduce quantity tree
+            Tree tree = treeRepository.findAllById(cartItem.getIdTree());
+            tree.setQuantity(tree.getQuantity()-cartItem.getQuantity());
+            treeRepository.save(tree);// save tree
             cartItemService.delete(cartItem);// xoa cartItem
         }
         // xoa cart 
@@ -144,14 +151,20 @@ public class OrderController {
         return "user/order/order";
     }
     // huy don status -> 0
-    @GetMapping("/closeOrder/{idCus}/{status}/{idOrder}")
-    public String closeOrder(@PathVariable Integer idCus, @PathVariable Integer status,
-                             @PathVariable Integer idOrder){
-        Order order = orderRepository.findByIdOrder(idOrder);
-        order.setStatus(0);
-        orderRepository.save(order);
-        return "redirect:/order/{idCus}/{status}";
-    }
+//    @GetMapping("/closeOrder/{idCus}/{status}/{idOrder}")
+//    public String closeOrder(@PathVariable Integer idCus, @PathVariable Integer status,
+//                             @PathVariable Integer idOrder){
+//        Order order = orderRepository.findByIdOrder(idOrder);
+//        order.setStatus(0);
+//        orderRepository.save(order);
+//        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(idOrder);
+//        for (OrderDetail orderDetail : orderDetails) {
+//            Tree tree = treeRepository.findAllById(orderDetail.getIdTree());
+//            tree.setQuantity(tree.getQuantity()+orderDetail.getQuantity());
+//            treeRepository.save(tree);
+//        }
+//        return "redirect:/order/{idCus}/{status}";
+//    }
     // mua lai status -> 1
     @GetMapping("/putOrder/{idCus}/{status}/{idOrder}")
     public String putOrder(@PathVariable Integer idCus, @PathVariable Integer status,
@@ -159,6 +172,12 @@ public class OrderController {
         Order order = orderRepository.findByIdOrder(idOrder);
         order.setStatus(1);
         orderRepository.save(order);
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(idOrder);
+        for (OrderDetail orderDetail : orderDetails) {
+            Tree tree = treeRepository.findAllById(orderDetail.getIdTree());
+            tree.setQuantity(tree.getQuantity()-orderDetail.getQuantity());
+            treeRepository.save(tree);
+        }
         return "redirect:/order/{idCus}/{status}";
     }
     // da nhan hang status -> 4
@@ -222,5 +241,29 @@ public class OrderController {
             orderRepository.save(order);
         }
         return "redirect:/order/admin/showOrder/"+order.getStatus();
+    }
+
+    // detail order 'user'
+    @GetMapping("/detailOrder/{idOrder}")
+    public String detailOrder(@PathVariable Integer idOrder,Model model){
+        Order order = orderRepository.findByIdOrder(idOrder);
+        model.addAttribute("order",order);
+        model.addAttribute("trees",orderDetailRepository.findByOrderId(order.getId()));
+        model.addAttribute("receiver",receiverRepository.findAllById(order.getIdReceiver()));
+        model.addAttribute("shipperOrder",shipperOrderRepository.findByOrderId(order.getId()));
+        return "user/order/detailOrder";
+    }
+    // detail order 'admin'
+    @GetMapping("/admin/detailOrder/{idOrder}")
+    public String detailOrderAdmin(@PathVariable Integer idOrder,Model model,HttpSession session){
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+
+        Order order = orderRepository.findByIdOrder(idOrder);
+        model.addAttribute("order",order);
+        model.addAttribute("trees",orderDetailRepository.findByOrderId(order.getId()));
+        model.addAttribute("receiver",receiverRepository.findAllById(order.getIdReceiver()));
+        model.addAttribute("shipperOrder",shipperOrderRepository.findByOrderId(order.getId()));
+        return "admin/order/detailOrder";
     }
 }

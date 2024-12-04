@@ -72,7 +72,7 @@ public class SQL {
     public static final String COUNT_USER="select count(id) countUser from user";
     // limit desc order by receiver_date
     public static final String LIMIT_ORDER_BY_RECEIVER_DATE="select  * from `order`\n" +
-            "where status= 3\n" +
+            "where status= 4\n" +
             "order by `order`.receiver_date desc\n" +
             "limit 5";
     // get all order join receiver ()

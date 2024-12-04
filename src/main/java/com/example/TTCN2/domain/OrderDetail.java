@@ -18,6 +18,9 @@ public class OrderDetail {
     @JoinColumn(name = "id_order")
     private Integer idOrder;
 
+    @Column(name = "id_tree")
+    private Integer idTree;
+
     @Column(name = "name_tree", length = 150)
     private String nameTree;
 
