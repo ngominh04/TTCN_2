@@ -17,9 +17,9 @@ import com.example.TTCN2.service.TreeImageService;
 import com.example.TTCN2.service.TreesService;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -53,7 +53,10 @@ public class CommonController {
     ReceiverRepository receiverRepository;
     @Autowired
     ShipperOrderRepository shipperOrderRepository;
-
+    @Autowired
+    ChatBoxDetailRepository chatBoxDetailRepository;
+    @Autowired
+    ChatBoxRepository chatBoxRepository;
 
     // khởi đầu khi vào đường dẫn trang usser
     @GetMapping("/")
@@ -81,6 +84,25 @@ public class CommonController {
         model.addAttribute("category",categoryRepository.getAllCategory());
         User user = (User) session.getAttribute("saveCus");
         if (user != null) {
+            // chat box
+            List<ChatBox> chatBoxList = chatBoxRepository.getAllChatBoxes();
+            for (ChatBox chatBox : chatBoxList) {
+                if (!Objects.equals(chatBox.getIdUser(), user.getId())) {
+                    ChatBox newChatBox = new ChatBox();
+                    newChatBox.setIdUser(user.getId());
+                    newChatBox.setIdAdmin(3);
+                    chatBoxRepository.save(newChatBox);
+                    session.setAttribute("saveChatBox", newChatBox);
+                    model.addAttribute("chatBox",chatBox);
+                    model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(chatBox.getId()));
+                }
+                else {
+                    session.setAttribute("saveChatBox", chatBoxRepository.getChatBoxByIdUser(user.getId()));
+                    model.addAttribute("chatBox",chatBox);
+                    model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(chatBox.getId()));
+                }
+            }
+            // end chat_box
             Cart cart = cartRepository.findByIdUser(user.getId());
             model.addAttribute("cart", cart);
             if (cart != null) {

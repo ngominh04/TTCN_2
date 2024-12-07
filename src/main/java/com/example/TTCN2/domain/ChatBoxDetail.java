@@ -22,11 +22,11 @@ public class ChatBoxDetail {
     @JoinColumn(name = "id_chat_box")
     private ChatBox idChatBox;
 
-    @Column(name = "content")
-    private Integer content;
+    @Column(name = "content" , length = 500)
+    private String content;
 
     @Column(name = "date")
-    private Instant date;
+    private String date;
 
     @Column(name = "sender", length = 150)
     private String sender;

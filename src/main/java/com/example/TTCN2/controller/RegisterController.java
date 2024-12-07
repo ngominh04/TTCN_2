@@ -152,6 +152,7 @@ public class RegisterController {
         session.removeAttribute("countOrder");
         session.removeAttribute("countShipper");
         session.removeAttribute("countCart_user");
+        session.removeAttribute("saveChatBox");
         return "redirect:/";
     }
 

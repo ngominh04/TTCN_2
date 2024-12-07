@@ -424,7 +424,7 @@
             transform: translate(0, 0);
             padding: 10px;
             height: 250px;
-            overflow: auto;
+            overflow-y: scroll;
         }
 
         .direct-chat-messages, .direct-chat-contacts {
@@ -612,7 +612,6 @@
                             <i class="bi-cart-fill me-1"></i>
                             <span class="badge bg-dark text-white ms-1 rounded-pill" th:if="${session.countCart_user != null}" th:text="${session.countCart_user.getCountCartItem()}"></span>
                             <span class="badge bg-dark text-white ms-1 rounded-pill" th:if="${session.countCart_user == null}" >0</span>
-
                         </a>
                     </form>
                     <div style="width: 5px"></div>
@@ -627,9 +626,10 @@
         </div>
     </div>
 </nav>
-
-<div name="box_chat" class="box_chat">
-    <a hidden="hidden" th:href="@{#}" ><i class='fab fa-facebook-messenger' style='font-size:36px'></i></a>
+<button id="openChat" style="display: none;width: 50px">
+    <i class='fab fa-facebook-messenger' style='font-size:36px'></i>
+</button>
+<div id="box_chat" class="box_chat" th:if="${session.saveCus != null}" style="display: block">
     <div class="page-content page-container" id="page-content">
         <div class="padding">
             <div class="row container-fluid d-flex justify-content-center">
@@ -639,74 +639,53 @@
                             <h3 class="box-title">Chat Messages</h3>
                             <div class="box-tools pull-right">
                                 <span data-toggle="tooltip" title="" class="badge bg-yellow" data-original-title="3 New Messages">20</span>
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                                 <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle" data-original-title="Contacts">
-                                    <i class="fa fa-comments"></i></button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                                    <i class="fa fa-comments"></i>
                                 </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                             </div>
                         </div>
-                        <div class="box-body">
-                            <div class="direct-chat-messages">
-                                <div class="direct-chat-msg">
-                                    <div class="direct-chat-info clearfix">
-                                        <span class="direct-chat-name pull-left">Timona Siera</span>
-                                        <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                        <div class="box-body" >
+                            <div class="direct-chat-messages" id="scrollContainer" >
+                                <div th:each="chat :${detailChatBox}">
+                                    <div class="direct-chat-msg" th:if="${chat.getSender() == 'admin3'}">
+                                        <div class="direct-chat-info clearfix" >
+                                            <span class="direct-chat-name pull-left" >Cây trồng VN</span>
+                                            <span class="direct-chat-timestamp pull-right" th:text="${chat.getDate()}"></span>
+                                        </div>
+                                        <img class="direct-chat-img" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="message user image">
+                                        <div class="direct-chat-text" th:text="${chat.getContent()}"></div>
                                     </div>
-                                    <img class="direct-chat-img" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="message user image">
-                                    <div class="direct-chat-text">
-                                        For what reason would it be advisable for me to think about business content?
-                                    </div>
-                                </div>
-                                <div class="direct-chat-msg right">
-                                    <div class="direct-chat-info clearfix">
-                                        <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                                        <span class="direct-chat-timestamp pull-left">23 Jan 2:05 pm</span>
-                                    </div>
-                                    <img class="direct-chat-img" src="https://img.icons8.com/office/36/000000/person-female.png" alt="message user image">
-                                    <div class="direct-chat-text">
-                                        Thank you for your believe in our supports
-                                    </div>
-                                </div>
-                                <div class="direct-chat-msg">
-                                    <div class="direct-chat-info clearfix">
-                                        <span class="direct-chat-name pull-left">Timona Siera</span>
-                                        <span class="direct-chat-timestamp pull-right">23 Jan 5:37 pm</span>
-                                    </div>
-                                    <img class="direct-chat-img" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="message user image">
-                                    <div class="direct-chat-text">
-                                        For what reason would it be advisable for me to think about business content?
-                                    </div>
-                                </div>
-                                <div class="direct-chat-msg right">
-                                    <div class="direct-chat-info clearfix">
-                                        <span class="direct-chat-name pull-right">Sarah Bullock</span>
-                                        <span class="direct-chat-timestamp pull-left">23 Jan 6:10 pm</span>
-                                    </div>
-                                    <img class="direct-chat-img" src="https://img.icons8.com/office/36/000000/person-female.png" alt="message user image">
-                                    <div class="direct-chat-text">
-                                        I would love to.
+                                    <div class="direct-chat-msg right" th:if="${chat.getSender() != 'admin3'}">
+                                        <div class="direct-chat-info clearfix" style="text-align: right">
+                                            <span class="direct-chat-name pull-right" th:text="${chat.getSender()}"></span>
+                                            <span class="direct-chat-timestamp pull-left" th:text="${chat.getDate()}"></span>
+                                        </div>
+                                        <img class="direct-chat-img" src="https://img.icons8.com/office/36/000000/person-female.png" alt="message user image">
+                                        <div class="direct-chat-text" th:text="${chat.getContent()}"></div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="box-footer">
+                                <form action="#" method="post">
+                                    <div class="input-group">
+                                        <input type="text" name="content" id="content" placeholder="Aa ..." class="form-control">
+                                        <span class="input-group-btn">
+                                        <button type="button" class="btn btn-warning btn-flat">Gửi</button>
+                                    </span>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="box-footer">
-                            <form action="#" method="post">
-                                <div class="input-group">
-                                    <input type="text" name="message" placeholder="Type Message ..." class="form-control">
-                                    <span class="input-group-btn">
-                            <button type="button" class="btn btn-warning btn-flat">Send</button>
-                          </span>
-                                </div>
-                            </form>
-                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 <div layout:fragment="content">
     <!-- Header-->
@@ -756,6 +735,17 @@
     </section>
 </div>
 
+<!-- test -->
+<div th:if="${session.saveCus != null}">
+    <h1>aaaaaaaaa</h1>
+    <div id="chat-box"></div>
+    <input type="text" id="sender" placeholder="Enter your name" th:value="'idUser: '+${session.saveChatBox.getIdUser()}" />
+    <input type="text" id="message" placeholder="Enter a message" />
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+<!--end test-->
+
 <nav aria-label="Page navigation example" style="margin-left: 9.5rem" th:if="${statusWeb == 1}">
     <p >Bạn đang ở trang thứ <span th:text="${trees.getNumber()+1}"></span></p>
     <ul class="pagination">
@@ -789,6 +779,17 @@
 <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
 <script th:src="@{/slick-1.8.1/slick-1.8.1/slick/slick.js}" type="text/javascript"></script>
 <script type="text/javascript">
+    // Đảm bảo rằng khi trang tải xong, thanh cuộn sẽ cuộn tới cuối
+    window.onload = function() {
+        const container = document.getElementById('scrollContainer');
+        container.scrollTop = container.scrollHeight;
+    };
+
+    // Nếu có nội dung mới được thêm vào, hãy cuộn tới cuối
+    function scrollToBottom() {
+        const container = document.getElementById('scrollContainer');
+        container.scrollTop = container.scrollHeight;
+    }
     $(document).on('ready', function() {
         $('.slider-for').slick({
             slidesToShow: 1,
@@ -843,7 +844,62 @@
             }, 100);
         });
     });
+</script>
+<!--<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/stompjs/dist/stomp.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<!--<script th:src="@{/stomp/stomp.umd.min.js}"></script>-->
+<!-- chat box -->
+<script>
+    let stompClient = null;
+
+    function connect() {
+        // Kiểm tra xem thư viện đã được tải chưa
+        if (typeof Stomp === 'undefined') {
+            console.error("STOMP library is not loaded");
+            return;
+        }
+        let socket = new SockJS('/chat');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/messages', function (message) {
+                showMessage(JSON.parse(message.body));
+            });
+        });
+    }
+
+    function sendMessage() {
+        if (!stompClient || !stompClient.connected) {
+            alert("You are not connected yet!");
+            return;  // Nếu chưa kết nối, không gửi tin nhắn
+        }
+
+        const message = document.getElementById("message").value;
+        const sender = document.getElementById("sender").value;
+
+        if (message && sender) {
+            stompClient.send("/app/sendMessage", {}, JSON.stringify({
+                                                                        'content': message,
+                                                                        'sender': sender
+                                                                    }));
+            document.getElementById("message").value = '';  // Clear message input
+        } else {
+            alert("Please enter both message and sender name.");
+        }
+    }
+
+    function showMessage(message) {
+        const chatBox = document.getElementById("chat-box");
+        const messageElement = document.createElement("div");
+        messageElement.textContent = message.sender + ": " + message.content;
+        chatBox.appendChild(messageElement);
+    }
+
+    window.onload = connect;
 </script>
 </body>
 </html>

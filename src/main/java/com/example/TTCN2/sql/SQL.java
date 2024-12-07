@@ -89,4 +89,8 @@ public class SQL {
     public static final String GET_SHIPPER_BY_IDSHIPPER="select * from shipper where id=?";
     // dateDiff orderStatus4
     public static final String DATEDIFF_ORDER_STATTUS_4="select datediff(receiver_date,create_date) dateOrder from `order` where id=?";
+
+    // show chat_box
+    public static final String SHOW_CHAT_BOX_BY_ID_CHAT_BOX="select * from chat_box_detail where id_chat_box =?\n" +
+            "order by date";
 }
