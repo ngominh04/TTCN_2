@@ -31,11 +31,12 @@ public class ChatBoxDetail {
     @Column(name = "sender", length = 150)
     private String sender;
 
-    @Lob
-    @Column(name = "type")
-    private MessageType type;
+//    @Lob
+//    trang thai da xem hay chua
+    @Column(name = "is_viewed")
+    private Integer isViewed;
 
-    public enum MessageType {
-        CHAT, LEAVE, JOIN
-    }
+//    public enum MessageType {
+//        CHAT, LEAVE, JOIN
+//    }
 }

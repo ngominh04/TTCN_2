@@ -84,24 +84,36 @@ public class CommonController {
         model.addAttribute("category",categoryRepository.getAllCategory());
         User user = (User) session.getAttribute("saveCus");
         if (user != null) {
+
             // chat box
             List<ChatBox> chatBoxList = chatBoxRepository.getAllChatBoxes();
+            boolean checkIdUser = false;
+            int idChatBox = 0;
             for (ChatBox chatBox : chatBoxList) {
+                model.addAttribute("chatBox",chatBox);
+
                 if (!Objects.equals(chatBox.getIdUser(), user.getId())) {
-                    ChatBox newChatBox = new ChatBox();
-                    newChatBox.setIdUser(user.getId());
-                    newChatBox.setIdAdmin(3);
-                    chatBoxRepository.save(newChatBox);
-                    session.setAttribute("saveChatBox", newChatBox);
-                    model.addAttribute("chatBox",chatBox);
-                    model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(chatBox.getId()));
-                }
-                else {
-                    session.setAttribute("saveChatBox", chatBoxRepository.getChatBoxByIdUser(user.getId()));
-                    model.addAttribute("chatBox",chatBox);
-                    model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(chatBox.getId()));
+                    checkIdUser = true;
+                    idChatBox = chatBox.getId();
+                }else {
+                    checkIdUser = false;
+                    idChatBox = chatBox.getId();
+                    break;
                 }
             }
+            if(!checkIdUser) {
+                session.setAttribute("saveChatBox", chatBoxRepository.getChatBoxByIdUser(user.getId()));
+                model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(idChatBox));
+            }
+            if (checkIdUser){
+                ChatBox newChatBox = new ChatBox();
+                newChatBox.setIdUser(user.getId());
+                newChatBox.setIdAdmin(3);
+                chatBoxRepository.save(newChatBox);
+                session.setAttribute("saveChatBox", newChatBox);
+                model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(idChatBox));
+            }
+
             // end chat_box
             Cart cart = cartRepository.findByIdUser(user.getId());
             model.addAttribute("cart", cart);

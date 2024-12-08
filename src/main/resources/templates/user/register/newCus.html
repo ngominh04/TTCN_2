@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
@@ -126,7 +127,7 @@
         font-size: 20px;
         font-weight: 500;
         cursor: pointer;
-        background: linear-gradient(-135deg, #50c879, #878b8f);;
+        background: linear-gradient(-135deg, #50c879, #878b8f);
         transition: all 0.3s ease;
     }
     form .field input[type="submit"]:active{
@@ -199,53 +200,47 @@
 <!--https://www.codingnepalweb.com/login-form-with-floating-label-animation/ -->
 <div class="wrapper">
     <div class="title">
-        Thay đổi mật khẩu
+        Đăng ký
     </div>
-    <div th:if="${session.saveCus == null}">
-        <form method="post" th:action="@{/register/forgotPass2}" enctype="multipart/form-data">
-            <p style="color: red" th:text="${message}"></p>
-            <div class="field">
-                <input type="password" id="password" name="password" required>
-                <label>Mật khẩu</label>
-            </div>
-            <div class="field">
-                <input type="password" id="password2" name="password2" required>
-                <label>Nhập lại mật khẩu</label>
-            </div>
-            <div class="field">
-                <input type="submit" value="Lưu lại">
-            </div>
-            <div style="margin-top: 2rem">
-                <a class="btn1"
-                   th:href="@{/}"
-                   style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
-                >Quay lại</a>
-            </div>
-        </form>
-    </div>
-    <div th:if="${session.saveCus != null}">
-        <!--        <p th:text="${message}" style="color: red"></p>-->
-        <form method="post" th:action="@{'/register/repairPassP/'+${session.saveCus.id}}" enctype="multipart/form-data">
-            <p style="color: red" th:text="${message}"></p>
-            <div class="field">
-                <input type="password" id="password" name="password" required>
-                <label>Mật khẩu</label>
-            </div>
-            <div class="field">
-                <input type="password" id="password2" name="password2" required>
-                <label>Nhập lại mật khẩu</label>
-            </div>
-            <div class="field">
-                <input type="submit" value="Lưu lại">
-            </div>
-<!--            <div style="margin-top: 2rem">-->
-<!--                <a class="btn1"-->
-<!--                   th:href="@{'/receiver/receiver/'+${session.saveCus.getId()}}"-->
-<!--                   style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"-->
-<!--                >Quay lại</a>-->
-<!--            </div>-->
-        </form>
-    </div>
+
+    <form method="post" th:action="@{/register/newCustomer}" enctype="multipart/form-data">
+        <p style="color: red" th:text="${message}"></p>
+        <div class="field">
+            <input type="email" id="email" name="email" required>
+            <label>Email</label>
+        </div>
+        <div class="field">
+            <input type="text" id="name" name="name" required>
+            <label>Tên đầy đủ</label>
+        </div>
+        <div class="field">
+            <input type="text" id="address" name="address" required>
+            <label>Địa chỉ</label>
+        </div>
+        <div class="field">
+            <input type="number" id="phone" name="phone" required>
+            <label>Số điện thoại</label>
+        </div>
+        <div class="field">
+            <input type="text" id="username" name="username" required>
+            <label>Tên tài khoản</label>
+        </div>
+        <div class="field">
+            <input type="password" id="password" name="password" required>
+            <label>Mật khẩu</label>
+        </div>
+        <div class="content">
+        </div>
+        <div class="field">
+            <input type="submit" value="Đăng ký">
+        </div>
+        <div style="margin-top: 2rem">
+            <a class="btn1"
+               th:href="@{/}"
+               style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
+            >Quay lại</a>
+        </div>
+    </form>
 </div>
 </body>
 </html>

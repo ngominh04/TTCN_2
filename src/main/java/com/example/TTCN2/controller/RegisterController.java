@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +36,10 @@ public class RegisterController {
     OrderRepository orderRepository;
     @Autowired
     ShipperOrderRepository shipperOrderRepository;
+    @Autowired
+    ChatBoxRepository chatBoxRepository;
+    @Autowired
+    ReceiverRepository receiverRepository;
     // chon quyen dang nhap
     @GetMapping("/role")
     public String role(){
@@ -62,6 +67,10 @@ public class RegisterController {
                 if(customer.getPassword().equals(password)){
                     session.setAttribute("saveCus",customer);
                     model.addAttribute("customer",userRepository.getCustomer(username));
+
+                    // remove sesion
+                    session.removeAttribute("idRole");
+
                     // thay đổi lại pass vs những người dùng cũ
                     model.addAttribute("message","Vì lí do bảo mật của chúng tôi với khách hàng cũ bạn vui lòng thay lại password: " +
                             "Mật khẩu bạn phải hơn 8 kí tự, bao gồm ít nhất 1 số, 1 chữ thường, 1 chữ hoa, 1 kí tự đặc biệt");
@@ -89,7 +98,6 @@ public class RegisterController {
                             orderRepository.save(order);
                         }
                     }
-
                     return "redirect:/";
                 }
             }
@@ -215,7 +223,7 @@ public class RegisterController {
             session.removeAttribute("idRole");
             userService.save(customer);
         }
-        return "/user/register/Login";
+        return "redirect:/";
     }
     // thay đổi pass trong trang người dùng
     @GetMapping("/repairPassG/{idCus}")
@@ -250,6 +258,83 @@ public class RegisterController {
             customer.setPassword(SHA_256_password.SHA_password(password));
             userService.save(customer);
         }
-        return "redirect:/receiver/receiver/{idCus}";
+        return "redirect:/";
+    }
+    // đăng kí người dùng
+    @GetMapping("/newCus")
+    public String newCus(){
+        return "/user/register/newCus";
+    }
+    // lưu tài khoản mới
+    @PostMapping("/newCustomer")
+    public String newCustomer(@RequestParam("name")String name,
+                              @RequestParam("email")String email,
+                              @RequestParam("address")String address,
+                              @RequestParam("phone")String phone,
+                              @RequestParam("username")String username,
+                              @RequestParam("password")String password,
+                              Model model){
+        boolean checkCus = false;
+        List<User> customers = userRepository.getAll();
+        for (User cus:customers) {
+            if (email.isBlank()){
+                model.addAttribute("message","email không được để trống");
+                checkCus = false;
+                break;
+            }if (cus.getUsername().equals(username)){
+                model.addAttribute("message","Đã tồn tại tên tài khoản");
+                checkCus = false;
+                break;
+            }
+            if (phone.length() != 10 ){
+                model.addAttribute("message","Số điện thoại phải 10 kí tự ");
+                checkCus = false;
+                break;
+            }
+            if (password.length() < 8  ){
+                model.addAttribute("message","Mật khẩu phải trên 8 kí tự");
+                checkCus = false;
+                break;
+            }
+            //Dùng regex
+            Pattern pattern = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).+$");
+            Matcher matcher = pattern.matcher(password);
+            boolean checkPass = matcher.matches();
+            if (!checkPass){
+                model.addAttribute("message",
+                        "Mật khẩu phải chứa ít nhất 1 kí tự số, " +
+                                "1 chữ thường, 1 chữ hoa, 1 ký tự đặc biệt");
+                checkCus = false;
+                break;
+            }
+            else {
+                checkCus =true;
+            }
+        }
+        if(checkCus) {
+            User customer = new User();
+            customer.setBlock(0);
+            customer.setPhone(phone);
+            customer.setEmail(email);
+            customer.setIdRole(2);
+            // mã hóa pass theo sha_256
+            customer.setPassword(sha_256_password.SHA_password(password));
+
+            customer.setCreateDate(String.valueOf(LocalDateTime.now()));
+            customer.setUsername(username);
+            customer.setAddress(address);
+            customer.setName(name);
+            userService.save(customer);
+            // đồng thời tạo luôn receiver mặc định khi ng dùng tạo xong tài khoản mới
+            Receiver receiver = new Receiver();
+            receiver.setIdUser(customer.getId());
+            receiver.setName(customer.getName());
+            receiver.setIsDelete(1);
+            receiver.setAddress(customer.getAddress());
+            receiver.setPhone(customer.getPhone());
+            receiverRepository.save(receiver);
+            return "user/register/login";
+        }
+        return "user/register/newCus";
     }
 }
