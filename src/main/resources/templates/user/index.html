@@ -649,7 +649,7 @@
                         <div class="box-body" >
                             <div class="direct-chat-messages" id="scrollContainer" >
                                 <div th:each="chat :${detailChatBox}">
-                                    <div class="direct-chat-msg" th:if="${chat.getSender() == 'admin3'}">
+                                    <div class="direct-chat-msg " th:if="${chat.getSender() == 'admin3'}">
                                         <div class="direct-chat-info clearfix" >
                                             <span class="direct-chat-name pull-left" >Cây trồng VN</span>
                                             <span class="direct-chat-timestamp pull-right" th:text="${chat.getDate()}"></span>
@@ -657,7 +657,7 @@
                                         <img class="direct-chat-img" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="message user image">
                                         <div class="direct-chat-text" th:text="${chat.getContent()}"></div>
                                     </div>
-                                    <div class="direct-chat-msg right" th:if="${chat.getSender() != 'admin3'}">
+                                    <div class="direct-chat-msg right"  th:if="${chat.getSender() != 'admin3'}">
                                         <div class="direct-chat-info clearfix" style="text-align: right">
                                             <span class="direct-chat-name pull-right" th:text="${chat.getSender()}"></span>
                                             <span class="direct-chat-timestamp pull-left" th:text="${chat.getDate()}"></span>
@@ -666,13 +666,19 @@
                                         <div class="direct-chat-text" th:text="${chat.getContent()}"></div>
                                     </div>
                                 </div>
+<!--                                khi chat duoi dang nguoi dung -->
+                                <div th:if="${session.saveCus == session.saveChatBox.getIdUser()}" class="direct-chat-msg right"  id="chat-box"></div>
+
                             </div>
                             <div class="box-footer">
-                                <form action="#" method="post">
+                                <form action="#">
                                     <div class="input-group">
-                                        <input type="text" name="content" id="content" placeholder="Aa ..." class="form-control">
+<!--                                        <div id="chat-box"></div>-->
+                                        <input type="text" id="sender" hidden="hidden" th:value="${session.saveCus.getName()}" />
+                                        <input type="text" class="form-control" name="content" id="message" placeholder="Nhâp tin nhắn" />
                                         <span class="input-group-btn">
-                                        <button type="button" class="btn btn-warning btn-flat">Gửi</button>
+                                        <button class="btn btn-warning btn-flat" onclick="sendMessage()">Gửi</button>
+<!--                                        <button type="button" class="btn btn-warning btn-flat">Gửi</button>-->
                                     </span>
                                     </div>
                                 </form>
@@ -736,13 +742,13 @@
 </div>
 
 <!-- test -->
-<div th:if="${session.saveCus != null}">
-    <h1>aaaaaaaaa</h1>
-    <div id="chat-box"></div>
-    <input type="text" id="sender" placeholder="Enter your name" th:value="'idUser: '+${session.saveChatBox.getIdUser()}" />
-    <input type="text" id="message" placeholder="Enter a message" />
-    <button onclick="sendMessage()">Send</button>
-</div>
+<!--<div th:if="${session.saveCus != null}">-->
+<!--    <h1>aaaaaaaaa</h1>-->
+<!--    <div id="chat-box"></div>-->
+<!--    <input type="text" id="sender" placeholder="Enter your name" th:value="'idUser: '+${session.saveChatBox.getIdUser()}" />-->
+<!--    <input type="text" id="message" placeholder="Enter a message" />-->
+<!--    <button onclick="sendMessage()">Send</button>-->
+<!--</div>-->
 
 <!--end test-->
 
@@ -892,12 +898,76 @@
         }
     }
 
+    // function showMessage(message) {
+    //     const chatBox = document.getElementById("chat-box");
+    //     const messageElement = document.createElement("div");
+    //     messageElement.textContent = "<div class=\"direct-chat-info clearfix\" style=\"text-align: right\">\n" +
+    //         "                                        <span class=\"direct-chat-name pull-right\" th:text=\"${session.saveCus.getName()}\"></span>\n" +
+    //         "                                        <span class=\"direct-chat-timestamp pull-left\" ></span>\n" +
+    //         "                                    </div>\n" +
+    //         "                                    <img class=\"direct-chat-img\" src=\"https://img.icons8.com/office/36/000000/person-female.png\" alt=\"message user image\">\n" +
+    //         "                                    <div class=\"direct-chat-text\" >"+message.content+"</div>";
+    //     chatBox.appendChild(messageElement);
+    // }
     function showMessage(message) {
+        // Thời gian khi người dùng gửi tin nhắn
+        const currentTime = getCurrentTime();
+
         const chatBox = document.getElementById("chat-box");
+
+        // Tạo phần tử div cho tin nhắn
         const messageElement = document.createElement("div");
-        messageElement.textContent = message.sender + ": " + message.content;
+
+        // Tạo cấu trúc HTML cho phần thông tin tin nhắn
+        const messageInfo = document.createElement("div");
+        messageInfo.classList.add("direct-chat-info", "clearfix");
+        messageInfo.style.textAlign = "right";
+
+        const messageTimestamp = document.createElement("span");
+        messageTimestamp.classList.add("direct-chat-timestamp", "pull-left");
+        messageTimestamp.textContent = currentTime; // Định dạng thời gian khi gửi tin nhắn
+
+        const messageName = document.createElement("span");
+        messageName.classList.add("direct-chat-name", "pull-right");
+        messageName.textContent = message.sender+" "; // Thay `message.senderName` bằng tên người gửi
+
+        messageInfo.appendChild(messageName);
+        messageInfo.appendChild(messageTimestamp);
+
+        // Tạo phần tử cho ảnh người gửi
+        const userImage = document.createElement("img");
+        userImage.classList.add("direct-chat-img");
+        userImage.src = "https://img.icons8.com/office/36/000000/person-female.png"; // Thay URL image
+        userImage.alt = "message user image";
+
+        // Tạo phần tử cho nội dung tin nhắn
+        const messageText = document.createElement("div");
+        messageText.classList.add("direct-chat-text");
+        messageText.textContent = message.content; // Thay `message.content` bằng nội dung tin nhắn
+        messageText.style.backgroundColor = "#f39c12";
+        messageText.style.color = "#fff";
+
+        // Thêm các phần tử vào `messageElement`
+        messageElement.appendChild(messageInfo);
+        messageElement.appendChild(userImage);
+        messageElement.appendChild(messageText);
+
+        // Thêm `messageElement` vào `chatBox`
         chatBox.appendChild(messageElement);
     }
+    function getCurrentTime() {
+        const now = new Date();
+
+        const year = now.getFullYear(); // Lấy năm
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Lấy tháng (thêm 1 vì tháng bắt đầu từ 0)
+        const day = String(now.getDate()).padStart(2, '0'); // Lấy ngày
+        const hour = String(now.getHours()).padStart(2, '0'); // Lấy giờ
+        const minute = String(now.getMinutes()).padStart(2, '0'); // Lấy phút
+
+        // Trả về thời gian theo định dạng "YYYY-MM-DD HH:mm"
+        return `${year}-${month}-${day} ${hour}:${minute}`;
+    }
+    scrollToBottom();
 
     window.onload = connect;
 </script>
