@@ -18,9 +18,9 @@ public class ChatBoxDetail {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_chat_box")
-    private ChatBox idChatBox;
+    private Integer idChatBox;
 
     @Column(name = "content" , length = 500)
     private String content;
@@ -31,10 +31,19 @@ public class ChatBoxDetail {
     @Column(name = "sender", length = 150)
     private String sender;
 
+    @Column(name = "recipient", length = 150)
+    private String recipient;
+
 //    @Lob
 //    trang thai da xem hay chua
     @Column(name = "is_viewed")
     private Integer isViewed;
+
+    @Column(name = "role")
+    private Integer role;
+
+    @Column(name = "id_sender")
+    private Integer idSender;
 
 //    public enum MessageType {
 //        CHAT, LEAVE, JOIN

@@ -667,13 +667,17 @@
                                     </div>
                                 </div>
 <!--                                khi chat duoi dang nguoi dung -->
-                                <div th:if="${session.saveCus == session.saveChatBox.getIdUser()}" class="direct-chat-msg right"  id="chat-box"></div>
-
+                                <div th:if="${session.saveCus.getId() == session.saveChatBox.getIdUser()}" class="direct-chat-msg right"  id="chat-box"></div>
+<!--                                <div class="direct-chat-msg "  id="chat-box-admin"></div>-->
                             </div>
                             <div class="box-footer">
                                 <form action="#">
                                     <div class="input-group">
 <!--                                        <div id="chat-box"></div>-->
+                                        <input type="text" id="idChatBox" hidden="hidden" th:value="${session.saveChatBox.getId()}">
+                                        <input type="text" id="role" hidden="hidden" th:value="${session.idRole}">
+                                        <input type="text" id="idSender" hidden="hidden" th:value="${session.saveCus.getId()}">
+                                        <input type="text" id="recipient" hidden="hidden" value="admin3">
                                         <input type="text" id="sender" hidden="hidden" th:value="${session.saveCus.getName()}" />
                                         <input type="text" class="form-control" name="content" id="message" placeholder="Nhâp tin nhắn" />
                                         <span class="input-group-btn">
@@ -741,16 +745,6 @@
     </section>
 </div>
 
-<!-- test -->
-<!--<div th:if="${session.saveCus != null}">-->
-<!--    <h1>aaaaaaaaa</h1>-->
-<!--    <div id="chat-box"></div>-->
-<!--    <input type="text" id="sender" placeholder="Enter your name" th:value="'idUser: '+${session.saveChatBox.getIdUser()}" />-->
-<!--    <input type="text" id="message" placeholder="Enter a message" />-->
-<!--    <button onclick="sendMessage()">Send</button>-->
-<!--</div>-->
-
-<!--end test-->
 
 <nav aria-label="Page navigation example" style="margin-left: 9.5rem" th:if="${statusWeb == 1}">
     <p >Bạn đang ở trang thứ <span th:text="${trees.getNumber()+1}"></span></p>
@@ -787,8 +781,16 @@
 <script type="text/javascript">
     // Đảm bảo rằng khi trang tải xong, thanh cuộn sẽ cuộn tới cuối
     window.onload = function() {
+        // const container = document.getElementById('scrollContainer');
+        // container.scrollTop = container.scrollHeight;
         const container = document.getElementById('scrollContainer');
-        container.scrollTop = container.scrollHeight;
+        // Đảm bảo container tồn tại
+        if (container) {
+            // Dùng requestAnimationFrame để đảm bảo cuộn sau khi trình duyệt vẽ lại
+            requestAnimationFrame(() => {
+                container.scrollTop = container.scrollHeight;
+            });
+        }
     };
 
     // Nếu có nội dung mới được thêm vào, hãy cuộn tới cuối
@@ -865,7 +867,7 @@
     function connect() {
         // Kiểm tra xem thư viện đã được tải chưa
         if (typeof Stomp === 'undefined') {
-            console.error("STOMP library is not loaded");
+            console.error("chua duoc tai");
             return;
         }
         let socket = new SockJS('/chat');
@@ -884,31 +886,39 @@
             return;  // Nếu chưa kết nối, không gửi tin nhắn
         }
 
+
         const message = document.getElementById("message").value;
         const sender = document.getElementById("sender").value;
+        const role =  document.getElementById("role").value;
+        const id_chat_box =  document.getElementById("idChatBox").value;
+        const id_sender = document.getElementById("idSender").value;
+        const currentTime = getCurrentTime();
 
-        if (message && sender) {
+        let recipient = document.getElementById("recipient").value;
+        // Nếu người gửi là admin3, họ có thể chọn bất kỳ người nhận nào
+        if (sender !== "admin3") {
+            // Nếu không phải admin3, recipient phải luôn là admin3
+            recipient = "admin3";
+        }
+        if (message && sender && recipient) {
+
             stompClient.send("/app/sendMessage", {}, JSON.stringify({
-                                                                        'content': message,
-                                                                        'sender': sender
+                                                                        'idChatBox': id_chat_box,'recipient':recipient,
+                                                                        'date': currentTime,'content': message,
+                                                                        'sender': sender,'role':role,'idSender':id_sender
                                                                     }));
             document.getElementById("message").value = '';  // Clear message input
         } else {
-            alert("Please enter both message and sender name.");
+            alert("Chua du thong tin de gui.");
         }
+        stompClient.connect({}, function (frame) {
+            stompClient.subscribe('/user/queue/reply', function (message) {
+                showMessage(JSON.parse(message.body));  // Hiển thị tin nhắn nhận được
+            });
+        });
+        scrollToBottom();
     }
 
-    // function showMessage(message) {
-    //     const chatBox = document.getElementById("chat-box");
-    //     const messageElement = document.createElement("div");
-    //     messageElement.textContent = "<div class=\"direct-chat-info clearfix\" style=\"text-align: right\">\n" +
-    //         "                                        <span class=\"direct-chat-name pull-right\" th:text=\"${session.saveCus.getName()}\"></span>\n" +
-    //         "                                        <span class=\"direct-chat-timestamp pull-left\" ></span>\n" +
-    //         "                                    </div>\n" +
-    //         "                                    <img class=\"direct-chat-img\" src=\"https://img.icons8.com/office/36/000000/person-female.png\" alt=\"message user image\">\n" +
-    //         "                                    <div class=\"direct-chat-text\" >"+message.content+"</div>";
-    //     chatBox.appendChild(messageElement);
-    // }
     function showMessage(message) {
         // Thời gian khi người dùng gửi tin nhắn
         const currentTime = getCurrentTime();
@@ -946,7 +956,7 @@
         messageText.textContent = message.content; // Thay `message.content` bằng nội dung tin nhắn
         messageText.style.backgroundColor = "#f39c12";
         messageText.style.color = "#fff";
-
+        messageText.style.overflowWrap = "break-word";
         // Thêm các phần tử vào `messageElement`
         messageElement.appendChild(messageInfo);
         messageElement.appendChild(userImage);
@@ -954,6 +964,7 @@
 
         // Thêm `messageElement` vào `chatBox`
         chatBox.appendChild(messageElement);
+        scrollToBottom();
     }
     function getCurrentTime() {
         const now = new Date();
@@ -967,7 +978,7 @@
         // Trả về thời gian theo định dạng "YYYY-MM-DD HH:mm"
         return `${year}-${month}-${day} ${hour}:${minute}`;
     }
-    scrollToBottom();
+
 
     window.onload = connect;
 </script>

@@ -69,12 +69,12 @@ public class RegisterController {
                     model.addAttribute("customer",userRepository.getCustomer(username));
 
                     // remove sesion
-                    session.removeAttribute("idRole");
+//                    session.removeAttribute("idRole");
 
                     // thay đổi lại pass vs những người dùng cũ
                     model.addAttribute("message","Vì lí do bảo mật của chúng tôi với khách hàng cũ bạn vui lòng thay lại password: " +
                             "Mật khẩu bạn phải hơn 8 kí tự, bao gồm ít nhất 1 số, 1 chữ thường, 1 chữ hoa, 1 kí tự đặc biệt");
-                    session.removeAttribute("idRole");
+//                    session.removeAttribute("idRole");
                     return "/user/register/forgotPass2";
                 }
                 if(!customer.getPassword().equals(sha_256_password.GM_SHA_password(password))){
@@ -86,7 +86,7 @@ public class RegisterController {
                     session.setAttribute("saveCus",customer);
                     model.addAttribute("customer",userRepository.getCustomer(username));
                     // remove sesion
-                    session.removeAttribute("idRole");
+//                    session.removeAttribute("idRole");
 
                     // ktra order status 3 -> 4
                     List<Order> orders = orderRepository.findByCusAndStatus(customer.getId(), 3);
@@ -107,7 +107,7 @@ public class RegisterController {
                 if(admin.getPassword().equals(password)){
                     session.setAttribute("saveAdmin",admin);
                     model.addAttribute("customer",adminRepository.getAdmin(username));
-                    session.removeAttribute("idRole");
+//                    session.removeAttribute("idRole");
                     return "redirect:/admin/"+admin.getId();
                 }
                 else if(!admin.getPassword().equals(sha_256_password.GM_SHA_password(password))){
@@ -116,7 +116,7 @@ public class RegisterController {
                 else if(admin.getPassword().equals(sha_256_password.GM_SHA_password(password))){
                     session.setAttribute("saveAdmin",admin);
                     model.addAttribute("customer",adminRepository.getAdmin(username));
-                    session.removeAttribute("idRole");
+//                    session.removeAttribute("idRole");
                     return "redirect:/admin/"+admin.getId();
                 }
             }
@@ -126,7 +126,7 @@ public class RegisterController {
                 if(shipper.getPassword().equals(password)){
                     session.setAttribute("saveShipper",shipper);
                     model.addAttribute("shipper",shipper);
-                    session.removeAttribute("idRole");
+//                    session.removeAttribute("idRole");
                     return "redirect:/shipper/"+shipper.getId();
                 }
                 else if(!shipper.getPassword().equals(sha_256_password.GM_SHA_password(password))){
@@ -161,6 +161,7 @@ public class RegisterController {
         session.removeAttribute("countShipper");
         session.removeAttribute("countCart_user");
         session.removeAttribute("saveChatBox");
+        session.removeAttribute("idRole");
         return "redirect:/";
     }
 
