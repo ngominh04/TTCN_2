@@ -1,11 +1,9 @@
 package com.example.TTCN2.controller;
 
-import com.example.TTCN2.domain.Admin;
-import com.example.TTCN2.domain.Order;
-import com.example.TTCN2.domain.Shipper;
-import com.example.TTCN2.domain.ShipperOrder;
+import com.example.TTCN2.domain.*;
 import com.example.TTCN2.projection.IOrder;
 import com.example.TTCN2.repository.*;
+import com.example.TTCN2.service.SHA_256_password;
 import com.example.TTCN2.service.ShipperService;
 import com.example.TTCN2.service.uploadFileService;
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -157,7 +157,159 @@ public class ShipperController {
     @GetMapping("/showShipper")
     public String showShipper(HttpSession session, Model model){
         Shipper shipper = (Shipper) session.getAttribute("saveShipper");
+        model.addAttribute("shipper",shipperRepository.getReferenceById(shipper.getId()));
+        model.addAttribute("countShipperOrder",shipperRepository.countShipperOrderByIdShipper(shipper.getId()));
+        return "shipper/account/showShipper";
+    }
+    // sửa thông tin tài khoản
+    @GetMapping("/updateShipper/{idShipper}")
+    public String updateShipper( Model model, @PathVariable Integer idShipper){
+        Shipper shipper = shipperRepository.getReferenceById(idShipper);
         model.addAttribute("shipper",shipper);
-        return "shipper/acount/showShipper";
+        return "shipper/account/updateShipper";
+    }
+    @PostMapping("/updateShipper/{idShipper}")
+    public String updateShipper(
+            @RequestParam("name")String name,
+            @RequestParam("address")String address,
+            @RequestParam("phone")String phone,
+            @RequestParam("username")String username,
+//            HttpSession session,
+            Model model, @PathVariable Integer idShipper){
+        Shipper shipper = shipperRepository.getReferenceById(idShipper);
+        List<Shipper> shippers = shipperRepository.findAll();
+        for (Shipper shipper1 : shippers){
+            if (shipper1.getUsername().equals(username) && !Objects.equals(shipper.getUsername(), username)){
+                model.addAttribute("message","Đã tồn tại tên tài khoản");
+                model.addAttribute("shipper",shipper);
+                return "shipper/account/updateShipper";
+            }
+            if (shipper1.getPhone().equals(phone) && !Objects.equals(shipper.getPhone(), phone)){
+                model.addAttribute("message","Đã tồn tại số điện thoại");
+                model.addAttribute("shipper",shipper);
+                return "shipper/account/updateShipper";
+            }
+        }
+        if (name.isBlank() ){ // isBlank : ktra kí tu khoảng trắng và emty
+            model.addAttribute("message","name Không hợp lệ");
+            model.addAttribute("shipper",shipper);
+            return "shipper/account/updateShipper";
+        }
+        if (phone.length() != 10 ) {
+            model.addAttribute("message", "Số điện thoại phải 10 kí tự ");
+            model.addAttribute("shipper",shipper);
+            return "shipper/account/updateShipper";
+        }
+        if (username.isBlank() ){ // isBlank : ktra kí tu khoảng trắng và emty
+            model.addAttribute("message","Username Không hợp lệ");
+            model.addAttribute("shipper",shipper);
+            return "shipper/account/updateShipper";
+        }
+        shipper.setName(name);
+        shipper.setPhone(phone);
+        shipper.setAddress(address);
+        shipper.setUsername(username);
+        shipper.setUpdateDate(String.valueOf(LocalDateTime.now()));
+//        customer.setPassword(password);
+        shipperRepository.save(shipper);
+        return "redirect:/shipper/showShipper";
+    }
+    // shipper quen pass
+    @GetMapping("/forgotPass")
+    public String forgotPass(){
+        return "/shipper/account/forgotPass";
+    }
+    // forgot password
+    @PostMapping("/forgotPass")
+    public String forgotPass(Model model,
+                             @RequestParam("username")String username,
+                             @RequestParam("phone") String phone,
+                             HttpSession session){
+        List<Shipper> shippers = shipperRepository.getAll();
+        boolean check = false;
+        for (Shipper shipper:shippers) {
+            if (shipper.getPhone().equals(phone)){
+                if (shipper.getUsername().equals(username)){
+                    check = false;
+                    session.setAttribute("usernameForgot",username);
+                    return "/shipper/account/forgotPass2";
+                }
+            }
+            else {
+                check = true;
+            }
+        }
+        if(check){
+            model.addAttribute("message","Không tồn tại so dien thoai hoặc ten tài khoản này");
+        }
+
+        return "/shipper/account/forgotPass";
+    }
+    @PostMapping("forgotPass2")
+    public String forgotPass2(Model model,
+                              @RequestParam("password")String password,
+                              @RequestParam("password2")String password2,
+                              HttpSession session){
+        if (!password.equals(password2)){
+            model.addAttribute("message","2 mật khẩu phải giống nhau");
+            return "shipper/account/forgotPass2";
+        }
+        if (password.length() <8){
+            model.addAttribute("message","Mật khẩu phải trên 8 ký tự");
+            return "shipper/account/forgotPass2";
+        }
+        //Dùng regex
+        Pattern pattern = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).+$");
+        Matcher matcher = pattern.matcher(password);
+        boolean checkPass = matcher.matches();
+        if (!checkPass){
+            model.addAttribute("message",
+                    "Mật khẩu phải chứa ít nhất 1 kí tự số, " +
+                            "1 chữ thường, 1 chữ hoa, 1 ký tự đặc biệt");
+            return "shipper/account/forgotPass2";
+        }
+        else {
+            Shipper shipper = shipperRepository.checkLogin((String) session.getAttribute("usernameForgot"));
+            shipper.setPassword(SHA_256_password.SHA_password(password));
+            session.removeAttribute("usernameForgot");
+//            session.removeAttribute("idRole");
+            shipperRepository.save(shipper);
+        }
+        return "redirect:/";
+    }
+    // click thay doi pass khi shipper da login
+    @GetMapping("/repairPassG/{idShipper}")
+    public String repairPass(@PathVariable("idShipper") Integer idShipper){
+        return "/shipper/account/forgotPass2";
+    }
+    @PostMapping("/repairPassP/{idShipper}")
+    public String repairPass(Model model,@PathVariable("idShipper") Integer idShipper,
+                             @RequestParam("password")String password,
+                             @RequestParam("password2")String password2,
+                             HttpSession session){
+        if (!password.equals(password2)){
+            model.addAttribute("message","2 mật khẩu phải giống nhau");
+            return "/shipper/account/forgotPass2";
+        }
+        if (password.length() <8){
+            model.addAttribute("message","Mật khẩu phải trên 8 ký tự");
+            return "/shipper/account/forgotPass2";
+        }
+        //Dùng regex
+        Pattern pattern = Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).+$");
+        Matcher matcher = pattern.matcher(password);
+        boolean checkPass = matcher.matches();
+        if (!checkPass){
+            model.addAttribute("message",
+                    "Mật khẩu phải chứa ít nhất 1 kí tự số, " +
+                            "1 chữ thường, 1 chữ hoa, 1 ký tự đặc biệt");
+            return "/shipper/account/forgotPass2";
+        }
+        else {
+            Shipper shipper = shipperRepository.getReferenceById(idShipper);
+            shipper.setPassword(SHA_256_password.SHA_password(password));
+            shipperRepository.save(shipper);
+        }
+        return "redirect:/shipper/{idShipper}";
     }
 }

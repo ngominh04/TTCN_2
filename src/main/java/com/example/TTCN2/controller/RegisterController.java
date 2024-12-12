@@ -132,10 +132,10 @@ public class RegisterController {
                 else if(!shipper.getPassword().equals(sha_256_password.GM_SHA_password(password))){
                     model.addAttribute("message","Mật Khẩu Sai __");
                 }
-                else if (shipper.getBlock() == 0) {
+                else if (shipper.getBlock() == 1) {
                     model.addAttribute("message","Tài khoản của bạn bị khóa");
                 } else {
-
+                    session.setAttribute("saveShipper",shipper);
                     model.addAttribute("shipper",shipper);
 
                     return "redirect:/shipper/"+shipper.getId();
@@ -190,10 +190,11 @@ public class RegisterController {
             }
         }
         if(check){
-            model.addAttribute("message","Không tồn tại email hoặc tài khoản này");
+            model.addAttribute("message","Không tồn tại email hoặc ten tài khoản này");
         }
         return "/user/register/forgotPass";
     }
+    // khi nguoi dung chua login
     @PostMapping("forgotPass2")
     public String forgotPass2(Model model,
                               @RequestParam("password")String password,
@@ -221,12 +222,12 @@ public class RegisterController {
             User customer = userRepository.getCustomer((String) session.getAttribute("usernameForgot"));
             customer.setPassword(SHA_256_password.SHA_password(password));
             session.removeAttribute("usernameForgot");
-            session.removeAttribute("idRole");
+//            session.removeAttribute("idRole");
             userService.save(customer);
         }
         return "redirect:/";
     }
-    // thay đổi pass trong trang người dùng
+    // thay đổi pass trong trang người dùng (khi nguoi dung da login)
     @GetMapping("/repairPassG/{idCus}")
     public String repairPass(@PathVariable("idCus") Integer idCus){
         return "/user/register/forgotPass2";

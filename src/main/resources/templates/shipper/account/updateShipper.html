@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -12,7 +13,7 @@
 <head>
     <meta charset="utf-8">
     <title>Login Form Design | CodeLab</title>
-    <link rel="stylesheet" href="style.css">
+<!--    <link rel="stylesheet" href="style.css">-->
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
@@ -48,7 +49,7 @@
         color: #fff;
         user-select: none;
         border-radius: 15px 15px 0 0;
-        background: linear-gradient(-135deg, #50c879, #878b8f);;
+        background: linear-gradient(-135deg, #50c879, #878b8f);
     }
     .wrapper form{
         padding: 10px 30px 50px 30px;
@@ -126,70 +127,7 @@
         font-size: 20px;
         font-weight: 500;
         cursor: pointer;
-        background: linear-gradient(-135deg,#50c879, #878b8f
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        );;
+        background: linear-gradient(-135deg, #50c879, #878b8f);
         transition: all 0.3s ease;
     }
     form .field input[type="submit"]:active{
@@ -260,27 +198,45 @@
 <body>
 <!--dùng form -->
 <!--https://www.codingnepalweb.com/login-form-with-floating-label-animation/ -->
-<div class="wrapper">
+<div class="wrapper" >
     <div class="title">
-        Quên mật khẩu
+        Sửa tài khoản
     </div>
-    <form method="post" th:action="@{/register/forgotPass}" enctype="multipart/form-data">
+
+    <form method="post" th:action="@{'/shipper/updateShipper/'+${session.saveShipper.getId()}}" enctype="multipart/form-data">
         <p style="color: red" th:text="${message}"></p>
-        <div class="field" th:if="${session.idRole == 2}">
-            <input type="email" id="email" name="email" required>
-            <label>Email</label>
-        </div>
         <div class="field">
-            <input type="text" id="username" name="username" required>
-            <label>Tên tài khoản</label>
+            <p>Tên đầy đủ</p>
+            <input type="text" id="name" name="name" th:value="${shipper.getName()}" required>
         </div>
-        <div class="field">
-            <input type="submit" value="Kiểm tra">
+        <div class="field" style="margin-top: 2rem">
+            <p>Địa chỉ</p>
+            <input type="text" id="address" name="address" th:value="${shipper.getAddress()}" required>
+
+        </div>
+        <div class="field" style="margin-top: 2rem">
+            <p>Số điện thoại</p>
+            <input type="text" id="phone" name="phone" th:value="${shipper.getPhone()}" required>
+
+        </div>
+        <div class="field" style="margin-top: 2rem">
+            <p>Tài khoản</p>
+            <input type="text" id="username" name="username" th:value="${shipper.username}" required>
+
+        </div>
+        <!--        <div class="field" style="margin-top: 4rem">-->
+        <!--            <p>Mật khẩu</p>-->
+        <!--            <input type="text" id="password" name="password" placeholder="*********" required>-->
+
+        <!--        </div>-->
+
+        <div class="field" style="margin-top: 4rem">
+            <input type="submit" value="Lưu lại">
         </div>
         <div style="margin-top: 2rem">
             <a class="btn1"
-               th:href="@{/}"
-               style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
+               th:href="@{/shipper/showShipper}"
+               style="text-decoration: none;color: white;font-size: 16px;background: linear-gradient(-135deg, #50c879, #878b8f);"
             >Quay lại</a>
         </div>
     </form>

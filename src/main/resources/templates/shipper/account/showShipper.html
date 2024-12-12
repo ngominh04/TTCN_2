@@ -29,9 +29,16 @@
                                             <div class= "d-flex justify-content-between">
                                                 <div class="d-flex flex-row align-items-center">
                                                     <div class="ms-3">
-                                                        <h5 > : <span th:text="${shipper.getName()}"></span></h5>
-                                                        <h5 > : <span th:text="${shipper.getAddress()}"></span></h5>
-                                                        <h5 > : <span th:text="${shipper.getPhone()}"></span></h5>
+                                                        <h5 >Họ và tên : <span th:text="${shipper.getName()}"></span></h5>
+                                                        <h5 >Địa chỉ : <span th:text="${shipper.getAddress()}"></span></h5>
+                                                        <h5 >Số điện thoại : <span th:text="${shipper.getPhone()}"></span></h5>
+                                                        <br>
+                                                        <h5 >Số đơn hàng đã giao : <span style="color: #198754" th:text="${countShipperOrder.getCountShipperOrder()}"></span></h5>
+                                                        <br>
+                                                        <a class="btn1"
+                                                           th:href="@{'/shipper/updateShipper/'+${session.saveShipper.getId()}}">Sửa thông tin tài khoản</a>
+                                                        <a class="btn1"
+                                                           th:href="@{'/shipper/repairPassG/'+${session.saveShipper.getId()}}">Thay đổi mật khẩu</a>
                                                     </div>
                                                 </div>
                                             </div>

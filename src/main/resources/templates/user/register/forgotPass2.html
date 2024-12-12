@@ -201,8 +201,9 @@
     <div class="title">
         Thay đổi mật khẩu
     </div>
-    <div th:if="${session.saveCus == null}">
+    <div th:if="${session.saveCus == null && session.idRole ==2}">
         <form method="post" th:action="@{/register/forgotPass2}" enctype="multipart/form-data">
+            <span style="color: #198754" th:if="${session.idRole == 2}">Phía người dùng</span>
             <p style="color: red" th:text="${message}"></p>
             <div class="field">
                 <input type="password" id="password" name="password" required>
@@ -223,9 +224,10 @@
             </div>
         </form>
     </div>
-    <div th:if="${session.saveCus != null}">
+    <div th:if="${session.saveCus != null && session.idRole ==2}">
         <!--        <p th:text="${message}" style="color: red"></p>-->
         <form method="post" th:action="@{'/register/repairPassP/'+${session.saveCus.id}}" enctype="multipart/form-data">
+            <span style="color: #198754" th:if="${session.idRole == 2}">Phía người dùng</span>
             <p style="color: red" th:text="${message}"></p>
             <div class="field">
                 <input type="password" id="password" name="password" required>
@@ -238,12 +240,6 @@
             <div class="field">
                 <input type="submit" value="Lưu lại">
             </div>
-<!--            <div style="margin-top: 2rem">-->
-<!--                <a class="btn1"-->
-<!--                   th:href="@{'/receiver/receiver/'+${session.saveCus.getId()}}"-->
-<!--                   style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"-->
-<!--                >Quay lại</a>-->
-<!--            </div>-->
         </form>
     </div>
 </div>

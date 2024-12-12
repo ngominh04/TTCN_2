@@ -264,11 +264,11 @@
     <div class="title">
         Quên mật khẩu
     </div>
-    <form method="post" th:action="@{/register/forgotPass}" enctype="multipart/form-data">
+    <form method="post" th:action="@{/shipper/forgotPass}" enctype="multipart/form-data">
         <p style="color: red" th:text="${message}"></p>
-        <div class="field" th:if="${session.idRole == 2}">
-            <input type="email" id="email" name="email" required>
-            <label>Email</label>
+        <div class="field" th:if="${session.idRole == 3}">
+            <input type="text" id="phone" name="phone" required>
+            <label>Số điện thoại</label>
         </div>
         <div class="field">
             <input type="text" id="username" name="username" required>

@@ -48,7 +48,7 @@
         color: #fff;
         user-select: none;
         border-radius: 15px 15px 0 0;
-        background: linear-gradient(-135deg, #50c879, #878b8f);;
+        background: linear-gradient(-135deg, #50c879, #878b8f);
     }
     .wrapper form{
         padding: 10px 30px 50px 30px;
@@ -126,70 +126,7 @@
         font-size: 20px;
         font-weight: 500;
         cursor: pointer;
-        background: linear-gradient(-135deg,#50c879, #878b8f
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        );;
+        background: linear-gradient(-135deg, #50c879, #878b8f);;
         transition: all 0.3s ease;
     }
     form .field input[type="submit"]:active{
@@ -262,28 +199,54 @@
 <!--https://www.codingnepalweb.com/login-form-with-floating-label-animation/ -->
 <div class="wrapper">
     <div class="title">
-        Quên mật khẩu
+        Thay đổi mật khẩu
     </div>
-    <form method="post" th:action="@{/register/forgotPass}" enctype="multipart/form-data">
-        <p style="color: red" th:text="${message}"></p>
-        <div class="field" th:if="${session.idRole == 2}">
-            <input type="email" id="email" name="email" required>
-            <label>Email</label>
-        </div>
-        <div class="field">
-            <input type="text" id="username" name="username" required>
-            <label>Tên tài khoản</label>
-        </div>
-        <div class="field">
-            <input type="submit" value="Kiểm tra">
-        </div>
-        <div style="margin-top: 2rem">
-            <a class="btn1"
-               th:href="@{/}"
-               style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
-            >Quay lại</a>
-        </div>
-    </form>
+    <div th:if="${session.saveShipper == null && session.idRole ==3}">
+        <form method="post" th:action="@{/shipper/forgotPass2}" enctype="multipart/form-data">
+            <span style="color: #198754" th:if="${session.idRole == 3}">phía người giao hàng</span>
+            <p style="color: red" th:text="${message}"></p>
+            <div class="field">
+                <input type="password" id="password" name="password" required>
+                <label>Mật khẩu</label>
+            </div>
+            <div class="field">
+                <input type="password" id="password2" name="password2" required>
+                <label>Nhập lại mật khẩu</label>
+            </div>
+            <div class="field">
+                <input type="submit" value="Lưu lại">
+            </div>
+            <div style="margin-top: 2rem">
+                <a class="btn1"
+                   th:href="@{/}"
+                   style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
+                >Quay lại</a>
+            </div>
+        </form>
+    </div>
+    <div th:if="${session.saveShipper != null && session.idRole ==3}">
+        <form method="post" th:action="@{'/shipper/repairPassP/'+${session.saveShipper.getId()}}" enctype="multipart/form-data">
+            <span style="color: #198754" th:if="${session.idRole == 3}">phía người giao hàng</span>
+            <p style="color: red" th:text="${message}"></p>
+            <div class="field">
+                <input type="password" id="password" name="password" required>
+                <label>Mật khẩu</label>
+            </div>
+            <div class="field">
+                <input type="password" id="password2" name="password2" required>
+                <label>Nhập lại mật khẩu</label>
+            </div>
+            <div class="field">
+                <input type="submit" value="Lưu lại">
+            </div>
+            <div style="margin-top: 2rem">
+                <a class="btn1"
+                   th:href="@{/}"
+                   style="text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
+                >Quay lại</a>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>

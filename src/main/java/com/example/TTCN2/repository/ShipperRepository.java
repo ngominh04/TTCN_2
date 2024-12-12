@@ -22,4 +22,8 @@ public interface ShipperRepository extends JpaRepository<Shipper, Integer> {
     // get shipper by username
     @Query(value = SQL.CHECK_LOGIN_SHIPPER,nativeQuery = true)
     Shipper checkLogin(String username);
+
+    // count shipper order by idShipper
+    @Query(value = SQL.COUNT_SHIPPER_ORDER_BY_IDSHIPPER,nativeQuery = true)
+    IShipper countShipperOrderByIdShipper(Integer idShipper);
 }

@@ -93,4 +93,7 @@ public class SQL {
     // show chat_box
     public static final String SHOW_CHAT_BOX_BY_ID_CHAT_BOX="select * from chat_box_detail where id_chat_box =?\n" +
             "order by date";
+
+    // count shipperOrder by idShipper
+    public static final String COUNT_SHIPPER_ORDER_BY_IDSHIPPER="select count(id) countShipperOrder from shipper_order where id_shipper = ?";
 }

@@ -227,8 +227,12 @@
             <label>Mật khẩu</label>
         </div>
         <div class="content">
-            <a class="btn1"
+            <a class="btn1" th:if="${session.idRole == 2}"
                th:href="@{/register/forgotPass}"
+               style="margin-top: 1rem;text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
+            >Quên mật khẩu</a>
+            <a class="btn1" th:if="${session.idRole == 3}"
+               th:href="@{/shipper/forgotPass}"
                style="margin-top: 1rem;text-decoration: none;color: white;font-size: 16px;background-color: #4d5154"
             >Quên mật khẩu</a>
         </div>
