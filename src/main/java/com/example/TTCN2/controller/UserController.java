@@ -1,12 +1,7 @@
 package com.example.TTCN2.controller;
 
-import com.example.TTCN2.domain.Admin;
-import com.example.TTCN2.domain.Tree;
-import com.example.TTCN2.domain.TreesImage;
-import com.example.TTCN2.domain.User;
-import com.example.TTCN2.repository.AdminRepository;
-import com.example.TTCN2.repository.DetailAdminRepository;
-import com.example.TTCN2.repository.UserRepository;
+import com.example.TTCN2.domain.*;
+import com.example.TTCN2.repository.*;
 import com.example.TTCN2.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -34,6 +30,10 @@ public class UserController {
     AdminRepository adminRepository;
     @Autowired
     DetailAdminRepository detailAdminRepository;
+    @Autowired
+    ChatBoxRepository chatBoxRepository;
+    @Autowired
+    ChatBoxDetailRepository chatBoxDetailRepository;
     // sửa thông tin tài khoản
     @GetMapping("/updateCus/{idCus}")
     public String updateCus(HttpSession session, Model model, @PathVariable("idCus") Integer idCus){
@@ -65,12 +65,33 @@ public class UserController {
             model.addAttribute("customer",customer);
             return "user/receiver/updateCus";
         }
+
+        //thay doi lai sender phia bang chat_box_detail
+        List<ChatBoxDetail> chatBoxDetails = chatBoxDetailRepository.findAll();
+        for (ChatBoxDetail chatBoxDetail : chatBoxDetails){
+            if(Objects.equals(chatBoxDetail.getSender(), customer.getName())){
+                chatBoxDetail.setSender(fullName);
+                chatBoxDetailRepository.save(chatBoxDetail);
+            }
+        }
+        //end save sender in chat_box_detail
+
+        // save recipient in chat_box_detail when replace updateCus
+        for (ChatBoxDetail chatBoxDetail1 : chatBoxDetails){
+            if(Objects.equals(chatBoxDetail1.getRecipient(),customer.getName())){
+                chatBoxDetail1.setRecipient(fullName);
+                chatBoxDetailRepository.save(chatBoxDetail1);
+            }
+        }
+        //end save recipient
+
         customer.setName(fullName);
         customer.setEmail(email);
         customer.setUsername(username);
         customer.setUpdateDate(String.valueOf(LocalDateTime.now()));
 //        customer.setPassword(password);
         userService.save(customer);
+
         return "redirect:/receiver/receiver/{idCus}";
     }
     // show all user to admin

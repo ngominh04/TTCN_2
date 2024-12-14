@@ -147,10 +147,41 @@ public class CommonController {
     }
     // enter shipper
     @GetMapping("/shipper/{idShipper}")
-    public String shipper(@PathVariable Integer idShipper,Model model){
+    public String shipper(@PathVariable Integer idShipper,Model model,HttpSession session){
         List<IOrder> orders=orderRepository.getAllOrderByStatusJoinReceiver(2,1);
         // idShipper chung khi order default la 1
         model.addAttribute("orders",orders);
+        // chat box
+        Shipper shipper = shipperRepository.getReferenceById(idShipper);
+        List<ChatBox> chatBoxList = chatBoxRepository.getAllChatBoxes();
+        boolean checkIdShipper = false;
+        int idChatBox = 0;
+        for (ChatBox chatBox : chatBoxList) {
+            model.addAttribute("chatBox",chatBox);
+
+            if (!Objects.equals(chatBox.getIdShipper(), shipper.getId())) {
+                checkIdShipper = true;
+                idChatBox = chatBox.getId();
+            }else {
+                checkIdShipper = false;
+                idChatBox = chatBox.getId();
+                break;
+            }
+        }
+        if(!checkIdShipper) {
+            session.setAttribute("saveChatBox", chatBoxRepository.getChatBoxByIdShipper(shipper.getId()));
+            model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(idChatBox));
+        }
+        if (checkIdShipper){
+            ChatBox newChatBox = new ChatBox();
+            newChatBox.setIdShipper(shipper.getId());
+            newChatBox.setIdAdmin(3);
+            chatBoxRepository.save(newChatBox);
+            session.setAttribute("saveChatBox", newChatBox);
+            model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(idChatBox));
+        }
+
+        // end chat_box
         return "shipper/index";
     }
 }

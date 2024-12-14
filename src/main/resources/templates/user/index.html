@@ -35,7 +35,7 @@
             width: 100%;
             position: fixed;
             top: 500px;
-            right: -1450px;
+            right: -45%;
             z-index: 100000;
         }
         .box_chat{
@@ -418,9 +418,9 @@
         }
 
         .direct-chat-messages {
-            -webkit-transform: translate(0, 0);
-            -ms-transform: translate(0, 0);
-            -o-transform: translate(0, 0);
+            /*-webkit-transform: translate(0, 0);*/
+            /*-ms-transform: translate(0, 0);*/
+            /*-o-transform: translate(0, 0);*/
             transform: translate(0, 0);
             padding: 10px;
             height: 250px;
@@ -626,10 +626,10 @@
         </div>
     </div>
 </nav>
-<button id="openChat" style="display: none;width: 50px">
+<button id="openChat" onclick="openChat()" style="display: block;width: 50px">
     <i class='fab fa-facebook-messenger' style='font-size:36px'></i>
 </button>
-<div id="box_chat" class="box_chat" th:if="${session.saveCus != null}" style="display: block">
+<div id="box_chat" class="box_chat" th:if="${session.saveCus != null}" style="display: none">
     <div class="page-content page-container" id="page-content">
         <div class="padding">
             <div class="row container-fluid d-flex justify-content-center">
@@ -639,11 +639,11 @@
                             <h3 class="box-title">Chat Messages</h3>
                             <div class="box-tools pull-right">
                                 <span data-toggle="tooltip" title="" class="badge bg-yellow" data-original-title="3 New Messages">20</span>
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle" data-original-title="Contacts">
-                                    <i class="fa fa-comments"></i>
-                                </button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                                <button type="button" id="closeChat" onclick="closeChat()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+<!--                                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle" data-original-title="Contacts">-->
+<!--                                    <i class="fa fa-comments"></i>-->
+<!--                                </button>-->
+<!--                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>-->
                             </div>
                         </div>
                         <div class="box-body" >
@@ -674,6 +674,7 @@
                                 <form action="#">
                                     <div class="input-group">
 <!--                                        <div id="chat-box"></div>-->
+                                        <input type="text" id="username" hidden="hidden" value="admin3">
                                         <input type="text" id="idChatBox" hidden="hidden" th:value="${session.saveChatBox.getId()}">
                                         <input type="text" id="role" hidden="hidden" th:value="${session.idRole}">
                                         <input type="text" id="idSender" hidden="hidden" th:value="${session.saveCus.getId()}">
@@ -798,6 +799,27 @@
         const container = document.getElementById('scrollContainer');
         container.scrollTop = container.scrollHeight;
     }
+
+    // turn on box_chat
+    function openChat(){
+        // Ẩn button
+        document.getElementById('openChat').style.display = 'none';
+        // Hiển thị box chat
+        document.getElementById('box_chat').style.display = 'block';
+        //cuon thanh cuon xuong cuoi
+        const box_chat = document.getElementById('box_chat');
+        box_chat.scrollTop = box_chat.scrollHeight;
+        scrollToBottom();
+
+    }
+    // turn off box_chat
+    function closeChat(){
+        // Ẩn button
+        document.getElementById('openChat').style.display = 'block';
+        // Hiển thị box chat
+        document.getElementById('box_chat').style.display = 'none';
+    }
+
     $(document).on('ready', function() {
         $('.slider-for').slick({
             slidesToShow: 1,
@@ -853,93 +875,131 @@
         });
     });
 </script>
-<!--<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/stompjs/dist/stomp.min.js"></script>-->
+<!--chat_box js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
-<!--<script th:src="@{/stomp/stomp.umd.min.js}"></script>-->
-<!-- chat box -->
 <script>
     let stompClient = null;
 
     function connect() {
-        // Kiểm tra xem thư viện đã được tải chưa
         if (typeof Stomp === 'undefined') {
-            console.error("chua duoc tai");
+            console.error("Chưa tải thư viện STOMP.");
             return;
         }
         let socket = new SockJS('/chat');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/messages', function (message) {
-                showMessage(JSON.parse(message.body));
+            const message = document.getElementById("message").value;
+            const sender = document.getElementById("sender").value;
+            let recipient =document.getElementById("recipient").value;
+            const role = document.getElementById("role").value;
+            const id_chat_box = document.getElementById("idChatBox").value;
+            const id_sender = document.getElementById("idSender").value;
+            const firstMessage = {
+                'idChatBox': id_chat_box,  // ID chatbox, có thể thay đổi tùy theo cấu trúc của bạn
+                'recipient': recipient,
+                'date': getCurrentTime(),
+                'content': message,
+                'sender': sender,
+                'role': role,  // Thay đổi theo vai trò thực tế
+                'idSender': id_sender   // ID người gửi
+            };
+
+            if (firstMessage.content != null){
+                // Hiển thị tin nhắn đầu tiên ngay lập tức
+                showMessage(firstMessage);
+            }
+            scrollToBottom();
+
+            //console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/messages', function (message) { // tin nhan cong khai
+                console.log("tin nhan nhan duoc tu server:", message.body);  // In dữ liệu nhận được từ server
+                try {
+                    const parsedMessage = JSON.parse(message.body);
+                    showMessage(parsedMessage);
+                    scrollToBottom();
+                } catch (e) {
+                    console.error("chua nhan duoc:", e);
+                }
             });
+            // Đảm bảo rằng username được thay bằng tên người dùng thực tế
+            let username = document.getElementById("recipient").value;
+            stompClient.subscribe('/user/' + username + '/queue/reply', function(message) {
+                console.log("nhan tin nhan:", message.body); // Xem tin nhắn trong console
+                try {
+                    const parsedMessage = JSON.parse(message.body);
+                    showMessage(parsedMessage);  // Hiển thị tin nhắn nhận được
+                    scrollToBottom();
+                } catch (e) {
+                    console.error("loi tin nhan:", e);
+                }
+            });
+        }, function(error) {
+            console.error("ket noi that bai:", error);  // In lỗi nếu kết nối thất bại
         });
     }
 
     function sendMessage() {
         if (!stompClient || !stompClient.connected) {
-            alert("You are not connected yet!");
-            return;  // Nếu chưa kết nối, không gửi tin nhắn
+            alert("ban chua ket noi!");
+            return;
         }
-
-
         const message = document.getElementById("message").value;
         const sender = document.getElementById("sender").value;
-        const role =  document.getElementById("role").value;
-        const id_chat_box =  document.getElementById("idChatBox").value;
+        let recipient =document.getElementById("recipient").value;
+        const role = document.getElementById("role").value;
+        const id_chat_box = document.getElementById("idChatBox").value;
         const id_sender = document.getElementById("idSender").value;
         const currentTime = getCurrentTime();
-
-        let recipient = document.getElementById("recipient").value;
-        // Nếu người gửi là admin3, họ có thể chọn bất kỳ người nhận nào
         if (sender !== "admin3") {
             // Nếu không phải admin3, recipient phải luôn là admin3
             recipient = "admin3";
         }
-        if (message && sender && recipient) {
+        if (message && sender && recipient && id_sender) {
+            const messageData = {
+                'idChatBox': id_chat_box,
+                'recipient': recipient,
+                'date': currentTime,
+                'content': message,
+                'sender': sender,
+                'role': role,
+                'idSender': id_sender
+            };
+            showMessage(messageData);  // Hiển thị tin nhắn ngay lập tức
 
-            stompClient.send("/app/sendMessage", {}, JSON.stringify({
-                                                                        'idChatBox': id_chat_box,'recipient':recipient,
-                                                                        'date': currentTime,'content': message,
-                                                                        'sender': sender,'role':role,'idSender':id_sender
-                                                                    }));
-            document.getElementById("message").value = '';  // Clear message input
+            // Gửi tin nhắn đến server
+            stompClient.send("/app/sendMessage", {}, JSON.stringify(messageData));
+            document.getElementById("message").value = '';  // Xóa ô nhập tin nhắn
         } else {
-            alert("Chua du thong tin de gui.");
+            alert("Chưa đầy đủ thông tin để gửi.");
         }
-        stompClient.connect({}, function (frame) {
-            stompClient.subscribe('/user/queue/reply', function (message) {
-                showMessage(JSON.parse(message.body));  // Hiển thị tin nhắn nhận được
-            });
-        });
+
         scrollToBottom();
     }
 
     function showMessage(message) {
-        // Thời gian khi người dùng gửi tin nhắn
-        const currentTime = getCurrentTime();
+        console.log("nhan tin nhan or hien thi tin nhan da gui:", message);
+
+        const currentTime = getCurrentTime();  // Lấy thời gian gửi tin nhắn
 
         const chatBox = document.getElementById("chat-box");
 
         // Tạo phần tử div cho tin nhắn
         const messageElement = document.createElement("div");
 
-        // Tạo cấu trúc HTML cho phần thông tin tin nhắn
+        // Tạo phần tử chứa thông tin tin nhắn (tên người gửi, thời gian gửi)
         const messageInfo = document.createElement("div");
         messageInfo.classList.add("direct-chat-info", "clearfix");
         messageInfo.style.textAlign = "right";
 
         const messageTimestamp = document.createElement("span");
         messageTimestamp.classList.add("direct-chat-timestamp", "pull-left");
-        messageTimestamp.textContent = currentTime; // Định dạng thời gian khi gửi tin nhắn
+        messageTimestamp.textContent = currentTime;
 
         const messageName = document.createElement("span");
         messageName.classList.add("direct-chat-name", "pull-right");
-        messageName.textContent = message.sender+" "; // Thay `message.senderName` bằng tên người gửi
+        messageName.textContent = message.sender + " ";
 
         messageInfo.appendChild(messageName);
         messageInfo.appendChild(messageTimestamp);
@@ -947,16 +1007,16 @@
         // Tạo phần tử cho ảnh người gửi
         const userImage = document.createElement("img");
         userImage.classList.add("direct-chat-img");
-        userImage.src = "https://img.icons8.com/office/36/000000/person-female.png"; // Thay URL image
+        userImage.src = "https://img.icons8.com/office/36/000000/person-female.png";
         userImage.alt = "message user image";
 
         // Tạo phần tử cho nội dung tin nhắn
         const messageText = document.createElement("div");
         messageText.classList.add("direct-chat-text");
-        messageText.textContent = message.content; // Thay `message.content` bằng nội dung tin nhắn
+        messageText.textContent = message.content;  // Nội dung tin nhắn
         messageText.style.backgroundColor = "#f39c12";
         messageText.style.color = "#fff";
-        messageText.style.overflowWrap = "break-word";
+
         // Thêm các phần tử vào `messageElement`
         messageElement.appendChild(messageInfo);
         messageElement.appendChild(userImage);
@@ -964,21 +1024,27 @@
 
         // Thêm `messageElement` vào `chatBox`
         chatBox.appendChild(messageElement);
+
+        // Cuộn xuống dưới để hiển thị tin nhắn mới nhất
         scrollToBottom();
     }
+
+
     function getCurrentTime() {
         const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hour = String(now.getHours()).padStart(2, '0');
+        const minute = String(now.getMinutes()).padStart(2, '0');
 
-        const year = now.getFullYear(); // Lấy năm
-        const month = String(now.getMonth() + 1).padStart(2, '0'); // Lấy tháng (thêm 1 vì tháng bắt đầu từ 0)
-        const day = String(now.getDate()).padStart(2, '0'); // Lấy ngày
-        const hour = String(now.getHours()).padStart(2, '0'); // Lấy giờ
-        const minute = String(now.getMinutes()).padStart(2, '0'); // Lấy phút
-
-        // Trả về thời gian theo định dạng "YYYY-MM-DD HH:mm"
         return `${year}-${month}-${day} ${hour}:${minute}`;
     }
 
+    function scrollToBottom() {
+        const chatBox = document.getElementById("chat-box");
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
     window.onload = connect;
 </script>

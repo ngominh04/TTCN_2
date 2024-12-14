@@ -44,6 +44,10 @@ public class ShipperController {
     ShipperOrderRepository shipperOrderRepository;
     @Autowired
     uploadFileService uploadFileService;
+    @Autowired
+    ChatBoxRepository chatBoxRepository;
+    @Autowired
+    ChatBoxDetailRepository chatBoxDetailRepository;
 
     // show all shipper to admin
     @GetMapping("/admin/showShipper")
@@ -205,6 +209,25 @@ public class ShipperController {
             model.addAttribute("shipper",shipper);
             return "shipper/account/updateShipper";
         }
+        //thay doi lai sender phia bang chat_box_detail
+        List<ChatBoxDetail>  chatBoxDetails = chatBoxDetailRepository.findAll();
+        for (ChatBoxDetail chatBoxDetail : chatBoxDetails){
+            if(Objects.equals(chatBoxDetail.getSender(),shipper.getName())){
+                chatBoxDetail.setSender(name);
+                chatBoxDetailRepository.save(chatBoxDetail);
+            }
+        }
+        //end save sender in chat_box_detail
+
+        // save recipient in chat_box_detail when replace updateCus
+        for (ChatBoxDetail chatBoxDetail1 : chatBoxDetails){
+            if(Objects.equals(chatBoxDetail1.getRecipient(),shipper.getName())){
+                chatBoxDetail1.setRecipient(name);
+                chatBoxDetailRepository.save(chatBoxDetail1);
+            }
+        }
+        //end save recipient
+
         shipper.setName(name);
         shipper.setPhone(phone);
         shipper.setAddress(address);
@@ -212,6 +235,7 @@ public class ShipperController {
         shipper.setUpdateDate(String.valueOf(LocalDateTime.now()));
 //        customer.setPassword(password);
         shipperRepository.save(shipper);
+
         return "redirect:/shipper/showShipper";
     }
     // shipper quen pass

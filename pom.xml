@@ -77,6 +77,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-websocket</artifactId>
 		</dependency>
+		<!-- Socket.IO Java Client dependency -->
+		<dependency>
+			<groupId>com.github.nkzawa</groupId>
+			<artifactId>socket.io-client</artifactId>
+			<version>0.3.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
