@@ -5,21 +5,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Chi tiết đơn hàng</title>
+    <style>
+        .card1 {
+            width: 800px;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            margin-left: 31rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .row {
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .item>a{
+            border: 1px solid black;
+            border-radius: 2px;
+            color: black;
+            width: 45px;
+            text-align: center;
+            padding: 5px;
+            text-decoration: none;
+        }
+        .item>a:hover{
+            background: #FF6666;
+            color: snow;
+        }
+        .col-lg-7>a:hover{
+            background: #15f48d;
+        }
+        .mb-3>a{
+            border: 1px solid black;
+            border-radius: 2px;
+            color: black;
+            width: 15px;text-align: center;
+            padding: 5px; text-decoration: none;
+        }
+
+    </style>
 </head>
 <body>
-<div layout:fragment="content">
-    <header>
-        <h1></h1>
-        <div class="user-info">
-            <span th:text="${detailAdmin.getName()}"></span>
-            <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
-        </div>
-    </header>
-    <section style="background-color: #eee;margin-top: 3.5rem">
+<main class="main-container" layout:fragment="content">
+<!--    <header>-->
+<!--        <h1></h1>-->
+<!--        <div class="user-info">-->
+<!--            <span th:text="${detailAdmin.getName()}"></span>-->
+<!--            <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>-->
+<!--        </div>-->
+<!--    </header>-->
+    <section>
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col">
-                    <div class="card">
+                    <div class="card1">
                         <div class="card-body p-4">
                             <div class="row">
                                 <div class="col-lg-7">
@@ -92,6 +135,6 @@
             </div>
         </div>
     </section>
-</div>
+</main>
 </body>
 </html>

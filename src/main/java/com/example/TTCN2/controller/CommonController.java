@@ -84,34 +84,28 @@ public class CommonController {
         model.addAttribute("category",categoryRepository.getAllCategory());
         User user = (User) session.getAttribute("saveCus");
         if (user != null) {
-
             // chat box
             List<ChatBox> chatBoxList = chatBoxRepository.getAllChatBoxes();
             boolean checkIdUser = false;
             int idChatBox = 0;
             for (ChatBox chatBox : chatBoxList) {
                 model.addAttribute("chatBox",chatBox);
-
-                if (!Objects.equals(chatBox.getIdUser(), user.getId())) {
+                if (chatBox.getIdUser() != null && chatBox.getIdUser().getId().equals(user.getId())){
                     checkIdUser = true;
                     idChatBox = chatBox.getId();
-                }else {
-                    checkIdUser = false;
-                    idChatBox = chatBox.getId();
-                    break;
                 }
             }
-            if(!checkIdUser) {
+            if(checkIdUser) {
                 session.setAttribute("saveChatBox", chatBoxRepository.getChatBoxByIdUser(user.getId()));
                 model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(idChatBox));
             }
-            if (checkIdUser){
+            if (!checkIdUser){
                 ChatBox newChatBox = new ChatBox();
-                newChatBox.setIdUser(user.getId());
+                newChatBox.setIdUser(user);
                 newChatBox.setIdAdmin(3);
                 chatBoxRepository.save(newChatBox);
                 session.setAttribute("saveChatBox", newChatBox);
-                model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(idChatBox));
+                model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(newChatBox.getId()));
             }
 
             // end chat_box
@@ -151,37 +145,37 @@ public class CommonController {
         List<IOrder> orders=orderRepository.getAllOrderByStatusJoinReceiver(2,1);
         // idShipper chung khi order default la 1
         model.addAttribute("orders",orders);
+
         // chat box
         Shipper shipper = shipperRepository.getReferenceById(idShipper);
-        List<ChatBox> chatBoxList = chatBoxRepository.getAllChatBoxes();
-        boolean checkIdShipper = false;
-        int idChatBox = 0;
-        for (ChatBox chatBox : chatBoxList) {
-            model.addAttribute("chatBox",chatBox);
+        if (shipper.getId() != null) {
+            List<ChatBox> chatBoxList = chatBoxRepository.getAllChatBoxes();
+            boolean checkIdShipper = false;
+            int idChatBox = 0;
+            for (ChatBox chatBox : chatBoxList) {
+                model.addAttribute("chatBox",chatBox);
 
-            if (!Objects.equals(chatBox.getIdShipper(), shipper.getId())) {
-                checkIdShipper = true;
-                idChatBox = chatBox.getId();
-            }else {
-                checkIdShipper = false;
-                idChatBox = chatBox.getId();
-                break;
+                if ( chatBox.getIdShipper() != null && chatBox.getIdShipper().getId().equals(shipper.getId())) {
+                    checkIdShipper = true;
+                    idChatBox = chatBox.getId();
+                }
             }
-        }
-        if(!checkIdShipper) {
-            session.setAttribute("saveChatBox", chatBoxRepository.getChatBoxByIdShipper(shipper.getId()));
-            model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(idChatBox));
-        }
-        if (checkIdShipper){
-            ChatBox newChatBox = new ChatBox();
-            newChatBox.setIdShipper(shipper.getId());
-            newChatBox.setIdAdmin(3);
-            chatBoxRepository.save(newChatBox);
-            session.setAttribute("saveChatBox", newChatBox);
-            model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(idChatBox));
+            if(checkIdShipper) {
+                session.setAttribute("saveChatBox", chatBoxRepository.getChatBoxByIdShipper(shipper.getId()));
+                model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(idChatBox));
+            }
+            if (!checkIdShipper){
+                ChatBox newChatBox = new ChatBox();
+                newChatBox.setIdShipper(shipper);
+                newChatBox.setIdAdmin(3);
+                chatBoxRepository.save(newChatBox);
+                session.setAttribute("saveChatBox", newChatBox);
+                model.addAttribute("detailChatBox",chatBoxDetailRepository.findChatBoxByChatBoxId(newChatBox.getId()));
+            }
+
+            // end chat_box
         }
 
-        // end chat_box
         return "shipper/index";
     }
 }

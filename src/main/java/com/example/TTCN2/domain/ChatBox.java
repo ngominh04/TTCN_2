@@ -14,16 +14,16 @@ public class ChatBox {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
-    private Integer idUser;
+    private User idUser;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_admin")
     private Integer idAdmin;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_shipper")
-    private Integer idShipper;
+    private Shipper idShipper;
 
 }

@@ -7,86 +7,278 @@
     <meta name="description" content="" />
     <title>Admin Dashboard</title>
     <link type="text/css" rel="stylesheet" th:href="@{/admin/css/index.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <style>
+    /*!* General form styling *!*/
+    /*.main-form {*/
+    /*    width: 550px;*/
+    /*    margin: 0 auto;*/
+    /*    padding: 20px;*/
+    /*    border: 1px solid #ccc;*/
+    /*    border-radius: 10px;*/
+    /*    background-color: #f9f9f9;*/
+    /*}*/
+    /*form {*/
+    /*    display: flex;*/
+    /*    flex-direction: column;*/
+    /*}*/
+    /*label {*/
+    /*    margin-bottom: 8px;*/
+    /*    font-weight: bold;*/
+    /*    color: #333;*/
+    /*}*/
+    /*input[type="text"], input[type="number"], select {*/
+    /*    padding: 10px;*/
+    /*    margin-bottom: 15px;*/
+    /*    border: 1px solid #ccc;*/
+    /*    border-radius: 5px;*/
+    /*    width: 100%;*/
+    /*    box-sizing: border-box;*/
+    /*}*/
+    /*input[type="submit"] {*/
+    /*    background-color: #4CAF50;*/
+    /*    color: white;*/
+    /*    padding: 10px;*/
+    /*    border: none;*/
+    /*    border-radius: 5px;*/
+    /*    cursor: pointer;*/
+    /*}*/
+    /*input[type="submit"]:hover {*/
+    /*    background-color: #45a049;*/
+    /*}*/
+    /*!* Optional styling for select options *!*/
+    /*select {*/
+    /*    background-color: #fff;*/
+    /*    color: #333;*/
+    /*}*/
+    /*select option {*/
+    /*    padding: 10px;*/
+    /*}*/
+    /*!* Add a hover effect for select and input fields *!*/
+    /*input[type="text"]:hover, input[type="number"]:hover, select:hover {*/
+    /*    border-color: #888;*/
+    /*}*/
+    /*!*css thanh cuộn ngang ul li ở order *!*/
+    /*.scrollable-list {*/
+    /*    width: 1240px;*/
+    /*    overflow-x: auto;*/
+    /*    white-space: nowrap;*/
+    /*    border: 1px solid #ccc;*/
+    /*    border-radius: 5px;*/
+    /*    padding: 10px;*/
+    /*    !*margin-left: 2rem;*!*/
+    /*}*/
+    /*.scrollable-list li {*/
+    /*    display: inline-block;*/
+    /*    margin-right: 10px;*/
+    /*}*/
+    /*.aByOrder{*/
+    /*    background-color: #333;*/
+    /*    color: white;*/
+    /*    padding: 5px 10px;*/
+    /*    text-decoration: none;*/
+    /*    margin-left: 20px;*/
+    /*    border-radius: 5px;*/
+    /*}*/
+    /*.spanByOrder{*/
+    /*    border: 1px solid white;*/
+    /*    border-radius: 10px;*/
+    /*    background-color: #333;*/
+    /*    color: white;*/
+    /*    padding: 2px 5px 0 4px;*/
+    /*}*/
     /* General form styling */
-    .main-form {
-        width: 550px;
-        margin: 0 auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        background-color: #f9f9f9;
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f2f5;
+        margin: 0;
+        padding: 0;
+        color: #333;
     }
-    form {
+
+    .container {
+        display: flex;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        background-color: #2c3e50;
+        color: white;
+        position: fixed;
         display: flex;
         flex-direction: column;
+        padding-top: 20px;
     }
-    label {
-        margin-bottom: 8px;
+
+    .sidebar .logo {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.5em;
         font-weight: bold;
-        color: #333;
     }
-    input[type="text"], input[type="number"], select {
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        width: 100%;
-        box-sizing: border-box;
+
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
     }
-    input[type="submit"] {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
+
+    .sidebar ul li {
+        padding: 15px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
         cursor: pointer;
+        transition: background-color 0.3s;
     }
-    input[type="submit"]:hover {
-        background-color: #45a049;
+
+    .sidebar ul li a {
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
     }
-    /* Optional styling for select options */
-    select {
-        background-color: #fff;
-        color: #333;
+
+    .sidebar ul li:hover {
+        background-color: #34495e;
     }
-    select option {
-        padding: 10px;
+
+    .sidebar ul li a span {
+        margin-left: 10px;
+        font-size: 14px;
     }
-    /* Add a hover effect for select and input fields */
-    input[type="text"]:hover, input[type="number"]:hover, select:hover {
-        border-color: #888;
+
+    .sidebar ul li.active {
+        background-color: #1abc9c;
     }
-    /*css thanh cuộn ngang ul li ở order */
-    .scrollable-list {
-        width: 1240px;
-        overflow-x: auto;
-        white-space: nowrap;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        /*margin-left: 2rem;*/
+
+    /* Main content area */
+    .main-content {
+        margin-left: 250px;
+        padding: 20px;
+        width: calc(100% - 250px);
     }
-    .scrollable-list li {
-        display: inline-block;
-        margin-right: 10px;
+
+    .main-content header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #ddd;
     }
-    .aByOrder{
-        background-color: #333;
+
+    .main-content header .user-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .logout-btn {
+        background-color: #e74c3c;
         color: white;
         padding: 5px 10px;
-        text-decoration: none;
-        margin-left: 20px;
         border-radius: 5px;
+        margin-left: 10px;
+        text-decoration: none;
     }
-    .spanByOrder{
-        border: 1px solid white;
+
+    .dashboard {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .card {
+        flex: 1;
+        background-color: white;
+        border: 1px solid #ddd;
         border-radius: 10px;
-        background-color: #333;
-        color: white;
-        padding: 2px 5px 0 4px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
     }
+
+    .card h3 {
+        color: #3498db;
+    }
+
+    .card p {
+        font-size: 2em;
+        font-weight: bold;
+    }
+
+    /* Table Section */
+    .table-section {
+        margin-top: 20px;
+    }
+
+    .table-section h2 {
+        margin-bottom: 10px;
+    }
+
+    .table-section table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-section table th, .table-section table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .table-section table th {
+        background-color: #3498db;
+        color: white;
+    }
+
+    .table-section table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    /* Scrollable List */
+    .scrollable-list {
+        display: flex;
+        overflow-x: auto;
+        padding: 10px;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+
+    .scrollable-list li {
+        flex: 0 0 auto;
+        padding: 10px;
+        background-color: #3498db;
+        color: white;
+        margin-right: 10px;
+        border-radius: 5px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .scrollable-list li.activeOrder {
+        background-color: #1abc9c;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 100%;
+            height: auto;
+            position: relative;
+        }
+        .main-content {
+            margin-left: 0;
+            width: 100%;
+        }
+    }
+
 </style>
 <body>
     <div class="container">
@@ -96,21 +288,22 @@
                 <h2>Danh sách quản lí</h2>
             </div>
             <ul>
-                <li><a th:href="@{'/admin/'+${session.saveAdmin.getId()}}">Thống kê </a></li>
-                <li><a th:href="@{/category/admin/showCate}">Phân loại cây <span th:text="${session.countCate.getCountCategory()}"></span></a></li>
-                <li><a th:href="@{/tree/admin/showTrees}">Danh sách cây <span th:text="${session.countTree.getCountTree()}"></span></a></li>
-                <li><a th:href="@{/order/admin/showOrder/1}">Đơn hàng <span th:text="${session.countOrder.getCountOrder()}"></span></a></li>
-                <li><a th:href="@{/user/admin/showUser}">Người dùng <span th:text="${session.countUser.getCountUser()}"></span></a></li>
-                <li><a th:href="@{/shipper/admin/showShipper}">Người vận chuyển <span th:text="${session.countShipper.getCountShipper()}"></span></a></li>
-                <li><a th:href="@{/payment/admin/showPayment}">Phương thức thanh toán <span></span></a></li>
-                <li><a th:href="@{/transport/admin/showTransport}">Phương thức vận chuyển<span></span></a></li>
-                <li><a th:href="@{#}">Tin nhắn <span>1</span></a></li>
-                <li><a th:href="@{#}">Evaluations <span>1</span></a></li>
+                <li><a th:href="@{'/admin/'+${session.saveAdmin.getId()}}"><i class="fas fa-chart-pie"></i> <span>Thống kê</span></a></li>
+                <li><a th:href="@{/category/admin/showCate}"><i class="fas fa-layer-group"></i> <span> Phân loại cây </span> <span th:text="${session.countCate.getCountCategory()}"></span></a></li>
+                <li><a th:href="@{/tree/admin/showTrees}"><i class="fas fa-tree"></i> <span> Danh sách cây </span> <span th:text="${session.countTree.getCountTree()}"></span></a></li>
+                <li><a th:href="@{/order/admin/showOrder/1}"><i class="fas fa-receipt"></i> <span> Đơn hàng </span> <span th:text="${session.countOrder.getCountOrder()}"></span></a></li>
+                <li><a th:href="@{/user/admin/showUser}"><i class="fas fa-users"></i> <span> Người dùng </span> <span th:text="${session.countUser.getCountUser()}"></span></a></li>
+                <li><a th:href="@{/shipper/admin/showShipper}"><i class="fas fa-shipping-fast"></i> <span> Người vận chuyển </span> <span th:text="${session.countShipper.getCountShipper()}"></span></a></li>
+                <li><a th:href="@{/payment/admin/showPayment}"><i class="fas fa-credit-card"></i> <span>Phương thức thanh toán</span></a></li>
+                <li><a th:href="@{/transport/admin/showTransport}"><i class="fas fa-truck"></i> <span>Phương thức vận chuyển</span></a></li>
+<!--                <li><a th:href="@{/admin/showChat}"><i class="fas fa-envelope"></i> <span>Tin nhắn</span></a></li>-->
+                <li><a th:href="@{#}"><i class="fas fa-star"></i> <span>Evaluations</span></a></li>
             </ul>
+
         </nav>
 
         <!-- Main content area -->
-        <div class="main-content" layout:fragment="content">
+        <div class="main-content" style="margin-left: 250px;" layout:fragment="content">
             <header>
                 <h1></h1>
                 <div class="user-info">
@@ -179,6 +372,13 @@
             });
         });
     });
+
+    // // Nếu có nội dung mới được thêm vào, hãy cuộn tới cuối
+    // function scrollToBottom() {
+    //     const container = document.getElementById('chatMessages');
+    //     container.scrollTop = container.scrollHeight;
+    // }
+    // window.onload= scrollToBottom;
 </script>
 </body>
 </html>

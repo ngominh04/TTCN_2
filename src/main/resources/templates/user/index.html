@@ -20,7 +20,7 @@
 <!--    css slick-->
     <link rel="stylesheet" type="text/css" th:href="@{/slick-1.8.1/slick-1.8.1/slick/slick.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/slick-1.8.1/slick-1.8.1/slick/slick-theme.css}">
-    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<!--    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>-->
     <style>
         .navbar{
             /*cố định mennu */
@@ -30,12 +30,12 @@
             left: 0;
             z-index: 100000;
         }
-        .fab{
+        .message{
             /*cố định mennu */
             width: 100%;
             position: fixed;
             top: 500px;
-            right: -45%;
+            right: -95%;
             z-index: 100000;
         }
         .box_chat{
@@ -626,9 +626,10 @@
         </div>
     </div>
 </nav>
-<button id="openChat" onclick="openChat()" style="display: block;width: 50px">
-    <i class='fab fa-facebook-messenger' style='font-size:36px'></i>
-</button>
+<a href="https://m.me/minh.ace.79?ref=chat_from_website" class="message">2<i class='fab fa-facebook-messenger' style='font-size:36px'></i></a>
+<!--<button id="openChat" onclick="openChat()" style="display: block;width: 50px">-->
+<!--    <i class='fab fa-facebook-messenger' style='font-size:36px'></i>-->
+<!--</button>-->
 <div id="box_chat" class="box_chat" th:if="${session.saveCus != null}" style="display: none">
     <div class="page-content page-container" id="page-content">
         <div class="padding">
@@ -667,7 +668,7 @@
                                     </div>
                                 </div>
 <!--                                khi chat duoi dang nguoi dung -->
-                                <div th:if="${session.saveCus.getId() == session.saveChatBox.getIdUser()}" class="direct-chat-msg right"  id="chat-box"></div>
+                                <div th:if="${session.saveCus.getId() == session.saveChatBox.getIdUser().getId()}" class="direct-chat-msg right"  id="chat-box"></div>
 <!--                                <div class="direct-chat-msg "  id="chat-box-admin"></div>-->
                             </div>
                             <div class="box-footer">
@@ -779,27 +780,16 @@
 <script th:src="@{/user/js/scripts.js}"></script>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
 <script th:src="@{/slick-1.8.1/slick-1.8.1/slick/slick.js}" type="text/javascript"></script>
-<script type="text/javascript">
-    // Đảm bảo rằng khi trang tải xong, thanh cuộn sẽ cuộn tới cuối
-    window.onload = function() {
-        // const container = document.getElementById('scrollContainer');
-        // container.scrollTop = container.scrollHeight;
-        const container = document.getElementById('scrollContainer');
-        // Đảm bảo container tồn tại
-        if (container) {
-            // Dùng requestAnimationFrame để đảm bảo cuộn sau khi trình duyệt vẽ lại
-            requestAnimationFrame(() => {
-                container.scrollTop = container.scrollHeight;
-            });
-        }
-    };
+<!--chat_box js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
+<script>
     // Nếu có nội dung mới được thêm vào, hãy cuộn tới cuối
     function scrollToBottom() {
         const container = document.getElementById('scrollContainer');
         container.scrollTop = container.scrollHeight;
     }
-
     // turn on box_chat
     function openChat(){
         // Ẩn button
@@ -807,10 +797,9 @@
         // Hiển thị box chat
         document.getElementById('box_chat').style.display = 'block';
         //cuon thanh cuon xuong cuoi
-        const box_chat = document.getElementById('box_chat');
-        box_chat.scrollTop = box_chat.scrollHeight;
+        // const box_chat = document.getElementById('box_chat');
+        // box_chat.scrollTop = box_chat.scrollHeight;
         scrollToBottom();
-
     }
     // turn off box_chat
     function closeChat(){
@@ -822,24 +811,24 @@
 
     $(document).on('ready', function() {
         $('.slider-for').slick({
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            arrows: false,
-            fade: true,
-            autoplay: true,
-            autoplaySpeed: 2000,
-            asNavFor: '.slider-nav'
-        });
+                                   slidesToShow: 1,
+                                   slidesToScroll: 1,
+                                   arrows: false,
+                                   fade: true,
+                                   autoplay: true,
+                                   autoplaySpeed: 2000,
+                                   asNavFor: '.slider-nav'
+                               });
         $('.slider-nav').slick({
-            slidesToShow: 3,
-            slidesToScroll: 1,
-            asNavFor: '.slider-for',
-            dots: true,
-            centerMode: true,
-            focusOnSelect: true,
-            autoplay: true,
-            autoplaySpeed: 2000,
-        });
+                                   slidesToShow: 3,
+                                   slidesToScroll: 1,
+                                   asNavFor: '.slider-for',
+                                   dots: true,
+                                   centerMode: true,
+                                   focusOnSelect: true,
+                                   autoplay: true,
+                                   autoplaySpeed: 2000,
+                               });
     });
     // js money transport
     const selectElement = document.getElementById('idTrans');
@@ -861,28 +850,25 @@
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
     // thay doi mau khi click thẻ li ở order
-    const listItems = document.querySelectorAll('.scrollable-list li');
+    // const listItems = document.querySelectorAll('.scrollable-list li');
+    //
+    // listItems.forEach(item => {
+    //     item.addEventListener('click', (event) => {
+    //         console.log('Li clicked:', item.textContent);
+    //         event.preventDefault();
+    //         listItems.forEach(li => li.classList.remove('activeOrder'));
+    //         item.classList.add('activeOrder');
+    //         setTimeout(() => {
+    //             window.location.href = item.querySelector('a').getAttribute('href');
+    //         }, 100);
+    //     });
+    // });
 
-    listItems.forEach(item => {
-        item.addEventListener('click', (event) => {
-            console.log('Li clicked:', item.textContent);
-            event.preventDefault();
-            listItems.forEach(li => li.classList.remove('activeOrder'));
-            item.classList.add('activeOrder');
-            setTimeout(() => {
-                window.location.href = item.querySelector('a').getAttribute('href');
-            }, 100);
-        });
-    });
-</script>
-<!--chat_box js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-
-<script>
+// stomp
     let stompClient = null;
 
     function connect() {
+        debugger;
         if (typeof Stomp === 'undefined') {
             console.error("Chưa tải thư viện STOMP.");
             return;
@@ -890,6 +876,7 @@
         let socket = new SockJS('/chat');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
+            console.log("ket noi thanh cong "+ frame)
             const message = document.getElementById("message").value;
             const sender = document.getElementById("sender").value;
             let recipient =document.getElementById("recipient").value;
@@ -897,7 +884,7 @@
             const id_chat_box = document.getElementById("idChatBox").value;
             const id_sender = document.getElementById("idSender").value;
             const firstMessage = {
-                'idChatBox': id_chat_box,  // ID chatbox, có thể thay đổi tùy theo cấu trúc của bạn
+                'idChatBox': id_chat_box,
                 'recipient': recipient,
                 'date': getCurrentTime(),
                 'content': message,
@@ -926,25 +913,35 @@
             // Đảm bảo rằng username được thay bằng tên người dùng thực tế
             let username = document.getElementById("recipient").value;
             stompClient.subscribe('/user/' + username + '/queue/reply', function(message) {
-                console.log("nhan tin nhan:", message.body); // Xem tin nhắn trong console
+                alert("nhan tin nhan: "+message.body);
                 try {
                     const parsedMessage = JSON.parse(message.body);
                     showMessage(parsedMessage);  // Hiển thị tin nhắn nhận được
                     scrollToBottom();
                 } catch (e) {
-                    console.error("loi tin nhan:", e);
+                    alert("loi tin nhan: " + e);
                 }
             });
         }, function(error) {
-            console.error("ket noi that bai:", error);  // In lỗi nếu kết nối thất bại
+            alert("ket noi that bai: "+error);  // In lỗi nếu kết nối thất bại
         });
     }
 
     function sendMessage() {
-        if (!stompClient || !stompClient.connected) {
-            alert("ban chua ket noi!");
+        debugger;
+
+        // Kiểm tra nếu stompClient đã được khởi tạo
+        if (stompClient === null) {
+            console.error("stompClient chưa được khởi tạo.");
             return;
         }
+        // Kiểm tra xem stompClient đã kết nối chưa
+        if (!stompClient.connected) {
+            console.error("Kết nối STOMP chưa sẵn sàng.");
+            return;
+        }
+        debugger;
+
         const message = document.getElementById("message").value;
         const sender = document.getElementById("sender").value;
         let recipient =document.getElementById("recipient").value;
@@ -967,8 +964,9 @@
                 'idSender': id_sender
             };
             showMessage(messageData);  // Hiển thị tin nhắn ngay lập tức
-
+            debugger;
             // Gửi tin nhắn đến server
+            alert(messageData);
             stompClient.send("/app/sendMessage", {}, JSON.stringify(messageData));
             document.getElementById("message").value = '';  // Xóa ô nhập tin nhắn
         } else {
@@ -979,14 +977,21 @@
     }
 
     function showMessage(message) {
-        console.log("nhan tin nhan or hien thi tin nhan da gui:", message);
-
+        // alert("nhan tin nhan or hien thi tin nhan da gui: "+message);
+        debugger;
         const currentTime = getCurrentTime();  // Lấy thời gian gửi tin nhắn
 
         const chatBox = document.getElementById("chat-box");
-
+        if (!chatBox){
+            console.error("ko ton tai chat-box");
+            return;
+        }
         // Tạo phần tử div cho tin nhắn
         const messageElement = document.createElement("div");
+        if (!messageElement){
+            console.error("ko tao duoc messageElement");
+            return;
+        }
 
         // Tạo phần tử chứa thông tin tin nhắn (tên người gửi, thời gian gửi)
         const messageInfo = document.createElement("div");
@@ -995,11 +1000,11 @@
 
         const messageTimestamp = document.createElement("span");
         messageTimestamp.classList.add("direct-chat-timestamp", "pull-left");
-        messageTimestamp.textContent = currentTime;
+        messageTimestamp.textContent = currentTime || "khong co thoi gian";
 
         const messageName = document.createElement("span");
         messageName.classList.add("direct-chat-name", "pull-right");
-        messageName.textContent = message.sender + " ";
+        messageName.textContent = message.sender + " " || " khong co nguoi gui";
 
         messageInfo.appendChild(messageName);
         messageInfo.appendChild(messageTimestamp);
@@ -1013,7 +1018,7 @@
         // Tạo phần tử cho nội dung tin nhắn
         const messageText = document.createElement("div");
         messageText.classList.add("direct-chat-text");
-        messageText.textContent = message.content;  // Nội dung tin nhắn
+        messageText.textContent = message.content || "khong co noi dung";  // Nội dung tin nhắn
         messageText.style.backgroundColor = "#f39c12";
         messageText.style.color = "#fff";
 
@@ -1021,14 +1026,13 @@
         messageElement.appendChild(messageInfo);
         messageElement.appendChild(userImage);
         messageElement.appendChild(messageText);
-
+        debugger
         // Thêm `messageElement` vào `chatBox`
         chatBox.appendChild(messageElement);
-
         // Cuộn xuống dưới để hiển thị tin nhắn mới nhất
         scrollToBottom();
-    }
 
+    }
 
     function getCurrentTime() {
         const now = new Date();
@@ -1041,12 +1045,9 @@
         return `${year}-${month}-${day} ${hour}:${minute}`;
     }
 
-    function scrollToBottom() {
-        const chatBox = document.getElementById("chat-box");
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    window.onload = connect;
+    window.onload = function (){
+        connect();
+    };
 </script>
 </body>
 </html>

@@ -13,6 +13,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ChatController {
@@ -44,4 +47,17 @@ public class ChatController {
         chatBoxDetailRepository.save(message);
     }
 
+    // show all chat
+    @GetMapping("/admin/showChat")
+    public String showChat(Model model) {
+        model.addAttribute("chat",chatBoxRepository.findAll());
+        return "admin/message/showMessage";
+    }
+    // show chat theo id chat_box
+    @GetMapping("/admin/chat/{idBoxChat}")
+    public String showChatDetail(@PathVariable("idBoxChat") Integer idBoxChat, Model model) {
+        model.addAttribute("chat",chatBoxRepository.getChatBoxById(idBoxChat));
+        model.addAttribute("box_chat",chatBoxDetailRepository.findChatBoxByChatBoxId(idBoxChat));
+        return "admin/message/detailMessage";
+    }
 }

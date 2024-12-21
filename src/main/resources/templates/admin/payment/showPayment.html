@@ -5,6 +5,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Danh sách phương thức thanh toán</title>
+    <style>
+        .page-item>a {
+            text-decoration: none;
+            display: inline-block;
+            padding: 8px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            color: #007bff; /* Màu chữ mặc định là xanh dương */
+        }
+
+        .page-item>a:hover {
+            background-color: #3498db;
+            color: red; /* Màu chữ cam khi hover */
+        }
+        .item>a{
+            border: 1px solid black;
+            border-radius: 2px;
+            color: black;
+            width: 60px;
+            text-align: center;
+            padding: 5px;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+        .item>a:hover{
+            background: #FF6666;
+            color: snow;
+        }
+    </style>
 </head>
 <body>
 <div class="main-content" layout:fragment="content">
@@ -40,25 +71,21 @@
                 <td th:text="${od.getUpdateDate()}"></td>
                 <td th:if="${od.getIsActive()} == 0" style="color: #15f48d" >Đang hiển thị</td>
                 <td th:if="${od.getIsActive()} == 1" style="color: #fb4e4e">Không hiển thị</td>
-                <td style="width: 92px;" th:if="${session.saveAdmin.getPower() != 3}">
-                    <a th:if="${od.getIsActive() == 0}"
-                       style="border: 1px solid black;border-radius: 2px; color: black;
-                       width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/payment/admin/activePayment/'+${od.getId()}}">Chặn</a>
-                    <a th:if="${od.getIsActive() == 1}"
-                       style="border: 1px solid black;border-radius: 2px; color: black;
-                       width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/payment/admin/activePayment/'+${od.getId()}}">Bỏ chặn</a>
+                <td th:if="${session.saveAdmin.getPower() != 3}">
+                    <div class="item" style="display: flex">
+                        <a th:if="${od.getIsActive() == 0}"
+                           th:href="@{'/payment/admin/activePayment/'+${od.getId()}}">Chặn</a>
+                        <a th:if="${od.getIsActive() == 1}"
+                           th:href="@{'/payment/admin/activePayment/'+${od.getId()}}">Bỏ chặn</a>
+                    </div>
                 </td>
                 <td >
-                    <a th:if="${session.saveAdmin.getPower() !=3}"
-                       style="border: 1px solid black;border-radius: 2px; color: black;
-                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/payment/admin/editPayment/'+${od.getId()}}">Sửa</a>
-                    <a th:if="${session.saveAdmin.getPower() ==1}"
-                            style="border: 1px solid black;border-radius: 2px; color: black;
-                       width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/payment/admin/removePayment/'+${od.getId()}}">Xóa</a>
+                    <div class="item" style="display: flex">
+                        <a th:if="${session.saveAdmin.getPower() !=3}"
+                           th:href="@{'/payment/admin/editPayment/'+${od.getId()}}">Sửa</a>
+                        <a th:if="${session.saveAdmin.getPower() ==1}"
+                           th:href="@{'/payment/admin/removePayment/'+${od.getId()}}">Xóa</a>
+                    </div>
                 </td>
             </tr>
             <!-- Add more rows as necessary -->
@@ -66,22 +93,19 @@
         </table>
     </section>
     <div style="height: 2rem"></div>
-    <a style="border: 1px solid black;border-radius: 2px; color: black; margin-top: 2rem;
-                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-       th:href="@{/payment/admin/newPayment}"
-    >Thêm mới </a>
-    <nav style="position: fixed;bottom: 5px;z-index: 1000;">
-        <p >Bạn đang ở trang thứ <span th:text="${paymentMethods.getNumber()+1}"></span></p>
-        <ul class="pagination" style="list-style: none;display: flex;">
+    <div class="item">
+        <a th:href="@{/payment/admin/newPayment}">Thêm mới </a>
+    </div>
+    <div style="height: 16rem"></div>
+    <nav style="position: relative; bottom: 0; width: 100%; z-index: 1000; padding: 10px 0;">
+        <p style="font-size: 14px; color: #555; text-align: center;" >Bạn đang ở trang thứ <span th:text="${paymentMethods.getNumber()+1}"></span></p>
+        <ul class="pagination" style="list-style: none; display: inline-flex; padding: 0; margin: 0; justify-content: center;">
             <div th:if="${paymentMethods.totalPages > 0}"
                  th:each="pageNumber : ${pageNumbers}">
-                <li class="page-link" style="border: 1px solid black;border-radius: 2px;
-                                        width: 15px;text-align: center;margin-left: 5px">
+                <li class="page-item" style="margin: 0 5px;">
                     <a th:href="@{/shipper/admin/showShipper (size=${paymentMethods.size}, page=${pageNumber})}"
                        th:text="${pageNumber}"
                        th:class="${pageNumber==paymentMethods.number + 1} ? active"
-                       style="text-decoration: none"
-                       class="page-link"
                     ></a>
                 </li>
             </div>

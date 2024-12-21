@@ -14,6 +14,10 @@ public interface ChatBoxRepository extends JpaRepository<ChatBox,Integer> {
     @Query(value ="select * from chat_box",nativeQuery = true)
     List<ChatBox> getAllChatBoxes();
 
+    // get by id
+    @Query(value = "select * from chat_box where id=?",nativeQuery = true)
+    ChatBox getChatBoxById(Integer idChatBox);
+
     // get by id user
     @Query(value = "select * from chat_box where id_user=?",nativeQuery = true)
     ChatBox getChatBoxByIdUser(Integer idUser);

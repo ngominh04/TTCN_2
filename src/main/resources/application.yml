@@ -10,3 +10,9 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+  vnpay:
+    url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+    merchantCode: HOKIYG7R
+    secretKey: CA76YVESN6DQWSLYSAZV7CBXCTL8K0FE
+    returnUrl: http://localhost:8080/vnpay/return
+    ipAddress: 127.0.0.1

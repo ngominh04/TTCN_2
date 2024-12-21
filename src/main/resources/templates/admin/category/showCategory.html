@@ -5,6 +5,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Xem loại sản phẩm</title>
+    <style>
+        .page-item>a {
+            text-decoration: none;
+            display: inline-block;
+            padding: 8px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            color: #007bff; /* Màu chữ mặc định là xanh dương */
+        }
+
+        .page-item>a:hover {
+            background-color: #3498db;
+            color: red; /* Màu chữ cam khi hover */
+        }
+        .item>a{
+            border: 1px solid black;
+            border-radius: 2px;
+            color: black;
+            width: 45px;
+            text-align: center;
+            padding: 5px;
+            text-decoration: none;
+        }
+        .item>a:hover{
+            background: #FF6666;
+            color: snow;
+        }
+    </style>
 </head>
 <body>
 <div class="main-content" layout:fragment="content">
@@ -41,13 +71,12 @@
                 <td th:text="${od.getUpdateDate()}"></td>
                 <td th:if="${od.getIsDelete()} == 0" style="color: #15f48d" >Đang hiển thị</td>
                 <td th:if="${od.getIsDelete()} == 1" style="color: #fb4e4e">Không hiển thị</td>
-                <td >
-                    <a style="border: 1px solid black;border-radius: 2px; color: black;
-                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/category/admin/editCategory/'+${od.getId()}}">Sửa</a>
-                    <a style="border: 1px solid black;border-radius: 2px; color: black;
-                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-                       th:href="@{'/category/admin/removeCategory/'+${od.getId()}}">Xóa</a>
+                <td>
+                    <div class="item" style="display: flex">
+                        <a style="margin-right: 5px"
+                           th:href="@{'/category/admin/editCategory/'+${od.getId()}}">Sửa</a>
+                        <a th:href="@{'/category/admin/removeCategory/'+${od.getId()}}">Xóa</a>
+                    </div>
                 </td>
             </tr>
             <!-- Add more rows as necessary -->
@@ -55,22 +84,19 @@
         </table>
     </section>
     <div style="height: 2rem"></div>
-    <a style="border: 1px solid black;border-radius: 2px; color: black; margin-top: 2rem;
-                           width: 15px;text-align: center;padding: 5px; text-decoration: none;"
-       th:href="@{/category/admin/newCategory}"
-    >Thêm mới </a>
-    <nav style="position: fixed;bottom: 5px;z-index: 1000;">
-        <p >Bạn đang ở trang thứ <span th:text="${showCategory.getNumber()+1}"></span></p>
-        <ul class="pagination" style="list-style: none;display: flex;">
+    <div class="item">
+        <a th:href="@{/category/admin/newCategory}">Thêm mới </a>
+    </div>
+    <div style="height: 5rem"></div>
+    <nav style="position: relative; bottom: 0; width: 100%; z-index: 1000; padding: 10px 0;">
+        <p style="font-size: 14px; color: #555; text-align: center;">Bạn đang ở trang thứ <span th:text="${showCategory.getNumber()+1}"></span></p>
+        <ul class="pagination" style="list-style: none; display: inline-flex; padding: 0; margin: 0; justify-content: center;">
             <div th:if="${showCategory.totalPages > 0}"
                  th:each="pageNumber : ${pageNumbers}">
-                <li class="page-link" style="border: 1px solid black;border-radius: 2px;
-                                        width: 15px;text-align: center;margin-left: 5px">
+                <li class="page-item" style="margin: 0 5px;">
                     <a th:href="@{/category/admin/showCate (size=${showCategory.size}, page=${pageNumber})}"
                        th:text="${pageNumber}"
                        th:class="${pageNumber==showCategory.number + 1} ? active"
-                       style="text-decoration: none"
-                       class="page-link"
                     ></a>
                 </li>
             </div>
