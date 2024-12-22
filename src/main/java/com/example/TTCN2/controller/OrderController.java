@@ -70,7 +70,9 @@ public class OrderController {
         if (cartItems1.isEmpty()){
             return "redirect:/cart/{idCus}";
         }
-
+        if(idPay == 2){
+            return "redirect:/vnPay";
+        }
         // save order
         Order order = new Order();
         order.setTotalQuantity(cart.getTotalQuantity());

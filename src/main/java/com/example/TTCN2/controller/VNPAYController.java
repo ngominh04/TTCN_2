@@ -7,16 +7,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping("/vnPay")
 public class VNPAYController {
     @Autowired
     VNPService vnPayService;
 
     @GetMapping({"", "/"})
     public String home(){
-        return "createOrder";
+        return "/user/order/createOrder";
     }
 
     // Chuyển hướng người dùng đến cổng thanh toán VNPAY
@@ -44,6 +46,7 @@ public class VNPAYController {
         model.addAttribute("paymentTime", paymentTime);
         model.addAttribute("transactionId", transactionId);
 
-        return paymentStatus == 1 ? "ordersuccess" : "orderfail";
+//        return paymentStatus == 1 ? "ordersuccess" : "orderfail";
+        return paymentStatus == 1 ? "/user/order/orderSuccess" : "/user/order/orderFail";
     }
 }
