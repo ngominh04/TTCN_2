@@ -305,7 +305,7 @@
         <!-- Main content area -->
         <div class="main-content" style="margin-left: 250px;" layout:fragment="content">
             <header>
-                <h1></h1>
+                <a class="logout-btn" th:href="@{'/admin/account/'+${session.saveAdmin.getId()}}">Tài khoản</a>
                 <div class="user-info">
                     <span th:text="${detailAdmin.getName()}"></span>
                     <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
@@ -379,6 +379,7 @@
     //     container.scrollTop = container.scrollHeight;
     // }
     // window.onload= scrollToBottom;
+    // Hiển thị phần chỉnh sửa thông tin
 </script>
 </body>
 </html>

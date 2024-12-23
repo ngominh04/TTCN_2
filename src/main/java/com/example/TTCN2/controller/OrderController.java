@@ -59,7 +59,7 @@ public class OrderController {
 
 
     @PostMapping("/{idCus}")
-    public String order(@PathVariable Integer idCus,  HttpSession session,
+    public String order(@PathVariable Integer idCus,  HttpSession session,Model model,
                         @RequestParam("idTrans")Integer idTrans,
                         @RequestParam("idPay")Integer idPay,
                         @RequestParam("idReceiver")Integer idReceiver
@@ -70,8 +70,13 @@ public class OrderController {
         if (cartItems1.isEmpty()){
             return "redirect:/cart/{idCus}";
         }
+        // ktra neu thanh toan vnPay
         if(idPay == 2){
-            return "redirect:/vnPay";
+            model.addAttribute("transport",transportMethodRepository.getTransportById(idTrans));
+            model.addAttribute("payment",paymentMethodRepository.getPaymentById(2));
+            model.addAttribute("receiver",receiverRepository.findAllById(idReceiver));
+            model.addAttribute("totalMoney",cart.getTotalMoney()+transportMethodRepository.getTransportById(idTrans).getMoney());
+            return "/user/order/createOrder";
         }
         // save order
         Order order = new Order();
@@ -122,6 +127,7 @@ public class OrderController {
         }
         // xoa cart 
         cartService.delete(cart);
+        session.removeAttribute("countCart_user");
 
         return "redirect:/";
     }

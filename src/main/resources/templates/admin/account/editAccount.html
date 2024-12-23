@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/admin/index}">
+      layout:decorate="~{/admin/index}"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,23 +53,21 @@
         .actions {
             text-align: center;
         }
-        .edit-btn a, .save-btn a, .change-password-btn a {
-            width: 80%;
+        .edit-btn, .save-btn, .change-password-btn {
             background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            text-decoration: none;
         }
-        .edit-btn a{
+        .edit-btn {
             background-color: #f1c40f;
         }
-        .save-btn a{
+        .save-btn {
             background-color: #3498db;
         }
-        .change-password-btn a{
+        .change-password-btn {
             background-color: #e67e22;
         }
         .edit-btn:hover, .save-btn:hover, .change-password-btn:hover {
@@ -88,46 +88,50 @@
     <h1>Thông tin cá nhân quản trị viên</h1>
 
     <!-- Thông tin tài khoản quản trị viên -->
+    <form th:action="@{'/admin/editAccountSave/'+${session.saveAdmin.getId()}}" enctype="multipart/form-data" method="post">
+    <!-- Thông tin tài khoản quản trị viên -->
     <div class="profile-info info-section">
         <div class="profile-info">
             <label for="username">Tên đăng nhập:</label>
-            <input type="text" id="username" th:value="${admin.getUsername()}" disabled>
+            <input type="text" id="username" name="username" th:value="${admin.getUsername()}" >
+            <p th:text="${userError}" style="color: red"></p>
         </div>
 
         <div class="profile-info">
             <label for="note_power">Mô tả quyền hạn:</label>
-            <textarea id="note_power"  disabled th:text="${admin.getNotePower()}"></textarea>
+            <textarea id="note_power" disabled th:value="${admin.getNotePower()}" th:text="${admin.getNotePower()}"></textarea>
         </div>
 
         <!-- Thông tin chi tiết quản trị viên -->
         <div class="profile-info">
             <label for="name">Họ tên:</label>
-            <input type="text" id="name" th:value="${detailAdmin.getName()}" disabled>
+            <input type="text" id="name" name="name" th:value="${detailAdmin.getName()}" >
+            <p th:text="${nameError}" style="color: red"></p>
         </div>
 
         <div class="profile-info">
             <label for="phone">Số điện thoại:</label>
-            <input type="text" id="phone" th:value="${detailAdmin.getPhone()}" disabled>
+            <input type="text" id="phone" name="phone" th:value="${detailAdmin.getPhone()}" >
+            <p th:text="${phoneError}" style="color: red"></p>
         </div>
 
         <div class="profile-info">
             <label for="address">Địa chỉ:</label>
-            <input type="text" id="address" th:value="${detailAdmin.getAddress()}" disabled>
+            <input type="text" id="address" name="address" th:value="${detailAdmin.getAddress()}" >
+            <p th:text="${addressError}" style="color: red"></p>
         </div>
 
         <div class="profile-info">
             <label for="id_card">Số CMND/CCCD:</label>
-            <input type="text" id="id_card" th:value="${detailAdmin.getIdCard()}" disabled>
+            <input type="number" id="id_card" name="id_card" th:value="${detailAdmin.getIdCard()}" >
+            <p th:text="${idCardError}" style="color: red"></p>
         </div>
-
         <!-- Các nút chỉnh sửa và đổi mật khẩu -->
         <div class="actions">
-            <button  class="edit-btn" style="border: 0"><a th:href="@{'/admin/editAccount/'+${session.saveAdmin.getId()}}">Chỉnh sửa thông tin</a></button>
-            <button class="change-password-btn" style="border: 0"><a th:href="@{'/admin/editPassword/'+${session.saveAdmin.getId()}}">Đổi mật khẩu</a></button>
+            <button type="submit" class="save-btn" >Lưu thay đổi</button>
         </div>
     </div>
-
+    </form>
 </div>
-
 </body>
 </html>

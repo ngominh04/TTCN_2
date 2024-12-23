@@ -32,13 +32,13 @@ public class DetailAdmin {
     @Column(name = "id_card", length = 12)
     private String idCard;
 
-    @Column(name = "imege", length = 250)
-    private String imege;
+    @Column(name = "image", length = 250)
+    private String image;
 
     @Column(name = "create_date")
-    private Instant createDate;
+    private String createDate;
 
     @Column(name = "update_date")
-    private Instant updateDate;
+    private String updateDate;
 
 }

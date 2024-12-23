@@ -11,4 +11,8 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
     // ktra tai khoan theo username admin
     @Query(value= SQL.CHECK_LOGIN_ADMIN,nativeQuery = true)
     Admin getAdmin(String username);
+
+    // get admin according to idAdmin
+    @Query(value = "select * from admin where id=?",nativeQuery = true)
+    Admin getAdminById(Integer idAdmin);
 }

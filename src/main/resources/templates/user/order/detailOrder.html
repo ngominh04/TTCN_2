@@ -72,6 +72,9 @@
                                     <div>
                                         <h4 class="mb-1">Tổng số tiền đơn hàng : <span th:text="${#numbers.formatDecimal(order.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></span></h4>
                                         <div style="height: 16px"></div>
+                                        <div th:if="${order.getIdPayment() == 2}">
+                                            <p style="color: red">Đơn hàng đã được thanh toán bằng VN PAY</p>
+                                        </div>
                                         <div th:if="${order.getStatus() == 4}">
                                             <p>Ảnh chụp sản phẩm đã giao (Time: <span th:text="${shipperOrder.getDeliveryDate()}"></span>)</p>
                                             <img  th:src="'/imageTree/'+${shipperOrder.getImageOrder()}" alt="" style="max-width: 300px;"/><br>

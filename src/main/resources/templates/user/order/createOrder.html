@@ -18,13 +18,20 @@
                     <h2 class="card-title">Tạo Đơn Hàng</h2>
                     <form th:action="@{/submitOrder}" method="post">
                         <div class="form-group">
-                            <label for="amount">Số tiền:</label>
-                            <input type="number" class="form-control" id="amount" name="amount" required value="299999">
+                            <label for="username">Thông tin người nhận :</label>
+                            <p type="text" class="form-control" id="username" name="username" th:text="${receiver.getName()}+' - '+${receiver.getPhone()}"></p>
+                            <p type="text" class="form-control" id="receiver" name="receiver" th:value="${receiver.getId()}" th:text="${receiver.getAddress()}"></p>
                         </div>
                         <div class="form-group">
-                            <label for="orderInfo">Thông tin đơn hàng:</label>
-                            <input type="text" class="form-control" id="orderInfo" name="orderInfo" required value="Thanh toan don hang 2923">
+                            <label for="totalMoney">Số tiền:</label>
+                            <p type="number" class="form-control"
+                               th:text="${#numbers.formatDecimal(totalMoney,3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></p>
                         </div>
+                        <input type="text" id="totalMoney" name="totalMoney" hidden="hidden" th:value="${totalMoney}">
+                        <input type="number" id="idTrans" name="idTrans" hidden="hidden" th:value="${transport.getId()}">
+                        <input type="number" id="idPay" name="idPay" hidden="hidden" th:value="2">
+                        <input type="number" id="idReceiver" name="idReceiver" hidden="hidden" th:value="${receiver.getId()}">
+
                         <button type="submit" class="btn btn-primary">Thanh toán</button>
                     </form>
                 </div>

@@ -12,7 +12,7 @@ import java.util.*;
 
 @Service
 public class VNPService {
-        public String createOrder(HttpServletRequest request, int amount, String orderInfor, String urlReturn){
+        public String createOrder(HttpServletRequest request, Integer amount, String orderInfor, String urlReturn){
             //Các bạn có thể tham khảo tài liệu hướng dẫn và điều chỉnh các tham số
             String vnp_Version = "2.1.0";
             String vnp_Command = "pay";
@@ -56,19 +56,15 @@ public class VNPService {
             while (itr.hasNext()) {
                 String fieldName = (String) itr.next();
                 String fieldValue = (String) vnp_Params.get(fieldName);
-                if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                if ((fieldValue != null) && (!fieldValue.isEmpty())) {
                     //Build hash data
                     hashData.append(fieldName);
                     hashData.append('=');
-                    try {
-                        hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                        //Build query
-                        query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
-                        query.append('=');
-                        query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
+                    hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+                    //Build query
+                    query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII));
+                    query.append('=');
+                    query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
                     if (itr.hasNext()) {
                         query.append('&');
                         hashData.append('&');
@@ -88,13 +84,9 @@ public class VNPService {
             for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
                 String fieldName = null;
                 String fieldValue = null;
-                try {
-                    fieldName = URLEncoder.encode((String) params.nextElement(), StandardCharsets.US_ASCII.toString());
-                    fieldValue = URLEncoder.encode(request.getParameter(fieldName), StandardCharsets.US_ASCII.toString());
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                fieldName = URLEncoder.encode((String) params.nextElement(), StandardCharsets.US_ASCII);
+                fieldValue = URLEncoder.encode(request.getParameter(fieldName), StandardCharsets.US_ASCII);
+                if ((fieldValue != null) && (!fieldValue.isEmpty())) {
                     fields.put(fieldName, fieldValue);
                 }
             }

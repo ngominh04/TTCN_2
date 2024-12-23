@@ -52,7 +52,7 @@
 <body>
 <div layout:fragment="content">
     <header>
-        <h1></h1>
+        <a class="logout-btn" th:href="@{'/admin/account/'+${session.saveAdmin.getId()}}">Tài khoản</a>
         <div class="user-info">
             <span th:text="${detailAdmin.getName()}"></span>
             <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
