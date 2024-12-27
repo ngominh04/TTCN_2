@@ -382,7 +382,7 @@
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                <div class="input-group">
+                <div class="input-group" hidden="hidden">
                     <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
                 </div>
@@ -478,76 +478,76 @@
                     </div>
                 </main>
 
-<!--                chat box -->
-                <button id="openChat" onclick="openChat()" style="display: block;width: 50px">
-                    <i class='fab fa-facebook-messenger' style='font-size:36px'></i>
-                </button>
-                <div id="box_chat" class="box_chat" th:if="${session.saveShipper != null}" style="display: none">
-                    <div class="page-content page-container" id="page-content">
-                        <div class="padding">
-                            <div class="row container-fluid d-flex justify-content-center">
-                                <div class="col-md-12">
-                                    <div class="box box-warning direct-chat direct-chat-warning">
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title">Chat Messages</h3>
-                                            <div class="box-tools pull-right">
-                                                <span data-toggle="tooltip" title="" class="badge bg-yellow" data-original-title="3 New Messages">20</span>
-                                                <button type="button" id="closeChat" onclick="closeChat()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-<!--                                                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle" data-original-title="Contacts">-->
-<!--                                                    <i class="fa fa-comments"></i>-->
-<!--                                                </button>-->
-<!--                                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>-->
-                                            </div>
-                                        </div>
-                                        <div class="box-body" >
-                                            <div class="direct-chat-messages" id="scrollContainer" >
-                                                <div th:each="chat :${detailChatBox}">
-                                                    <div class="direct-chat-msg " th:if="${chat.getSender() == 'admin3'}">
-                                                        <div class="direct-chat-info clearfix" >
-                                                            <span class="direct-chat-name pull-left" >Cây trồng VN</span>
-                                                            <span class="direct-chat-timestamp pull-right" th:text="${chat.getDate()}"></span>
-                                                        </div>
-                                                        <img class="direct-chat-img" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="message user image">
-                                                        <div class="direct-chat-text" th:text="${chat.getContent()}"></div>
-                                                    </div>
-                                                    <div class="direct-chat-msg right"  th:if="${chat.getSender() != 'admin3'}">
-                                                        <div class="direct-chat-info clearfix" style="text-align: right">
-                                                            <span class="direct-chat-name pull-right" th:text="${chat.getSender()}"></span>
-                                                            <span class="direct-chat-timestamp pull-left" th:text="${chat.getDate()}"></span>
-                                                        </div>
-                                                        <img class="direct-chat-img" src="https://img.icons8.com/office/36/000000/person-female.png" alt="message user image">
-                                                        <div class="direct-chat-text" th:text="${chat.getContent()}"></div>
-                                                    </div>
-                                                </div>
-                                                <!--                                khi chat duoi dang nguoi van chuyen -->
-                                                <div th:if="${session.saveShipper.getId() == session.saveChatBox.getIdShipper()}" class="direct-chat-msg right"  id="chat-box"></div>
-                                                <!--                                <div class="direct-chat-msg "  id="chat-box-admin"></div>-->
-                                            </div>
-                                            <div class="box-footer">
-                                                <form action="#">
-                                                    <div class="input-group">
-                                                        <input type="text" id="username" hidden="hidden" value="admin3">
-                                                        <input type="text" id="idChatBox" hidden="hidden" th:value="${session.saveChatBox.getId()}">
-                                                        <input type="text" id="role" hidden="hidden" th:value="${session.idRole}">
-                                                        <input type="text" id="idSender" hidden="hidden" th:value="${session.saveShipper.getId()}">
-                                                        <input type="text" id="recipient" hidden="hidden" value="admin3">
-                                                        <input type="text" id="sender" hidden="hidden" th:value="${session.saveShipper.getName()}" />
-                                                        <input type="text" class="form-control" name="content" id="message" placeholder="Nhâp tin nhắn" />
-                                                        <span class="input-group-btn">
-                                        <button class="btn btn-warning btn-flat" onclick="sendMessage()">Gửi</button>
-                                    </span>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
+<!--&lt;!&ndash;                chat box &ndash;&gt;-->
+<!--                <button id="openChat" onclick="openChat()" style="display: block;width: 50px">-->
+<!--                    <i class='fab fa-facebook-messenger' style='font-size:36px'></i>-->
+<!--                </button>-->
+<!--                <div id="box_chat" class="box_chat" th:if="${session.saveShipper != null}" style="display: none">-->
+<!--                    <div class="page-content page-container" id="page-content">-->
+<!--                        <div class="padding">-->
+<!--                            <div class="row container-fluid d-flex justify-content-center">-->
+<!--                                <div class="col-md-12">-->
+<!--                                    <div class="box box-warning direct-chat direct-chat-warning">-->
+<!--                                        <div class="box-header with-border">-->
+<!--                                            <h3 class="box-title">Chat Messages</h3>-->
+<!--                                            <div class="box-tools pull-right">-->
+<!--                                                <span data-toggle="tooltip" title="" class="badge bg-yellow" data-original-title="3 New Messages">20</span>-->
+<!--                                                <button type="button" id="closeChat" onclick="closeChat()" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>-->
+<!--&lt;!&ndash;                                                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="" data-widget="chat-pane-toggle" data-original-title="Contacts">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <i class="fa fa-comments"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                </button>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>&ndash;&gt;-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="box-body" >-->
+<!--                                            <div class="direct-chat-messages" id="scrollContainer" >-->
+<!--                                                <div th:each="chat :${detailChatBox}">-->
+<!--                                                    <div class="direct-chat-msg " th:if="${chat.getSender() == 'admin3'}">-->
+<!--                                                        <div class="direct-chat-info clearfix" >-->
+<!--                                                            <span class="direct-chat-name pull-left" >Cây trồng VN</span>-->
+<!--                                                            <span class="direct-chat-timestamp pull-right" th:text="${chat.getDate()}"></span>-->
+<!--                                                        </div>-->
+<!--                                                        <img class="direct-chat-img" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="message user image">-->
+<!--                                                        <div class="direct-chat-text" th:text="${chat.getContent()}"></div>-->
+<!--                                                    </div>-->
+<!--                                                    <div class="direct-chat-msg right"  th:if="${chat.getSender() != 'admin3'}">-->
+<!--                                                        <div class="direct-chat-info clearfix" style="text-align: right">-->
+<!--                                                            <span class="direct-chat-name pull-right" th:text="${chat.getSender()}"></span>-->
+<!--                                                            <span class="direct-chat-timestamp pull-left" th:text="${chat.getDate()}"></span>-->
+<!--                                                        </div>-->
+<!--                                                        <img class="direct-chat-img" src="https://img.icons8.com/office/36/000000/person-female.png" alt="message user image">-->
+<!--                                                        <div class="direct-chat-text" th:text="${chat.getContent()}"></div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                                &lt;!&ndash;                                khi chat duoi dang nguoi van chuyen &ndash;&gt;-->
+<!--                                                <div th:if="${session.saveShipper.getId() == session.saveChatBox.getIdShipper()}" class="direct-chat-msg right"  id="chat-box"></div>-->
+<!--                                                &lt;!&ndash;                                <div class="direct-chat-msg "  id="chat-box-admin"></div>&ndash;&gt;-->
+<!--                                            </div>-->
+<!--                                            <div class="box-footer">-->
+<!--                                                <form action="#">-->
+<!--                                                    <div class="input-group">-->
+<!--                                                        <input type="text" id="username" hidden="hidden" value="admin3">-->
+<!--                                                        <input type="text" id="idChatBox" hidden="hidden" th:value="${session.saveChatBox.getId()}">-->
+<!--                                                        <input type="text" id="role" hidden="hidden" th:value="${session.idRole}">-->
+<!--                                                        <input type="text" id="idSender" hidden="hidden" th:value="${session.saveShipper.getId()}">-->
+<!--                                                        <input type="text" id="recipient" hidden="hidden" value="admin3">-->
+<!--                                                        <input type="text" id="sender" hidden="hidden" th:value="${session.saveShipper.getName()}" />-->
+<!--                                                        <input type="text" class="form-control" name="content" id="message" placeholder="Nhâp tin nhắn" />-->
+<!--                                                        <span class="input-group-btn">-->
+<!--                                        <button class="btn btn-warning btn-flat" onclick="sendMessage()">Gửi</button>-->
+<!--                                    </span>-->
+<!--                                                    </div>-->
+<!--                                                </form>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
 
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-<!--                end chat box -->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--&lt;!&ndash;                end chat box &ndash;&gt;-->
 
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">

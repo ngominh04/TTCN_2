@@ -81,6 +81,29 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div th:if="${order.getStatus()==4}" class="col-12" >
+                                    <div th:each="od : ${detailOrder}" class="card mb-3" style="padding: 10px">
+                                        <div th:each="eva : ${evaluates}">
+                                            <form th:if="${eva.getContent() == null && od.getId() == eva.getIdOrderDetail().getId()}" method="post" enctype="multipart/form-data"
+                                                  th:action="@{'/evaluate/saveEvaluate/' + ${session.saveCus.getId()} + '/' + ${od.getId()}}">
+                                                <label for="content" >
+                                                    <span th:text="${od.getNameTree()}"></span> <span style="color: red">( Bạn chưa đánh giá )</span>
+                                                </label><br>
+                                                <textarea id="content" name="content" style="width: 80%;border-radius: 10px"></textarea>
+                                                <button id="submitEvaluate" type="submit" style="position: relative;top: -10px">Gửi</button>
+                                            </form>
+                                            <div th:if="${eva.getContent() != null && eva.getIdOrderDetail().getId() == od.getId()}">
+                                                <label for="contentUser" >
+                                                    <span th:text="${od.getNameTree()}+' - '+${eva.getEvaluateDate()}"></span>
+                                                </label>
+                                                <br>
+                                                <textarea id="contentUser" style="width: 80%;border-radius: 10px" disabled th:text="${eva.getContent()}"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
                             </div>
                         </div>
                     </div>

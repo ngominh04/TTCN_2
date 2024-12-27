@@ -1,6 +1,7 @@
 package com.example.TTCN2.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +29,9 @@ public class Evaluate {
     private String usernameCus;
 
     @Column(name = "evaluate_date")
-    private Instant evaluateDate;
+    private String evaluateDate;
+
+    @Column(name = "is_active")
+    private Integer isActive;
 
 }

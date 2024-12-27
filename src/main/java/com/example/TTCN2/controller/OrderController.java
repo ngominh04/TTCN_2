@@ -11,9 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/order")
@@ -56,6 +54,8 @@ public class OrderController {
     ReceiverRepository receiverRepository;
     @Autowired
     TreeRepository treeRepository;
+    @Autowired
+    EvaluateRepository evaluateRepository;
 
 
     @PostMapping("/{idCus}")
@@ -259,6 +259,28 @@ public class OrderController {
         model.addAttribute("trees",orderDetailRepository.findByOrderId(order.getId()));
         model.addAttribute("receiver",receiverRepository.findAllById(order.getIdReceiver()));
         model.addAttribute("shipperOrder",shipperOrderRepository.findByOrderId(order.getId()));
+        List<OrderDetail> orderDetails =  orderDetailRepository.findByOrderId(order.getId());
+        model.addAttribute("detailOrder",orderDetails);
+        List<Evaluate> evaluates = new ArrayList<>();
+        List<Evaluate> evaluates1 = evaluateRepository.findAll();
+        Map<Integer, Evaluate> evaluateMap = new HashMap<>();
+        for (Evaluate evaluate : evaluates1) {
+            evaluateMap.put(evaluate.getIdOrderDetail().getId(), evaluate);
+        }
+        for (OrderDetail orderDetail : orderDetails) {
+            Evaluate evaluate1 = evaluateMap.get(orderDetail.getId());
+
+            if (evaluate1 != null) {
+                evaluates.add(evaluate1);
+            } else {
+                evaluate1 = new Evaluate();
+                evaluate1.setIdOrderDetail(orderDetail);
+                evaluateRepository.save(evaluate1);
+                evaluates.add(evaluate1);
+            }
+        }
+        model.addAttribute("evaluateMap",evaluateMap);
+        model.addAttribute("evaluates", evaluates);
         return "user/order/detailOrder";
     }
     // detail order 'admin'

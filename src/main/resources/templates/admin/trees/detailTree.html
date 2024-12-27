@@ -101,6 +101,25 @@
                                     <a
                                        th:href="@{'/tree/admin/editTree/'+${tree.getId()}}">Sửa thông tin cây</a>
                                 </div>
+                                <div  style="margin-top: 1rem">
+                                    <p>Đánh giá sản phẩm :</p>
+                                    <div  style="overflow-y: scroll;height: 300px;margin-left: 10px;">
+                                        <div th:each="eva :${evaluates}" th:if="${eva.getIdOrderDetail().getIdTree() == tree.getId()}"
+                                             style="border: 1px solid #959595;border-radius: 10px;padding: 5px;margin-bottom: 5px"
+                                        >
+                                            <p th:if="${eva.getUsernameCus() !=null}" th:text="${eva.getUsernameCus()}+' - '+${eva.getEvaluateDate()}"></p>
+                                            <p th:text="${eva.getContent()}" style="margin-left: 10px"></p>
+                                            <div class="item" style="position: relative;right: -88%;top: -25px;width: 70px">
+                                                <a th:if="${eva.getIsActive()==0 }"
+                                                   th:href="@{'/evaluate/admin/isActiveOn/'+${tree.getId()}+'/'+${eva.getId()}}">Hiển thị</a>
+                                                <a th:if="${eva.getIsActive()==1 }"
+                                                   th:href="@{'/evaluate/admin/isActiveOff/'+${tree.getId()}+'/'+${eva.getId()}}">Ẩn</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 

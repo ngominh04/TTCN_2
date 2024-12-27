@@ -1,13 +1,7 @@
 package com.example.TTCN2.controller;
 
-import com.example.TTCN2.domain.Admin;
-import com.example.TTCN2.domain.Category;
-import com.example.TTCN2.domain.Tree;
-import com.example.TTCN2.domain.TreesImage;
-import com.example.TTCN2.repository.CategoryRepository;
-import com.example.TTCN2.repository.DetailAdminRepository;
-import com.example.TTCN2.repository.TreeRepository;
-import com.example.TTCN2.repository.TreesImageRepository;
+import com.example.TTCN2.domain.*;
+import com.example.TTCN2.repository.*;
 import com.example.TTCN2.service.TreeImageService;
 import com.example.TTCN2.service.TreesService;
 import com.example.TTCN2.service.uploadFileService;
@@ -50,6 +44,8 @@ public class TreeController {
     uploadFileService uploadFileService;
     @Autowired
     TreeImageService treeImageService;
+    @Autowired
+    EvaluateRepository evaluateRepository;
     // xem chi tiet san pham
     @GetMapping("/detailTree/{idCate}/{idTree}")
     public String detailTree(Model model, @PathVariable(name = "idTree") Integer idTree,
@@ -71,7 +67,7 @@ public class TreeController {
             images.add(treesImage);
         }
         model.addAttribute("tree_image",images);
-
+        model.addAttribute("evaluates",evaluateRepository.findAll());
         return "user/detailTree";
     }
     @GetMapping("/admin/showTrees")
@@ -119,6 +115,7 @@ public class TreeController {
         }
         model.addAttribute("tree_image",images);
         model.addAttribute("category",categoryRepository.findById(treeRepository.findDetailTreeById(idTree).getIdCategory()));
+        model.addAttribute("evaluates",evaluateRepository.findAll());
         return "admin/trees/detailTree";
     }
     // edit tree

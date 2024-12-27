@@ -57,6 +57,8 @@ public class CommonController {
     ChatBoxDetailRepository chatBoxDetailRepository;
     @Autowired
     ChatBoxRepository chatBoxRepository;
+    @Autowired
+    EvaluateRepository evaluateRepository;
 
     // khởi đầu khi vào đường dẫn trang usser
     @GetMapping("/")
