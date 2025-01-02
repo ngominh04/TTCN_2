@@ -860,20 +860,11 @@
     function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
-    // thay doi mau khi click thẻ li ở order
-    // const listItems = document.querySelectorAll('.scrollable-list li');
-    //
-    // listItems.forEach(item => {
-    //     item.addEventListener('click', (event) => {
-    //         console.log('Li clicked:', item.textContent);
-    //         event.preventDefault();
-    //         listItems.forEach(li => li.classList.remove('activeOrder'));
-    //         item.classList.add('activeOrder');
-    //         setTimeout(() => {
-    //             window.location.href = item.querySelector('a').getAttribute('href');
-    //         }, 100);
-    //     });
-    // });
+    function showAlertAndRedirect(event) {
+        event.preventDefault(); // Ngừng hành động mặc định (truy cập vào link ngay lập tức)
+        alert("Bạn đã yêu cầu hủy đơn, hãy nhắn tin cho phía shop để xác nhận được trả hàng!");
+        window.location.href = event.target.href; // Sau khi alert xong, chuyển hướng đến liên kết
+    }
 
 // stomp
     let stompClient = null;

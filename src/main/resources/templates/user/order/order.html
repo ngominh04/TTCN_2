@@ -23,6 +23,9 @@
             <div th:if="${status == 4}">
                 <p style="color: red">Bạn được trả hàng sau khi nhận hàng 3 ngày</p>
             </div>
+            <div th:if="${status == 5}" >
+                <a style="color: red" href="https://m.me/536606479529963">Hãy nhắn cho shop để làm hoàn tất hoàn đơn </a>
+            </div>
             <li class="table-row" th:each="od: ${orders}">
                 <div class="col1 col-1" >
                     <ul >
@@ -41,11 +44,13 @@
                             <a class="btn1" th:if="${status == 1 || status==2}"
                                style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
                                th:href="@{'/order/closeOrder/'+${session.saveCus.getId()}+'/0/'+${od.getId()}}">Hủy đơn</a>
-                            <div th:each="date :${dateDiffs}">
+                            <div th:each="date :${dateDiffs}" th:if="${date.getId() == od.getId()}">
                                 <!--                        Điều kiện trả hàng là 3 ngày-->
                                 <a class="btn1" th:if="${status == 4 && date.getDateOrder()<3}"
                                    style="text-decoration: none;color: white;font-size: 15px;background-color: #4d5154;padding: 5px"
-                                   th:href="@{'/order/refundOrder/'+${session.saveCus.getId()}+'/2/'+${od.getId()}}">Trả hàng</a>
+                                   th:href="@{'/order/refundOrder/'+${session.saveCus.getId()}+'/2/'+${od.getId()}}"
+
+                                >Trả hàng</a>
                             </div>
                             <div th:if="${status == 3}" th:each="shipperOrder :${shipperOrders}">
                                 <a class="btn1" th:if="${shipperOrder.getStatus() ==2 && od.getId()==shipperOrder.getIdOrder()}"
@@ -67,6 +72,7 @@
                     </ul>
                 </div>
             </li>
+
         </ul>
     </div>
 </div>

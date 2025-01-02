@@ -159,20 +159,20 @@ public class OrderController {
         return "user/order/order";
     }
     // huy don status -> 0
-//    @GetMapping("/closeOrder/{idCus}/{status}/{idOrder}")
-//    public String closeOrder(@PathVariable Integer idCus, @PathVariable Integer status,
-//                             @PathVariable Integer idOrder){
-//        Order order = orderRepository.findByIdOrder(idOrder);
-//        order.setStatus(0);
-//        orderRepository.save(order);
-//        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(idOrder);
-//        for (OrderDetail orderDetail : orderDetails) {
-//            Tree tree = treeRepository.findAllById(orderDetail.getIdTree());
-//            tree.setQuantity(tree.getQuantity()+orderDetail.getQuantity());
-//            treeRepository.save(tree);
-//        }
-//        return "redirect:/order/{idCus}/{status}";
-//    }
+    @GetMapping("/closeOrder/{idCus}/{status}/{idOrder}")
+    public String closeOrder(@PathVariable Integer idCus, @PathVariable Integer status,
+                             @PathVariable Integer idOrder){
+        Order order = orderRepository.findByIdOrder(idOrder);
+        order.setStatus(0);
+        orderRepository.save(order);
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(idOrder);
+        for (OrderDetail orderDetail : orderDetails) {
+            Tree tree = treeRepository.findAllById(orderDetail.getIdTree());
+            tree.setQuantity(tree.getQuantity()+orderDetail.getQuantity());
+            treeRepository.save(tree);
+        }
+        return "redirect:/order/{idCus}/{status}";
+    }
     // mua lai status -> 1
     @GetMapping("/putOrder/{idCus}/{status}/{idOrder}")
     public String putOrder(@PathVariable Integer idCus, @PathVariable Integer status,
