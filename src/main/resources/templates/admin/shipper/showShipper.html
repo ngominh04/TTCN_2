@@ -41,6 +41,7 @@
 <div class="main-content" layout:fragment="content">
     <header>
         <a class="logout-btn" th:href="@{/admin/showShipper}">Tài khoản</a>
+        <a th:if="${session.saveAdmin.getPower()==1}" class="logout-btn" th:href="@{/register/admin/createAdmin}">Thêm tài khoản</a>
         <div class="user-info">
             <span th:text="${detailAdmin.getName()}"></span>
             <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>

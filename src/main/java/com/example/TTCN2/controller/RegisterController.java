@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +41,8 @@ public class RegisterController {
     ChatBoxRepository chatBoxRepository;
     @Autowired
     ReceiverRepository receiverRepository;
+    @Autowired
+    DetailAdminRepository detailAdminRepository;
     // chon quyen dang nhap
     @GetMapping("/role")
     public String role(){
@@ -338,5 +341,76 @@ public class RegisterController {
             return "user/register/login";
         }
         return "user/register/newCus";
+    }
+
+    // create new admin with role admin == 1
+    @GetMapping("/admin/createAdmin")
+    public String createAdmin(){
+        return "/admin/account/createNewAdmin";
+    }
+    @PostMapping("/admin/createNewAdmin")
+    public String createNewAdmin(@RequestParam("username")String username,
+                                 @RequestParam("password")String password,
+                                 @RequestParam("name")String name,
+                                 @RequestParam("phone")String phone,
+                                 @RequestParam("address")String address,
+                                 @RequestParam("id_card")String idCard,
+                                 @RequestParam("power") Integer power,
+                                 @RequestParam("note_power") String notePower,
+                                 Model model,HttpSession session){
+        Admin admin1 = (Admin) session.getAttribute("saveAdmin");
+        List<Admin> admins = adminRepository.findAll();
+        for (Admin admin : admins) {
+            if (admin.getUsername().equals(username) ) {
+                model.addAttribute("userError", "Đã tồn tại tên tài khoản");
+                return "/admin/account/createNewAdmin";
+            }
+            if (username.isBlank() ) {
+                model.addAttribute("userError", "Bạn đang để trống tên tài khoản ");
+                return "/admin/account/createNewAdmin";
+            }
+            if (password.isBlank() ) {
+                model.addAttribute("passwordError", "Bạn đang để trống password ");
+                return "/admin/account/createNewAdmin";
+            }
+            if (password.length() < 5 ) {
+                model.addAttribute("passwordError", "Số password phải > 5 số");
+                return "/admin/account/createNewAdmin";
+            }
+
+            if (name.isBlank() ) {
+                model.addAttribute("nameError", "Bạn đang để trống họ tên ");
+                return "/admin/account/createNewAdmin";
+            }
+            if (phone.length() != 10 ) {
+                model.addAttribute("phoneError", "Số điện thoại phải 10 số");
+                return "/admin/account/createNewAdmin";
+            }
+            if (address.isBlank() ) {
+                model.addAttribute("addressError", "Bạn đang để trống địa chỉ");
+                return "/admin/account/createNewAdmin";
+            }
+            if (idCard.length() != 12 ) {
+                model.addAttribute("idCardError", "CCCD phải 12 số");
+                return "/admin/account/createNewAdmin";
+            }
+        }
+        Admin admin = new Admin();
+        admin.setUsername(username);
+        admin.setPassword(password);
+        admin.setCreateDate(String.valueOf(LocalDateTime.now()));
+        admin.setPower(power);
+        admin.setNotePower(notePower);
+        adminRepository.save(admin);
+
+        DetailAdmin detailAdmin = new DetailAdmin();
+        detailAdmin.setIdAdmin(admin);
+        detailAdmin.setName(name);
+        detailAdmin.setAddress(address);
+        detailAdmin.setCreateDate(String.valueOf(LocalDateTime.now()));
+        detailAdmin.setPhone(phone);
+        detailAdmin.setIdCard(idCard);
+        detailAdminRepository.save(detailAdmin);
+        return "redirect:/admin/"+admin1.getId();
     }
 }

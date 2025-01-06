@@ -4,7 +4,7 @@
       layout:decorate="~{/admin/index}">
 <head>
     <meta charset="UTF-8">
-    <title>Xem loại sản phẩm</title>
+    <title>Danh sách người dùng</title>
     <style>
         .page-item>a {
             text-decoration: none;
@@ -25,10 +25,11 @@
             border: 1px solid black;
             border-radius: 2px;
             color: black;
-            width: 45px;
+            width: 60px;
             text-align: center;
             padding: 5px;
             text-decoration: none;
+            margin-left: 5px;
         }
         .item>a:hover{
             background: #FF6666;
@@ -47,62 +48,60 @@
         </div>
     </header>
     <section class="table-section">
-        <h2>Các loại sản phẩm</h2>
-        <p style="color: red" th:text="${message}"></p>
+        <h2>Danh người quản lý</h2>
         <table>
             <thead>
             <tr>
-                <th></th>
-                <th>Tên phân loại</th>
-                <th>Người sửa</th>
-                <th>Ghi chú</th>
+                <th>Tên DN người quản lý</th>
+                <th>Quyền hạn</th>
+                <th>Mô tả quyền hạn</th>
                 <th>Ngày tạo</th>
                 <th>Ngày sửa</th>
-                <th>Trạng thái</th>
-                <th></th>
             </tr>
             </thead>
-            <tbody th:each="od :${showCategory}">
+            <tbody th:each="od :${admins}">
             <tr>
-                <td th:text="${od.getId()}"></td>
-                <td th:text="${od.getName()}"></td>
-                <td th:text="${od.getRepairer()}"></td>
-                <td th:text="${od.getNotes()}" style="width: 390px;"></td>
+                <td th:text="${od.getUsername()}"></td>
+                <td th:text="${od.getPower()}"></td>
+                <td th:text="${od.getNotePower()}" style="width: 390px;"></td>
                 <td th:text="${od.getCreateDate()}"></td>
                 <td th:text="${od.getUpdateDate()}"></td>
-                <td th:if="${od.getIsDelete()} == 0" style="color: #15f48d" >Đang hiển thị</td>
-                <td th:if="${od.getIsDelete()} == 1" style="color: #fb4e4e">Không hiển thị</td>
-                <td>
-                    <div class="item" style="display: flex">
-                        <a style="margin-right: 5px"
-                           th:href="@{'/category/admin/editCategory/'+${od.getId()}}">Sửa</a>
-                        <a th:href="@{'/category/admin/removeCategory/'+${od.getId()}}">Xóa</a>
-                    </div>
-                </td>
             </tr>
             <!-- Add more rows as necessary -->
             </tbody>
         </table>
     </section>
-    <div style="height: 2rem"></div>
-    <div class="item">
-        <a th:href="@{/category/admin/newCategory}">Thêm mới </a>
-    </div>
-    <div style="height: 5rem"></div>
+    <div style="height: 23rem"></div>
+    <!--    <nav style="position: fixed;bottom: 5px;z-index: 1000;">-->
+    <!--        <p >Bạn đang ở trang thứ <span th:text="${users.getNumber()+1}"></span></p>-->
+    <!--        <ul class="pagination" style="list-style: none;display: flex;">-->
+    <!--            <div th:if="${users.totalPages > 0}"-->
+    <!--                 th:each="pageNumber : ${pageNumbers}">-->
+    <!--                <li class="page-link" style="border: 1px solid black;border-radius: 2px;-->
+    <!--                                        width: 15px;text-align: center;margin-left: 5px">-->
+    <!--                    <a th:href="@{/user/admin/showUser (size=${users.size}, page=${pageNumber})}"-->
+    <!--                       th:text="${pageNumber}"-->
+    <!--                       th:class="${pageNumber==users.number + 1} ? active"-->
+    <!--                       style="text-decoration: none"-->
+    <!--                       class="page-link"-->
+    <!--                    ></a>-->
+    <!--                </li>-->
+    <!--            </div>-->
+    <!--        </ul>-->
+    <!--    </nav>-->
     <nav style="position: relative; bottom: 0; width: 100%; z-index: 1000; padding: 10px 0;">
-        <p style="font-size: 14px; color: #555; text-align: center;">Bạn đang ở trang thứ <span th:text="${showCategory.getNumber()+1}"></span></p>
+        <p style="font-size: 14px; color: #555; text-align: center;">Bạn đang ở trang thứ <span th:text="${admins.getNumber()+1}"></span></p>
         <ul class="pagination" style="list-style: none; display: inline-flex; padding: 0; margin: 0; justify-content: center;">
-            <div th:if="${showCategory.totalPages > 0}"
-                 th:each="pageNumber : ${pageNumbers}">
+            <div th:if="${admins.totalPages > 0}" th:each="pageNumber : ${pageNumbers}">
                 <li class="page-item" style="margin: 0 5px;">
-                    <a th:href="@{/category/admin/showCate (size=${showCategory.size}, page=${pageNumber})}"
+                    <a th:href="@{/account/admin/showAllAdmin (size=${admins.size}, page=${pageNumber})}"
                        th:text="${pageNumber}"
-                       th:class="${pageNumber==showCategory.number + 1} ? active"
-                    ></a>
+                       th:class="${pageNumber == admins.number + 1} ? 'active'"></a>
                 </li>
             </div>
         </ul>
     </nav>
+
 </div>
 </body>
 </html>

@@ -111,7 +111,7 @@
                 <li class="page-item" style="margin: 0 5px;">
                     <a th:href="@{/user/admin/showUser (size=${users.size}, page=${pageNumber})}"
                        th:text="${pageNumber}"
-                       th:class="${pageNumber == users.number + 1} ? 'active'"
+                       th:class="${pageNumber == users.number + 1} ? 'active'"></a>
                 </li>
             </div>
         </ul>

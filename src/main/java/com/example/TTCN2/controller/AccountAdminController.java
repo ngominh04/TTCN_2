@@ -2,9 +2,14 @@ package com.example.TTCN2.controller;
 
 import com.example.TTCN2.domain.Admin;
 import com.example.TTCN2.domain.DetailAdmin;
+import com.example.TTCN2.domain.User;
 import com.example.TTCN2.repository.AdminRepository;
 import com.example.TTCN2.repository.DetailAdminRepository;
+import com.example.TTCN2.service.AdminService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/admin")
@@ -20,6 +28,8 @@ public class AccountAdminController {
     AdminRepository adminRepository;
     @Autowired
     DetailAdminRepository detailAdminRepository;
+    @Autowired
+    AdminService adminService;
 
     @GetMapping("/account/{idAdmin}")
     public String account(@PathVariable Integer idAdmin, Model model) {
@@ -119,5 +129,28 @@ public class AccountAdminController {
         admin.setUpdateDate(String.valueOf(LocalDateTime.now()));
         adminRepository.save(admin);
         return "redirect:/admin/account/" + idAdmin;
+    }
+    // show all user to admin
+    @GetMapping("/showAllAdmin")
+    public String showUser(HttpSession session, Model model,
+                           @RequestParam("page") Optional<Integer> page,
+                           @RequestParam("size") Optional<Integer> size){
+        Admin admin = (Admin) session.getAttribute("saveAdmin");
+        model.addAttribute("detailAdmin",detailAdminRepository.findDetailAdminById(admin.getId()));
+        // phân trang cho trang chủ
+        int currentPage = page.orElse(1); // số trang
+        int pageSize = size.orElse(8); // số sản phẩn trên 1 trang
+        Page<Admin> admins = adminService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("admins", admins);
+
+        int totalPages = admins.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+            model.addAttribute("maxPageNumber",pageNumbers.size());
+        }
+        return "admin/account/showAllAdmin";
     }
 }

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin cá nhân quản trị viên</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .main-content {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .profile-info {
+            margin-bottom: 20px;
+        }
+        .profile-info label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .profile-info input,
+        .profile-info textarea {
+            width: 98%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .profile-info textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .profile-info img {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+        .actions {
+            text-align: center;
+        }
+        .edit-btn, .save-btn, .change-password-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #f1c40f;
+        }
+        .save-btn {
+            background-color: #3498db;
+        }
+        .change-password-btn {
+            background-color: #e67e22;
+        }
+        .edit-btn:hover, .save-btn:hover, .change-password-btn:hover {
+            opacity: 0.8;
+        }
+        .password-section {
+            display: none;
+        }
+        .edit-info-section {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-content" style="margin: 1rem auto" layout:fragment="content">
+
+    <h1>Tạo mới quản trị viên</h1>
+
+    <!-- Thông tin tài khoản quản trị viên -->
+    <form th:action="@{/register/admin/createNewAdmin}" enctype="multipart/form-data" method="post">
+        <!-- Thông tin tài khoản quản trị viên -->
+        <div class="profile-info info-section">
+            <div class="profile-info">
+                <label for="username">Tên đăng nhập:</label>
+                <input type="text" id="username" name="username"  >
+                <p th:text="${userError}" style="color: red"></p>
+            </div>
+            <div class="profile-info">
+                <label for="password">Mật khẩu đăng nhập :</label>
+                <input type="text" id="password" name="password"  >
+                <p th:text="${passwordError}" style="color: red"></p>
+            </div>
+
+            <div class="profile-info">
+                Chọn quyền hạn:
+                <label for="1">1</label><input type="radio" id="1" name="power" value="1" onclick="updateNotePower(1)">
+                <label for="2">2</label><input type="radio" id="2" name="power" value="2" onclick="updateNotePower(2)" checked>
+                <label for="3">3</label><input type="radio" id="3" name="power" value="3" onclick="updateNotePower(3)">
+                <label for="note_power">Mô tả quyền hạn:</label>
+                <textarea id="note_power" name="note_power">sửa sp,....</textarea>
+            </div>
+
+            <!-- Thông tin chi tiết quản trị viên -->
+            <div class="profile-info">
+                <label for="name">Họ tên:</label>
+                <input type="text" id="name" name="name"  >
+                <p th:text="${nameError}" style="color: red"></p>
+            </div>
+
+            <div class="profile-info">
+                <label for="phone">Số điện thoại:</label>
+                <input type="text" id="phone" name="phone"  >
+                <p th:text="${phoneError}" style="color: red"></p>
+            </div>
+
+            <div class="profile-info">
+                <label for="address">Địa chỉ:</label>
+                <input type="text" id="address" name="address"  >
+                <p th:text="${addressError}" style="color: red"></p>
+            </div>
+
+            <div class="profile-info">
+                <label for="id_card">Số CMND/CCCD:</label>
+                <input type="number" id="id_card" name="id_card"  >
+                <p th:text="${idCardError}" style="color: red"></p>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="save-btn" >Lưu</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

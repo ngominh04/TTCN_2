@@ -219,7 +219,7 @@
                 <li><a th:href="@{/payment/admin/showPayment}"><i class="fas fa-credit-card"></i> <span>Phương thức thanh toán</span></a></li>
                 <li><a th:href="@{/transport/admin/showTransport}"><i class="fas fa-truck"></i> <span>Phương thức vận chuyển</span></a></li>
 <!--                <li><a th:href="@{#}"><i class="fas fa-envelope"></i> <span>Tin nhắn</span></a></li>-->
-<!--                <li><a th:href="@{#}"><i class="fas fa-star"></i> <span>Evaluations</span></a></li>-->
+                <li><a th:if="${session.saveAdmin.getPower()==1}" th:href="@{/admin/showAllAdmin}"><i class="fas fa-star"></i> <span> Danh sách người quản lí</span></a></li>
             </ul>
 
         </nav>
@@ -228,6 +228,7 @@
         <div class="main-content" layout:fragment="content">
             <header>
                 <a class="logout-btn" th:href="@{/admin/showShipper}">Tài khoản</a>
+                <a th:if="${session.saveAdmin.getPower()==1}" class="logout-btn" th:href="@{/register/admin/createAdmin}">Thêm tài khoản</a>
                 <div class="user-info">
                     <span th:text="${detailAdmin.getName()}"></span>
                     <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
@@ -294,6 +295,26 @@
             });
         });
     });
+
+    // bat event onClick power in admin
+    function updateNotePower(value) {
+        var notePower = document.getElementById('note_power');
+
+        // Mô tả quyền hạn theo từng giá trị radio button
+        switch(value) {
+            case 1:
+                notePower.value = 'Quyền cao nhất (xóa sp,xóa loại sp,thêm admin khác, sửa admin khác).';
+                break;
+            case 2:
+                notePower.value = 'sửa sp,....';
+                break;
+            case 3:
+                notePower.value = 'nhận và rep tn người dùng.';
+                break;
+            default:
+                notePower.value = '';
+        }
+    }
 </script>
 </body>
 </html>

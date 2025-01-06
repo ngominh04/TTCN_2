@@ -53,6 +53,7 @@
 <div layout:fragment="content">
     <header>
         <a class="logout-btn" th:href="@{/admin/showShipper}">Tài khoản</a>
+        <a th:if="${session.saveAdmin.getPower()==1}" class="logout-btn" th:href="@{/register/admin/createAdmin}">Thêm tài khoản</a>
         <div class="user-info">
             <span th:text="${detailAdmin.getName()}"></span>
             <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
@@ -108,6 +109,8 @@
                         <td>
                             <a th:if="${od.getStatus()==1}" class="aByOrder" th:href="@{'/order/admin/orderStatus/'+${od.getId()}}">Xác nhận đơn</a>
                             <a th:if="${od.getStatus()==5}" class="aByOrder" th:href="@{'/order/admin/orderStatus/'+${od.getId()}}">Chấp nhận hoàn đơn</a>
+                            <div style="height: 14px;width: 10px"></div>
+                            <a th:if="${od.getStatus()==5}" class="aByOrder" th:href="@{'/order/admin/notPermitOrder5/'+${od.getId()}}">không chấp nhận hoàn đơn</a>
                             <div style="height: 14px;width: 10px"></div>
                             <a class="aByOrder"  th:href="@{'/order/admin/detailOrder/'+${od.getId()}}">Xem</a>
                         </td>

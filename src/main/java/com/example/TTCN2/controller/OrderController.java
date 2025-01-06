@@ -250,6 +250,16 @@ public class OrderController {
         }
         return "redirect:/order/admin/showOrder/"+order.getStatus();
     }
+    // khong chap nhan hoan don phia admin
+    @GetMapping("/admin/notPermitOrder5/{idOrder}")
+    public String notPermitOrder5(Model model,@PathVariable Integer idOrder){
+        Order order = orderRepository.findByIdOrder(idOrder);
+        if (order.getStatus() == 5) {
+            order.setStatus(4);
+            orderRepository.save(order);
+        }
+        return "redirect:/order/admin/showOrder/"+order.getStatus();
+    }
 
     // detail order 'user'
     @GetMapping("/detailOrder/{idOrder}")
