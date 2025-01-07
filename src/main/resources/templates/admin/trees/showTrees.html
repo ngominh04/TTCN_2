@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Xem loại sản phẩm</title>
+    <style>
+        .page-item>a {
+            text-decoration: none;
+            display: inline-block;
+            padding: 8px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            color: #007bff; /* Màu chữ mặc định là xanh dương */
+        }
+
+        .page-item>a:hover {
+            background-color: #3498db;
+            color: red; /* Màu chữ cam khi hover */
+        }
+        .item>a{
+            border: 1px solid black;
+            border-radius: 2px;
+            color: black;
+            width: 45px;
+            text-align: center;
+            padding: 5px;
+            text-decoration: none;
+        }
+        .item>a:hover{
+            background: #FF6666;
+            color: snow;
+        }
+    </style>
+</head>
+<body>
+<div class="main-content" layout:fragment="content">
+    <header>
+        <a class="logout-btn" th:href="@{'/admin/account/'+${detailAdmin.getIdAdmin().getId()}}">Tài khoản</a>
+        <a th:if="${session.saveAdmin.getPower()==1}" class="logout-btn" th:href="@{/register/admin/createAdmin}">Thêm tài khoản</a>
+        <div class="user-info">
+            <span th:text="${detailAdmin.getName()}"></span>
+            <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
+        </div>
+    </header>
+    <section class="table-section">
+        <h2>Danh sách các cây</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Ảnh</th>
+                <th>Tên cây</th>
+                <th>Người sửa</th>
+                <th>Số lượng </th>
+                <th>Giá tiền</th>
+                <th>Ngày tạo</th>
+                <th>Ngày sửa</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody th:each="od :${trees}">
+            <tr>
+                <td th:text="${od.getId()}"></td>
+                <td >
+                    <div th:each="image: ${tree_image}" th:if="${image.getIdTree() == od.getId()}">
+                        <img th:if="${image.getUrl() != null}" class="card-img-top" style="width: 100px;height: 100px;border-radius: 15px;"
+                             th:src="'/imageTree/'+${image.getUrl()}" alt="..." />
+                        <p th:if="${image.getUrl() == null}" style="color: red">Chưa có ảnh</p>
+                    </div>
+                </td>
+                <td th:text="${od.getName()}"></td>
+                <td th:text="${od.getRepairer()}"></td>
+                <td th:text="${od.getQuantity()}"></td>
+                <td th:text="${#numbers.formatDecimal(od.getMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></td>
+                <td th:text="${od.getCreateDate()}"></td>
+                <td th:text="${od.getUpdateDate()}"></td>
+                <td>
+                    <div style="margin-top: 10px">
+                        <div class="item">
+                            <a style="padding: 10px"
+                               th:href="@{'/tree/admin/detailTree/'+${od.getId()}}">Xem chi tiết</a>
+                            <br><br>
+                        </div>
+                        <div class="item" style="display: flex">
+                            <a style="margin-right: 5px; margin-left: 10px"
+                               th:href="@{'/tree/admin/editTree/'+${od.getId()}}">Sửa</a>
+                            <a
+                                    th:href="@{'/tree/admin/removeTree/'+${od.getId()}}">Xóa</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <!-- Add more rows as necessary -->
+            </tbody>
+        </table>
+    </section>
+    <div style="height: 2rem"></div>
+    <div class="item">
+        <a th:href="@{/tree/admin/newTree}">Thêm mới </a>
+    </div>
+    <div style="height: 5rem"></div>
+    <nav style="position: relative; bottom: 0; width: 100%; z-index: 1000; padding: 10px 0;">
+        <p style="font-size: 14px; color: #555; text-align: center;" >Bạn đang ở trang thứ <span th:text="${trees.getNumber()+1}"></span></p>
+        <ul class="pagination" style="list-style: none; display: inline-flex; padding: 0; margin: 0; justify-content: center;">
+            <div th:if="${trees.totalPages > 0}"
+                 th:each="pageNumber : ${pageNumbers}">
+                <li class="page-item" style="margin: 0 5px;">
+                    <a th:href="@{/tree/admin/showTrees (size=${trees.size}, page=${pageNumber})}"
+                       th:text="${pageNumber}"
+                       th:class="${pageNumber==trees.number + 1} ? active"
+                    ></a>
+                </li>
+            </div>
+        </ul>
+    </nav>
+
+</div>
+</body>
+</html>

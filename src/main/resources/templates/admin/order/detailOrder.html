@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết đơn hàng</title>
+    <style>
+        /*Container and Row*/
+        .main-container {
+            width: 800px;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+        /* Container chính */
+        .container1 {
+            background-color: #ffffff;
+            border: 2px solid #007bff;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 900px;
+            margin: 1rem auto;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .container1:hover {
+            transform: scale(1.02);
+        }
+
+        /* Nút "Quay lại" */
+        .back a {
+            display: inline-block;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            color: #007bff;
+            padding: 8px 15px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+        }
+
+        .back a:hover {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        /* Thông tin đơn hàng */
+        h4 {
+            font-size: 1.5rem;
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        h5 {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            color: #343a40;
+        }
+
+        h5 span {
+            font-weight: bold;
+        }
+
+        /* Card hiển thị thông tin */
+        .card1 {
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        /* Phần sản phẩm */
+        .card-body .justify-content-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-body .ms-3 h5 {
+            font-size: 1.2rem;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        /* Tổng số tiền đơn hàng */
+        h4 span {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        /* Ảnh chụp sản phẩm */
+        .card-body img {
+            border-radius: 10px;
+            max-width: 300px;
+            height: auto;
+            border: 2px solid #ddd;
+            margin-top: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-body img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container1 {
+                padding: 20px;
+            }
+
+            .card {
+                width: 100%;
+            }
+
+            h4 {
+                font-size: 1.3rem;
+            }
+
+            h5 {
+                font-size: 1rem;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+<main class="main-container" layout:fragment="content" style="margin-left: 28rem">
+<!--    <header>-->
+<!--        <h1></h1>-->
+<!--        <div class="user-info">-->
+<!--            <span th:text="${detailAdmin.getName()}"></span>-->
+<!--            <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>-->
+<!--        </div>-->
+<!--    </header>-->
+    <section>
+        <div class="container1">
+            <div class="back">
+                <h5 class="mb-3"><a th:if="${order.getStatus() == 1}" th:href="@{'/order/admin/showOrder/1 '}" class="btn1">Quay lại</a></h5>
+                <h5 class="mb-3"><a th:if="${order.getStatus() == 2}" th:href="@{'/order/admin/showOrder/2 '}" class="btn1">Quay lại</a></h5>
+                <h5 class="mb-3"><a th:if="${order.getStatus() == 3}" th:href="@{'/order/admin/showOrder/3 '}" class="btn1">Quay lại</a></h5>
+                <h5 class="mb-3"><a th:if="${order.getStatus() == 4}" th:href="@{'/order/admin/showOrder/4 '}" class="btn1">Quay lại</a></h5>
+                <h5 class="mb-3"><a th:if="${order.getStatus() == 5}" th:href="@{'/order/admin/showOrder/5 '}" class="btn1">Quay lại</a></h5>
+                <h5 class="mb-3"><a th:if="${order.getStatus() == 6}" th:href="@{'/order/admin/showOrder/6 '}" class="btn1">Quay lại</a></h5>
+                <h5 class="mb-3"><a th:if="${order.getStatus() == 7}" th:href="@{'/order/admin/showOrder/7 '}" class="btn1">Quay lại</a></h5>
+                <h5 class="mb-3"><a th:if="${order.getStatus() == 0}" th:href="@{'/order/admin/showOrder/0 '}" class="btn1">Quay lại</a></h5>
+                <hr>
+                <div class="d-flex justify-content-between align-items-center mb-4" style="margin-top: 40px">
+                    <div>
+                        <h4 class="mb-1">Đơn hàng mã <span th:text="${order.getId()}"></span></h4>
+                    </div>
+                </div>
+                <div class="card1 mb-3" style="width: 600px">
+                    <div class="card-body" th:each="tree :${trees}">
+                        <div class= "justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <div class="ms-3">
+                                    <h5 th:text="${tree.getNameTree()}"></h5>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                                <div style="margin-left: 0.25rem">
+                                    <h5 class="mb-0" style="color: #007bff">Số lượng : <span th:text="${tree.getQuantity()}" style="color: #28a745;"></span></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="card mb-3" style="margin-top: 50px; width: 600px">
+                    <div class="card-body">
+                        <div class= "row d-flex justify-content-between">
+                            <div class="col-12">
+                                <h5 style="color: #007bff">Tên khách hàng: <span th:text="${receiver.getName()}" style="color: #28a745;"></span></h5>
+                            </div>
+                            <div class="col-12">
+                                <div >
+                                    <h5 style="color: #007bff">Địa chỉ giao : <span th:text="${receiver.getAddress()}" style="color: #28a745;"></span></h5>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <h5 style="color: #007bff">Liên hệ : <span th:text="${receiver.getPhone()}" style="color: #28a745;"></span></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4" style="margin-top: 50px">
+                <div>
+                    <h4 class="mb-1">Tổng số tiền đơn hàng : <span th:text="${#numbers.formatDecimal(order.getTotalMoney(),3,'DEFAULT', 0, 'DEFAULT')}+' VNĐ'"></span></h4>
+                    <div style="height: 16px"></div>
+                    <div th:if="${order.getStatus() == 4}" style="place-items: center">
+                        <img  th:src="'/imageTree/'+${shipperOrder.getImageOrder()}" alt="" style="width: 250px; height: 250px; border-radius: 5px"/>
+                        <p style="font-size: 1.2rem; color: red">Ảnh chụp sản phẩm đã giao (Time: <span th:text="${shipperOrder.getDeliveryDate()}"></span>)</p><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main>
+</body>
+</html>

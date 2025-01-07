@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/index}">
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa phân loại cây</title>
+    <style>
+        .main-container {
+            width: 600px;
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+            /*margin-left: 36rem;*/
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        /* Tổng thể cho form */
+        .main-form {
+            background-color: #ffffff;
+            border: 2px solid #007bff;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .main-form:hover {
+            transform: scale(1.02);
+        }
+
+        /* Tiêu đề chính */
+        .main-title h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.5rem;
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Định dạng nhãn */
+        label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* Input và Textbox */
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 25px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+            outline: none;
+        }
+
+        /* Radio Button */
+        .select {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .select div {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        label[for="is_delete_yes"],
+        label[for="is_delete_no"] {
+            font-size: 1.1rem;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        label[for="is_delete_yes"]:hover,
+        label[for="is_delete_no"]:hover {
+            color: #007bff;
+        }
+
+        /* Nút submit */
+        input[type="submit"] {
+            display: block;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Khoảng cách */
+        br {
+            display: none; /* Xóa các khoảng trắng thừa giữa các phần */
+        }
+
+
+    </style>
+</head>
+<body>
+<main class="main-container" layout:fragment="content" style="margin-left: 36rem">
+    <div class="main-title" style="margin-top: 3rem;margin-bottom: 2rem;">
+        <h2>Phân loại cây</h2>
+    </div>
+    <div class="main-form" >
+        <form method="post" enctype="multipart/form-data" th:action="@{'/category/admin/saveEditCategory/'+${idCate}}">
+            <label for="name">Tên loại cây:</label>
+            <input type="text" id="name" name="name" th:value="${category.getName()}"><br><br>
+
+            <label for="notes">Ghi chú:</label>
+            <input  type="text" id="notes" name="notes" th:value="${category.getNotes()}"><br><br>
+
+            <label >Hiển thị phía người dùng:</label>
+            <div class="select">
+                <div>
+                    <input type="radio" style="align-self: center" name="is_delete"
+                           id="is_delete_yes" value="0" th:checked="${category.getIsDelete()} == 0">
+                    <label for="is_delete_yes" style="padding: 20px 10px; margin-top: 8px">Đang hiển thị</label>
+                </div>
+                <div>
+                    <input type="radio" style="align-self: center" name="is_delete"
+                           id="is_delete_no" value="1" th:checked="${category.getIsDelete()} == 1">
+                    <label for="is_delete_no" style="padding: 20px 10px; margin-top: 8px">Không hiển thị</label>
+                </div>
+            </div>
+            <br><br>
+
+            <input style="margin-top: 30px" type="submit" value="Lưu lại">
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

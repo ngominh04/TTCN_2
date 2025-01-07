@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/trees/detailTree}">
+<head>
+    <meta charset="UTF-8">
+    <title>Sửa ảnh sản phẩm</title>
+</head>
+<body>
+<div style="width: 645px;" layout:fragment="detailTreeContent" >
+    <form enctype="multipart/form-data" method="post" th:action="@{'/tree/admin/saveRepairImg/'+${tree.getId()}+'/'+${imageById.getId()}}">
+        <input type="file"  accept="multipart/form-data" id="file" name="file" style="margin-bottom: 1rem">
+        <input type="submit" value="Lưu lại">
+    </form>
+</div>
+</body>
+</html>
