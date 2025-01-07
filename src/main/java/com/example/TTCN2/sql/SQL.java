@@ -96,4 +96,10 @@ public class SQL {
 
     // count shipperOrder by idShipper
     public static final String COUNT_SHIPPER_ORDER_BY_IDSHIPPER="select count(id) countShipperOrder from shipper_order where id_shipper = ?";
+
+    // sumMoney and sumQuantity by month and year
+    public static final String SUM_MONEY_QUANTITY_ORDER4="select YEAR(receiver_date) AS year, MONTH(receiver_date) AS month, sum(total_money) sumMoney,sum(total_quantity) sumQuantity from `order`\n" +
+            "where receiver_date IS NOT NULL\n" +
+            "GROUP BY YEAR(receiver_date), MONTH(receiver_date)\n" +
+            "ORDER BY year, month;";
 }

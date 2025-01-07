@@ -37,5 +37,8 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     // count dateDiff order wwith status 4
     @Query(value = SQL.DATEDIFF_ORDER_STATTUS_4,nativeQuery = true)
     IOrder getOrderByStatus4(Integer idOrder);
+    // sumMoney and sumQuantity by year and moth
+    @Query(value = SQL.SUM_MONEY_QUANTITY_ORDER4,nativeQuery = true)
+    List<IOrder> sumMoneyQuantityOrder4();
 
 }

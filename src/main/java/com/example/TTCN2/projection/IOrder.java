@@ -11,4 +11,8 @@ public interface IOrder {
     Integer getCountOrder();
     Integer getStatus();
     Integer getDateOrder();
+    Integer getYear();
+    Integer getMonth();
+    Double getSumMoney();
+    Integer getSumQuantity();
 }

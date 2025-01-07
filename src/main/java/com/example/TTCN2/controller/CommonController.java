@@ -139,6 +139,7 @@ public class CommonController {
         session.setAttribute("countOrder",orderRepository.countAllById());
         session.setAttribute("countShipper",shipperRepository.countAllById());
         model.addAttribute("order_limit5",orderRepository.findOrderByReceiverDate());
+        model.addAttribute("sumMoney_quantity",orderRepository.sumMoneyQuantityOrder4());
         return "admin/index";
     }
     // enter shipper
@@ -177,7 +178,6 @@ public class CommonController {
 
             // end chat_box
         }
-
         return "shipper/index";
     }
 }

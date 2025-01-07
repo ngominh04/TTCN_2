@@ -8,6 +8,9 @@
     <title>Admin Dashboard</title>
     <link type="text/css" rel="stylesheet" th:href="@{/admin/css/index.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 <style>
@@ -18,7 +21,14 @@
         padding: 0;
         color: #333;
     }
-
+    .message{
+        /*cố định mennu */
+        width: 100%;
+        position: fixed;
+        top: 500px;
+        right: -95%;
+        z-index: 100000;
+    }
     .container {
         display: flex;
     }
@@ -106,6 +116,12 @@
         text-decoration: none;
     }
 
+    .time{
+        text-align: right;
+        margin-top: 15px;
+        font-weight: bold;
+    }
+
     .dashboard {
         display: flex;
         gap: 20px;
@@ -120,15 +136,25 @@
         padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         text-align: center;
+        flex-direction: row;
+    }
+    .icon{
+        padding: 25px 10px;
+        background: #15f48d;
+        color: green;
+        font-size: 3.5rem;
+        border-radius: 10px
     }
 
     .card h3 {
         color: #3498db;
+        font-size: 1.8rem;
     }
 
     .card p {
         font-size: 2em;
         font-weight: bold;
+        color: red;
     }
 
     /* Table Section */
@@ -188,6 +214,29 @@
         background-color: #1abc9c;
     }
 
+    /* Container to hold both charts */
+    .chart-container {
+        display: flex;
+        justify-content: space-between; /* Ensures space between the two charts */
+        gap: 20px; /* Optional: adds some space between the charts */
+    }
+
+    /* Ensure each chart takes up equal space */
+    .embed-responsive {
+        flex: 1;
+        max-width: 48%; /* Optional: ensures charts don't stretch too far */
+    }
+
+    /*chart*/
+    .chart{
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+    .chart h2{
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
         .sidebar {
@@ -200,9 +249,8 @@
             width: 100%;
         }
     }
-
 </style>
-<body>
+<body onload="displayDateTime()" class="app sidebar-mini rtl">
     <div class="container">
         <!-- Sidebar for navigation -->
         <nav class="sidebar">
@@ -223,37 +271,73 @@
             </ul>
 
         </nav>
-
+        <div>
+            <a th:if="${session.saveAdmin != null && session.saveAdmin.getPower()==1||session.saveAdmin.getPower()==3}"
+               href="https://business.facebook.com/latest/inbox/all/?asset_id=536606479529963"
+               class="message"><i class='fab fa-facebook-messenger' style='font-size:36px'></i></a>
+        </div>
         <!-- Main content area -->
-        <div class="main-content" layout:fragment="content">
+        <div class="main-content" style="margin-left: 250px;" layout:fragment="content">
             <header>
-                <a class="logout-btn" th:href="@{/admin/showShipper}">Tài khoản</a>
+                <a class="logout-btn" th:href="@{'/admin/account/'+${detailAdmin.getIdAdmin().getId()}}">Tài khoản</a>
                 <a th:if="${session.saveAdmin.getPower()==1}" class="logout-btn" th:href="@{/register/admin/createAdmin}">Thêm tài khoản</a>
                 <div class="user-info">
                     <span th:text="${detailAdmin.getName()}"></span>
                     <a th:href="@{/register/}" class="logout-btn">Đăng xuất</a>
                 </div>
             </header>
-
-            <section class="dashboard">
-                <div class="card">
-                    <h3>Tổng cây</h3>
-                    <p th:text="${session.countTree.getCountTree()}"></p>
-                </div>
-                <div class="card">
-                    <h3>Tổng người dùng</h3>
-                    <p th:text="${session.countUser.getCountUser()}"></p>
-                </div>
-                <div class="card">
-                    <h3>Tổng đơn hàng</h3>
-                    <p th:text="${session.countOrder.getCountOrder()}"></p>
-                </div>
-                <div class="card">
-                    <h3>Tổng người vận chuyển</h3>
-                    <p th:text="${session.countShipper.getCountShipper()}"></p>
+            <section class="time">
+                <div id="currentDateTime" class="datetime">
                 </div>
             </section>
-
+            <section class="dashboard">
+                <div class="card">
+                    <i class="icon bx bxs-leaf"></i>
+                    <div style="padding-top: 25px; padding-left: 35px; text-align: center">
+                        <h3>Tổng cây</h3>
+                        <p th:text="${session.countTree.getCountTree()}"></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <i class='icon bx bxs-user-account'></i>
+                    <div>
+                        <h3>Tổng người dùng</h3>
+                        <p th:text="${session.countUser.getCountUser()}"></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <i class="icon bx bxs-shopping-bags"></i>
+                    <div>
+                        <h3>Tổng đơn hàng</h3>
+                        <p th:text="${session.countOrder.getCountOrder()}"></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <i class='icon bx bx-rocket'></i>
+                    <div>
+                        <h3>Tổng người vận chuyển</h3>
+                        <p th:text="${session.countShipper.getCountShipper()}"></p>
+                    </div>
+                </div>
+            </section>
+<!--            <div  th:each="s :${sumMoney_quantity}">-->
+<!--                <input type="text" th:value="${s.getYear()}" id="year" hidden="hidden">-->
+<!--                <input type="text" th:value="${s.getMonth()}" id="month" hidden="hidden">-->
+<!--                <input type="text" th:value="${s.getSumMoney()}" id="price" hidden="hidden">-->
+<!--                <input type="text" th:value="${s.getSumQuantity()}" id="quantity" hidden="hidden">-->
+<!--            </div>-->
+<!--            <section class="chart" >-->
+<!--                &lt;!&ndash;Right&ndash;&gt;-->
+<!--                <h2 class="tile-title">Tỷ lệ tăng trưởng của từng tháng</h2>-->
+<!--                <div class="chart-container">-->
+<!--                    <div class="embed-responsive embed-responsive-16by9">-->
+<!--                        <canvas class="embed-responsive-item" id="lineChartDemo"></canvas>-->
+<!--                    </div>-->
+<!--                    <div class="embed-responsive embed-responsive-16by9">-->
+<!--                        <canvas class="embed-responsive-item" id="barChartDemo"></canvas>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </section>-->
             <section class="table-section">
                 <h2>Các đơn hàng bán được gần đây</h2>
                 <table>
@@ -281,6 +365,37 @@
         </div>
     </div>
 <script>
+    //Thời gian
+    function displayDateTime() {
+        // Tạo mảng để hiển thị thứ bằng tiếng Việt
+        const weekdays = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+
+        // Hàm cập nhật thời gian
+        function updateDateTime() {
+            const now = new Date();
+
+            // Lấy thông tin ngày giờ
+            const dayOfWeek = weekdays[now.getDay()];
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+            const year = now.getFullYear();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            // Tạo chuỗi hiển thị
+            const dateTimeString = `${dayOfWeek}, ${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
+
+            // Hiển thị lên trang
+            document.getElementById('currentDateTime').textContent = dateTimeString;
+        }
+
+        // Gọi hàm ngay khi tải trang
+        updateDateTime();
+
+        // Cập nhật mỗi giây
+        setInterval(updateDateTime, 1000);
+    }
     // thay doi mau khi click thẻ li ở order
     const listItems = document.querySelectorAll('.scrollable-list li');
 
@@ -315,6 +430,94 @@
                 notePower.value = '';
         }
     }
+    // // Dữ liệu của các tháng trước
+    // // Mảng để lưu giá trị price và quantity cho mỗi tháng (từ 1 đến 12)
+    // let priceArray = new Array(12).fill(0); // Mảng giá trị sumMoney cho các tháng (mặc định là 0)
+    // let quantityArray = new Array(12).fill(0); // Mảng giá trị sumQuantity cho các tháng (mặc định là 0)
+    //
+    // // Lấy tất cả các input chứa giá trị price và quantity
+    // const priceInputs = document.querySelectorAll('input#price');
+    // const quantityInputs = document.querySelectorAll('input#quantity');
+    //
+    // // Duyệt qua các input và phân loại dữ liệu theo tháng
+    // priceInputs.forEach(input => {
+    //     const month = parseInt(input.previousElementSibling.value) - 1; // Lấy tháng từ input#month, tháng trong JavaScript là từ 0-11
+    //     const price = Number(input.value); // Lấy giá trị sumMoney
+    //     priceArray[month] = price; // Đưa giá trị vào mảng priceArray theo đúng tháng
+    // });
+    //
+    // quantityInputs.forEach(input => {
+    //     const month = parseInt(input.previousElementSibling.value) - 1; // Lấy tháng từ input#month
+    //     const quantity = Number(input.value); // Lấy giá trị sumQuantity
+    //     quantityArray[month] = quantity; // Đưa giá trị vào mảng quantityArray theo đúng tháng
+    // });
+    //
+    // // Hàm tính tỷ lệ tăng trưởng
+    // const calculateGrowthRates = (priceArray, quantityArray) => {
+    //     const growthRates = {
+    //         price: [0],  // Bắt đầu với 0 cho tháng 1
+    //         quantity: [0] // Bắt đầu với 0 cho tháng 1
+    //     };
+    //
+    //     for (let i = 1; i < priceArray.length; i++) {
+    //         const priceGrowth = ((priceArray[i] - priceArray[i - 1]) / priceArray[i - 1]) * 100;
+    //         growthRates.price.push(priceGrowth.toFixed(2)); // Tính giá trị tăng trưởng cho các tháng còn lại
+    //     }
+    //
+    //     for (let i = 1; i < quantityArray.length; i++) {
+    //         const quantityGrowth = ((quantityArray[i] - quantityArray[i - 1]) / quantityArray[i - 1]) * 100;
+    //         growthRates.quantity.push(quantityGrowth.toFixed(2)); // Tính giá trị tăng trưởng cho số lượng bán
+    //     }
+    //
+    //     return growthRates;
+    // };
+    //
+    //
+    // // Tính toán tỷ lệ tăng trưởng
+    // const growthRates = calculateGrowthRates(priceArray, quantityArray);
+    //
+    // // Dữ liệu cho biểu đồ
+    // const data = {
+    //     labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"], // Các tháng
+    //     datasets: [
+    //         {
+    //             label: "Tăng trưởng giá bán (%)",
+    //             backgroundColor: "rgba(75, 192, 192, 0.5)",
+    //             borderColor: "rgba(75, 192, 192, 1)",
+    //             pointBackgroundColor: "rgba(75, 192, 192, 1)",
+    //             pointBorderColor: "#fff",
+    //             data: [0, ...growthRates.price], // Đặt giá trị tăng trưởng của tháng 1 là 0, vì không có giá trị so sánh
+    //             tension: 0.4,
+    //         },
+    //         {
+    //             label: "Tăng trưởng số lượng (%)",
+    //             backgroundColor: "rgba(153, 102, 255, 0.5)",
+    //             borderColor: "rgba(153, 102, 255, 1)",
+    //             pointBackgroundColor: "rgba(153, 102, 255, 1)",
+    //             pointBorderColor: "#fff",
+    //             data: [0, ...growthRates.quantity], // Đặt giá trị tăng trưởng của tháng 1 là 0, vì không có giá trị so sánh
+    //             tension: 0.4,
+    //         }
+    //     ]
+    // };
+    //
+    // // Kiểm tra kết quả tính toán
+    // console.log(growthRates);
+    //
+    // // Line Chart
+    // var ctxl = $("#lineChartDemo").get(0).getContext("2d");
+    // var lineChart = new Chart(ctxl, {
+    //     type: 'line',
+    //     data: data
+    // });
+    //
+    // // Bar Chart
+    // var ctxb = $("#barChartDemo").get(0).getContext("2d");
+    // var barChart = new Chart(ctxb, {
+    //     type: 'bar',
+    //     data: data
+    // });
+
 </script>
 </body>
 </html>

@@ -70,6 +70,19 @@ public class ShipperController {
             model.addAttribute("pageNumbers", pageNumbers);
             model.addAttribute("maxPageNumber",pageNumbers.size());
         }
+
+
+        for (Shipper shipper : shippers) {
+            List<ShipperOrder> shipperOrders = shipperOrderRepository.getAllByShipperId(shipper.getId());
+            for (ShipperOrder shipperOrder : shipperOrders) {
+                if (shipperOrder.getStatus() == 1){
+                    shipper.setStatus(2);
+                    break;
+                }
+            }
+
+        }
+
         return "admin/shipper/showShipper";
     }
     // block shipper
@@ -118,6 +131,9 @@ public class ShipperController {
     @GetMapping("/shipperOrder/confirmOrder/{idOrder}")
     public String confirmOrder(@PathVariable Integer idOrder, HttpSession session, Model model){
         Shipper shipper = (Shipper) session.getAttribute("saveShipper");
+        shipper.setStatus(2);
+        shipperRepository.save(shipper);
+
         // repair table order
         Order order = orderRepository.getReferenceById(idOrder);
         order.setIdShipper(shipper.getId());
