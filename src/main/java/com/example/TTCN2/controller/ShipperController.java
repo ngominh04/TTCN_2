@@ -161,7 +161,7 @@ public class ShipperController {
         Order order = orderRepository.findByIdOrder(idOrder);
         // save status, image and deliveryDate
         ShipperOrder shipperOrder = shipperOrderRepository.findByOrderId(idOrder);
-        if (shipper.getStatus() ==1 ){
+        if (shipper.getStatus() == 2 ){
             shipperOrder.setImageOrder(fileName);
             shipperOrder.setDeliveryDate(String.valueOf(LocalDateTime.now()));
             shipperOrder.setStatus(2); // (2) trang thai da giao toi user kem image
